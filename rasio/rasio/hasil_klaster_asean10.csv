@@ -1,0 +1,11 @@
+country,luc_pc,ch4_pc,n2o_pc,co2_pc,populasi,is_asean,lat,lon,klaster,nama_klaster
+Brunei,2.1976,6.3054,0.6822,22.974,443928.2,1,4.9031,114.9398,1,Peternakan Ekstensif
+Cambodia,2.7778,1.3955,0.2941,1.0095,16626945.8,1,11.5564,104.9282,2,Frontier Konversi Lahan
+Indonesia,3.1045,1.2983,0.2526,2.3853,273129600.5,1,-6.2088,106.8456,2,Frontier Konversi Lahan
+Laos,4.3543,1.4195,0.4398,2.6623,7288783.3,1,17.9757,102.6331,2,Frontier Konversi Lahan
+Malaysia,2.7589,0.8562,0.261,7.8719,33528110.0,1,3.139,101.6869,2,Frontier Konversi Lahan
+Myanmar,1.7136,1.1895,0.293,0.5541,52818697.3,1,19.7633,96.0785,2,Frontier Konversi Lahan
+Philippines,0.4324,0.6996,0.1484,1.2629,111031979.1,1,14.5995,120.9842,4,Padat Penduduk Intensitas Rendah
+Singapore,0.0175,0.903,0.2319,8.8323,5644910.3,1,1.3521,103.8198,0,Industri Mapan Rendah-Lahan
+Thailand,1.3407,1.3209,0.3085,3.8647,71393373.9,1,13.7563,100.5018,2,Frontier Konversi Lahan
+Vietnam,1.4696,0.9599,0.289,3.0434,97344627.1,1,21.0278,105.8342,2,Frontier Konversi Lahan

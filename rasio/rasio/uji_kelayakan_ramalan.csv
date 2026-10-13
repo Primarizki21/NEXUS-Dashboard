@@ -1,0 +1,12 @@
+seri,kolom,MAPE_h3,MAPE_h5,MAPE_h10,metode,perubahan_2000_2024_%
+Populasi ASEAN,populasi,0.107,0.191,0.359,AR(2) beda,31.796
+GHG sistem pangan (absolut),pangan_ghg,12.305,15.073,21.734,Holt teredam,0.795
+GHG sistem pangan per kapita,pangan_pc,12.195,15.257,22.717,Holt teredam,-23.522
+Metana absolut,ch4,2.726,3.058,4.438,Drift,55.35
+Metana per kapita,ch4_pc,2.81,3.122,4.373,Holt teredam,17.872
+N2O absolut,n2o,2.359,2.651,3.429,Drift,39.4
+CO2 alih guna lahan absolut,luc,18.837,23.136,32.785,Holt teredam,-23.483
+CO2 alih guna lahan per kapita,luc_pc,18.938,23.21,33.54,AR(2) beda,-41.943
+Kumulatif CO2 alih guna lahan,kum_luc,0.368,0.537,0.892,AR(2) beda,28.846
+Pangsa emisi lahan global (%),pangsa_luc,17.461,18.233,22.811,Holt teredam,2.548
+Total GHG ASEAN,ghg,7.612,9.081,13.009,Drift,48.295
