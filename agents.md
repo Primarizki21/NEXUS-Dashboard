@@ -1,145 +1,101 @@
-# Multi-Agent Architecture & Workflow: ACTION 2026 Infografis
+# Multi-Agent Architecture & Workflow: Analisis Data Ketenagakerjaan ACTION 2026
 *Subtema: “Turning Insight into Opportunity: Analisis Pengangguran Terbuka untuk Pemerataan Kesempatan Kerja”*
-*Penyelenggara: HMP Sains Data UNESA*
+*Fokus & Batasan Proyek: **Hanya Analisis Data** (Data Harvester, Ekonometrika/Statistika, Sintesis Insight, & Pengisian Template Masalah untuk Tim Desain)*
 
 ---
 
-## 1. Filosofi Analisis: Mengambil Intisari Terbaik dari `@rasio/` (Tanpa Menjiplak Mentah-Mentah)
+## 1. Batasan Ruang Lingkup (Scope Boundary)
 
-Studi kasus `@rasio/` menunjukkan standar juara nasional, namun **metode spesifiknya (panel 64 tahun, ekonometrika spasial pertanian) TIDAK BOLEH ditiru secara membabi buta**. Kita harus bersikap jujur secara ilmiah (*data-driven & data-first*):
-
-### Yang DIADOPSI dari `@rasio/` (Prinsip Unggulan):
-1. **Eksplorasi Data Berbasis Fakta (*Data-First Discovery*):**
-   - Jangan berasumsi atau memaksakan model sebelum melihat dataset riil BPS dan `data.go.id`.
-   - Biarkan ketersediaan dan granulasi data (apakah level Provinsi 34/38 atau Kabupaten/Kota 514, apakah deret waktu 5 atau 10 tahun) yang menentukan pertanyaan riset dan teknik pemodelan yang relevan.
-2. **Ketelitian Metodologis (*Methodological Rigor*):**
-   - Menghindari angka tanpa sumber atau klaim tanpa verifikasi.
-   - Jika melakukan klasterisasi atau regresi, sertakan uji validitas/stabilitas yang masuk akal, bukan sekadar menampilkan grafik bawaan library.
-3. **Struktur Jurnalisme Data (*Compelling Storytelling Arc*):**
-   - **Hook Paradoks:** Menemukan satu anomali atau kontras tajam di awal (misal: paradoks pengangguran terdidik SMK/Sarjana vs SD, atau ketimpangan penyerapan kerja pemuda).
-   - **Anatomi Masalah:** Menelusuri faktor struktural (*mismatch*, upah, investasi, sektor informal).
-   - **Proyeksi & Dampak:** Apa yang terjadi jika pola ini berlanjut tanpa intervensi.
-   - **Solusi Terarah (*Actionable Opportunities*):** Rekomendasi kebijakan yang realistis dan terukur.
-4. **Alur Kerja Artefak Terisolasi:**
-   - Pemisahan yang rapi: Data mentah $\rightarrow$ Script analisis $\rightarrow$ Ringkasan metrik terverifikasi (`RINGKASAN_*.md`) $\rightarrow$ Visualisasi SVG $\rightarrow$ Pengisian template dokumen.
-
-### Yang DIHINDARI:
-- **Jangan memaksakan model rumit yang tidak didukung data:** Jangan memaksakan analisis spasial global atau forecasting 30 tahun jika rentang data BPS tidak valid untuk itu.
-- **Jangan mengorbankan keterbacaan publik:** Infografis ditujukan untuk masyarakat umum dan juri sains data. Visual harus tajam, elegan, dan langsung dipahami dalam 30 detik pertama.
+Proyek ini difokuskan **sepenuhnya pada analisis data** dan **tidak mencakup pembuatan grafis infografis**. 
+Tujuan akhir adalah menghasilkan:
+1. Dataset terkurasi dan bersih dari sumber resmi (BPS & `data.go.id`).
+2. Kode analisis statistik yang teruji, reproduktif, dan sederhana (*reproducible & simple*).
+3. Ringkasan temuan siap pakai (*ready-to-use metrics & insights*) yang terdokumentasi dalam `RINGKASAN_TEMUAN.md`.
+4. Kerangka narasi dan data terisi lengkap pada `template_masalah.docx` (memuat *Research Questions*, *Prelude*, data kalkulasi, tautan sumber, dan spesifikasi visual untuk tim desain infografis).
+5. Draf metodologi dan pengolahan data untuk Laporan Resmi bab (c) & (d).
 
 ---
 
-## 2. Aturan Wajib Alur Kerja Agen (Mandatory Workflow Protocol)
+## 2. Prinsip Kerja: Mengambil Aspek Terbaik `@rasio/` (Secara Proporsional)
 
-Setiap agen atau kontributor yang mengeksekusi tugas dalam proyek ini **WAJIB** mengikuti siklus kerja berikut secara berurutan:
+Mengadopsi prinsip keunggulan `@rasio/` tanpa memaksakan metode yang tidak sesuai data:
+* **Data-First Discovery:** Identifikasi ketersediaan dan granulasi data nyata di BPS/data.go.id terlebih dahulu sebelum menentukan model statistik.
+* **Metodologi Jujur & Teruji:** Setiap metrik diverifikasi dari data mentah resmi (tidak ada angka fiktif/asumsi tak berdasar).
+* **Storytelling Data:** Menyajikan data dengan struktur narasi tajam (*hook paradoks* $\rightarrow$ anatomi ketimpangan $\rightarrow$ faktor struktural $\rightarrow$ proyeksi $\rightarrow$ rekomendasi kebijakan).
+* **Spesifikasi Visual Jelas:** Memberikan rekomendasi visualisasi konkret (tipe grafik, variabel sumbu X/Y, warna sorotan) yang mempermudah tim desain nantinya.
+
+---
+
+## 3. Aturan Wajib Alur Kerja Agen (Mandatory Workflow Protocol)
+
+Setiap agen/kontributor wajib mengikuti protokol 5 langkah:
 
 ```
 [1. Load Skills] ──> [2. To-Do List] ──> [3. Surgical Work] ──> [4. Verification] ──> [5. Atomic Commit]
-  • antislop           • Breakdown        • Minimum code       • Smoke test        • 1 logical change
-  • j-space              terukur          • Simplicity first   • Inspect output    • Descriptive msg
+  • antislop           • Breakdown        • Minimum code       • Run scripts       • 1 logical change
+  • j-space              terukur          • Simplicity first   • Inspect data      • Descriptive msg
   • karpathy           • Success criteria • No speculative     • Zero hallucination
 ```
 
-### Tahap 1: Pembacaan Skills & Prinsip Dasar
-Sebelum mengetik kode atau menyusun teks:
-* **Wajib baca `/skill:antislop`:** Pastikan tidak ada teks klise AI (*buzzwords*, em dash `—`, klaim palsu, data fiktif), penuhi rasio kontras WCAG, palet warna terkontrol (2–3 warna utama + 1 aksen), dan jangan gunakan template generik.
-* **Wajib baca `/skill:j-space`:** Aktifkan ruang penalaran mendalam (*inner workspace*), evaluasi asumsi, dan pertahankan invariant proyek di setiap *seam*.
-* **Wajib ikuti `karpathy-guidelines`:** Utamakan kesederhanaan (*Simplicity First*), jangan membuat abstraksi berlebihan untuk kode sekali pakai, dan lakukan perubahan secara bedah (*Surgical Changes*).
-
-### Tahap 2: Penyusunan To-Do List
-* Buat daftar tugas eksplisit dengan kriteria sukses (*success criteria*) yang terukur sebelum mengeksekusi pekerjaan.
-
-### Tahap 3: Eksekusi Ramping & Nyata (Surgical Execution)
-* Tulis kode seminimal mungkin yang menyelesaikan masalah (*Minimum Viable Code*).
-* Gunakan data nyata dari BPS atau `data.go.id`. Dilarang keras mengarang angka dummy sebagai data final.
-
-### Tahap 4: Verifikasi & Uji Hasil
-* Jalankan script secara langsung. Periksa output tabel/grafik.
-* Pastikan tidak ada nilai rumpang, kesalahan kalkulasi, atau distorsi visual.
-
-### Tahap 5: Atomic Git Commit
-* Lakukan *git commit* atomik untuk setiap unit kerja yang telah lolos verifikasi:
-  - Satu commit untuk satu tujuan logis.
-  - Pesan commit jelas, ringkas, dan merefleksikan perubahan nyata (contoh: `feat(data): harvest bps provincial unemployment 2015-2024`).
+1. **Load Skills & Constraints:**
+   * `/skill:antislop`: Teks bebas *buzzwords*, bebas klaim palsu, data 100% berbasis sumber resmi, tanpa em dash (`—`).
+   * `/skill:j-space`: Jaga invariant logika, evaluasi asumsi data, dan fokus terarah.
+   * `karpathy-guidelines`: *Simplicity first*, kode seringkas mungkin, tanpa abstraksi berlebihan.
+2. **To-Do List:** Tetapkan daftar tugas dengan kriteria keberhasilan yang dapat diverifikasi.
+3. **Surgical Execution:** Tulis script seminimal mungkin yang menyelesaikan tugas pengolahan/analisis data.
+4. **Verification:** Eksekusi script secara langsung, cek konsistensi angka dan ketiadaan nilai hilang tak terduga.
+5. **Atomic Commit:** Lakukan commit git terpisah untuk setiap capaian logis yang telah diverifikasi.
 
 ---
 
-## 3. Pembagian Peran Agen
+## 4. Struktur Tim Agen (Khusus Analisis Data)
 
 ```
                           ┌─────────────────────────────┐
                           │   Orchestrator / Human PM   │
                           └──────────────┬──────────────┘
                                          │
-        ┌────────────────────────────────┼────────────────────────────────┐
-        ▼                                ▼                                ▼
-┌──────────────────┐           ┌──────────────────┐           ┌──────────────────┐
-│  @data-scout     │           │  @narrative-     │           │  @qa-specialist  │
-│  (Survey, Harvest│           │   strategist     │           │  (Compliance,    │
-│   & Clean BPS)   │           │  (Template &     │           │   Report & PPT)  │
-└────────┬─────────┘           │   Storyline)     │           └──────────────────┘
-         │                     └────────▲─────────┘
-         ▼                              │
-┌──────────────────┐                    │ (Angka siap pakai & insight terverifikasi)
-│ @data-analyst    ├────────────────────┤
-│ (Explorasi,      │                    │
-│  Model Sesuai    │                    │
-│  Temuan Data)    │                    │
-└────────┬─────────┘                    │
-         │                              │
-         ▼ (Spesifikasi visual & angka) │
-┌──────────────────┐                    │
-│ @visual-         ├────────────────────┘
-│  architect       │
-│ (A3 Layout,      │
-│  SVG Charts)     │
-└──────────────────┘
+        ┌────────────────────────────────┴────────────────────────────────┐
+        ▼                                                                 ▼
+┌───────────────────────────┐                         ┌───────────────────────────┐
+│       @data-scout         │                         │   @narrative-synthesizer  │
+│  • Survei BPS & data.go.id│                         │  • Adapter template_      │
+│  • Harvesting Sakernas    │                         │    masalah.docx           │
+│  • Kurasi dataset bersih  │                         │  • Research questions     │
+└─────────────┬─────────────┘                         │  • Policy recommendations │
+              │                                       └─────────────▲─────────────┘
+              ▼                                                     │
+┌───────────────────────────┐                                       │
+│       @data-analyst       │                                       │
+│  • EDA & Variansi Data    ├───────────────────────────────────────┘
+│  • Model Statistik Sesuai │ (Angka siap pakai, tabel ringkasan,
+│    Karakteristik Data     │  rekomendasi tipe plot untuk desainer)
+│  • RINGKASAN_TEMUAN.md    │
+└───────────────────────────┘
 ```
 
 ### Agen 1: Data Scout & Curator (`@data-scout`)
-* **Misi:** Mensurvei portal BPS (`bps.go.id`, API Web BPS) dan Satu Data Indonesia (`data.go.id`) untuk subtema *Pengangguran Terbuka*.
-* **Tugas:**
-  1. Mengidentifikasi tabel data ketenagakerjaan yang tersedia secara lengkap dan mutakhir (misal: Sakernas Agustus/Februari 2015–2024).
-  2. Mengumpulkan variabel: TPT provinsi/kabupaten, TPT menurut tingkat pendidikan (SD s.d. Perguruan Tinggi), kelompok umur (youth unemployment & NEET), serta indikator pasar kerja pelengkap (informalitas, setengah penganggur, upah, pertumbuhan ekonomi).
-  3. Memvalidasi kelengkapan, mengatasi diskontinuitas kode provinsi/kabupaten, dan menyimpan data bersih ke folder `data/clean/`.
+* **Tanggung Jawab:**
+  * Menelusuri portal resmi BPS (`bps.go.id`, API Web BPS, publikasi Sakernas) dan Satu Data Indonesia (`data.go.id`).
+  * Mengunduh dan membersihkan tabel data ketenagakerjaan:
+    1. TPT menurut provinsi / kabupaten-kota (deret waktu mutakhir).
+    2. TPT menurut tingkat pendidikan tertinggi yang ditamatkan.
+    3. TPT kelompok umur muda (15–24 tahun) & status NEET.
+    4. Indikator pendukung pasar kerja: informalitas, setengah penganggur, upah minimum, PDRB per kapita, IPM.
+  * Menghasilkan dataset bersih terstruktur di folder `data/clean/`.
 
 ### Agen 2: Data & Statistical Analyst (`@data-analyst`)
-* **Misi:** Melakukan analisis statistik yang jujur, tajam, dan proporsional sesuai karakteristik data yang ditemukan.
-* **Tugas:**
-  1. Eksplorasi Data Analitik (EDA): distribusi, disparitas wilayah, divergensi antar-tingkat pendidikan.
-  2. Menerapkan pemodelan statistik yang *didukung oleh data*, seperti:
-     - Tipologi/Klasterisasi wilayah yang stabil.
-     - Analisis autokorelasi spasial (jika variasi geografis signifikan).
-     - Analisis tren dan dekomposisi struktural (misal dampak post-COVID 2020 terhadap kesempatan kerja muda).
-  3. Menyusun dokumen ringkasan metrik terverifikasi: `data/RINGKASAN_TEMUAN.md`.
+* **Tanggung Jawab:**
+  * Menjalankan analisis eksploratif data (EDA) untuk menemukan pola dan disparitas utama.
+  * Memilih dan mengeksekusi metode analisis yang benar-benar didukung data (misal: klasterisasi tipologi provinsi/daerah, evaluasi autokorelasi spasial jika ada dependensi geografis, atau dekomposisi tren/struktural).
+  * Menghasilkan tabel metrik terverifikasi dan mengekspor ringkasan ke `data/RINGKASAN_TEMUAN.md`.
+  * Merumuskan spesifikasi data visualisasi untuk tim infografis (tipe grafik yang disarankan, variabel yang diplot, data agregat yang siap dimasukkan ke software desain).
 
-### Agen 3: Storyline & Narrative Strategist (`@narrative-strategist`)
-* **Misi:** Merangkai temuan data ke dalam alur jurnalisme data yang kuat sesuai template `template_masalah.docx`.
-* **Tugas:**
-  1. Merumuskan 4 *Research Questions* kritis.
-  2. Mengisi kerangka babak (Prelude, Data, Link Sumber, Visualisasi).
-  3. Menghubungkan *insight* analitis menjadi *opportunity* (rekomendasi kebijakan konkret yang berdaya guna).
-
-### Agen 4: Visual Architect (`@visual-architect`)
-* **Misi:** Mendesain infografis A3 Portrait yang estetis, informatif, dan memenuhi regulasi lomba.
-* **Tugas:**
-  1. Menerapkan aturan `antislop` untuk estetika visual (hierarki visual jelas, tipografi terbaca, warna harmonis).
-  2. Menghasilkan grafik SVG vektor presisi tinggi dari data olahan (`assets/charts/*.svg`).
-  3. Memastikan kepatuhan teknis A3 Portrait, 300 dpi, 3 logo wajib di atas, watermark nama tim di bawah.
-
-### Agen 5: QA, Compliance & Final Documentation (`@qa-specialist`)
-* **Misi:** Menjamin 100% kepatuhan terhadap Buku Panduan ACTION 2026.
-* **Tugas:**
-  1. Memverifikasi tidak adanya elemen AI generatif pada desain final.
-  2. Menyusun draf Laporan Resmi 7 bab sesuai format panduan.
-  3. Menyiapkan surat orisinalitas bermaterai dan persiapan materi final (10 slide PPT).
-
----
-
-## 4. Format Laporan Git Commit Atomik
-Setiap agen wajib melakukan commit menggunakan konvensi terstandarisasi:
-* `docs(guide): ...` — pembaruan panduan atau dokumentasi.
-* `data(harvest): ...` — penambahan atau kurasi dataset mentah.
-* `feat(analysis): ...` — kode analisis statistik atau notebook.
-* `viz(svg): ...` — penambahan aset visualisasi grafik.
-* `chore(env): ...` — konfigurasi environment, uv, dan dependensi.
+### Agen 3: Narrative & Template Synthesizer (`@narrative-synthesizer`)
+* **Tanggung Jawab:**
+  * Mengisi struktur dokumen `template_masalah.docx`:
+    - Judul yang memikat (*data journalism angle*).
+    - 4 *Research Questions* berbasis temuan data riil.
+    - Rincian Babak I s.d. Babak V (Prelude, Data hasil kalkulasi, Tautan sumber data resmi, dan Rekomendasi visualisasi).
+    - Matriks Solusi / Kebijakan (*Turning Insight into Opportunity*).
+  * Menyusun draf teks Laporan Resmi bab Pengolahan Data dan Deskripsi Data.
