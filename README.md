@@ -73,9 +73,13 @@ uv run jupyter lab
    ```
    *Output akan memperbarui `data/RINGKASAN_TEMUAN.md` dan tabel `hasil_klaster_provinsi.csv`.*
 
-2. **Jalankan Notebook:**
-   Buka `notebooks/analisis_ketenagakerjaan_action2026.ipynb` dan pilih **Run All Cells**.  
-   Seluruh chart akan otomatis diekspor ke folder `assets/charts/` dalam format PNG (300 DPI) dan SVG.
+2. **Auto-Run Notebook (Tanpa Perlu Membuka Browser/GUI):**
+   ```bash
+   python scripts/run_notebook.py
+   ```
+   *Skrip ini mengeksekusi seluruh sel notebook end-to-end secara headless dan menyimpan hasilnya langsung ke dalam file `.ipynb`. Berkas notebook yang ada di repositori ini sudah dalam kondisi ter-run dengan seluruh grafik & metrik yang langsung tampil.*
+
+   Jika ingin membukanya secara interaktif: Buka `notebooks/analisis_ketenagakerjaan_action2026.ipynb` melalui Jupyter Lab / VS Code.
 
 3. **Perbarui Dokumen Desain (`template_masalah_terisi.docx`):**
    ```bash
