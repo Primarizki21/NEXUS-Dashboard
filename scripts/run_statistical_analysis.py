@@ -227,14 +227,14 @@ Korelasi negatif yang kuat (**r = -0,782**) antara TPT dan persentase pekerja in
 
 ### Trajektori Pemulihan Provinsi:
 - **Provinsi dengan Pemulihan Tercepat (2019 vs 2024):**
-  - **Riau:** Turun dari 5,76% (2019) menjadi 3,70% (2024) [$\Delta = -2,06$ poin].
-  - **Banten:** Turun dari 8,11% (2019) menjadi 6,68% (2024) [$\Delta = -1,43$ poin].
-  - **Jawa Barat:** Turun dari 8,04% (2019) menjadi 6,75% (2024) [$\Delta = -1,29$ poin].
-  - **Kepulauan Riau:** Turun dari 7,50% (2019) menjadi 6,39% (2024) [$\Delta = -1,11$ poin].
+  - **Riau:** Turun dari 5,76% (2019) menjadi 3,70% (2024) [$\\Delta = -2,06$ poin].
+  - **Banten:** Turun dari 8,11% (2019) menjadi 6,68% (2024) [$\\Delta = -1,43$ poin].
+  - **Jawa Barat:** Turun dari 8,04% (2019) menjadi 6,75% (2024) [$\\Delta = -1,29$ poin].
+  - **Kepulauan Riau:** Turun dari 7,50% (2019) menjadi 6,39% (2024) [$\\Delta = -1,11$ poin].
 - **Provinsi dengan Pemulihan Melambat / Anomali Peningkatan TPT:**
-  - **Papua:** Meningkat dari 3,51% (2019) menjadi 6,48% (2024) [$\Delta = +2,97$ poin] pasca-pemekaran DOB.
-  - **DI Yogyakarta:** Meningkat dari 3,18% (2019) menjadi 3,48% (2024) [$\Delta = +0,30$ poin].
-  - **Jawa Timur:** Meningkat dari 3,82% (2019) menjadi 4,19% (2024) [$\Delta = +0,37$ poin].
+  - **Papua:** Meningkat dari 3,51% (2019) menjadi 6,48% (2024) [$\\Delta = +2,97$ poin] pasca-pemekaran DOB.
+  - **DI Yogyakarta:** Meningkat dari 3,18% (2019) menjadi 3,48% (2024) [$\\Delta = +0,30$ poin].
+  - **Jawa Timur:** Meningkat dari 3,82% (2019) menjadi 4,19% (2024) [$\\Delta = +0,37$ poin].
 
 ---
 

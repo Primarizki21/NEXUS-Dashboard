@@ -8,9 +8,12 @@ from docx.shared import Inches, Pt, RGBColor
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from pathlib import Path
 
-INPUT_DOCX = "template_masalah.docx"
-OUTPUT_DOCX = "template_masalah_terisi.docx"
-OUTPUT_MD = "DRAFT_TEMPLATE_MASALAH.md"
+ROOT_DIR = Path(__file__).resolve().parent.parent
+DOCS_DIR = ROOT_DIR / "docs" if (ROOT_DIR / "docs").exists() else ROOT_DIR
+
+INPUT_DOCX = DOCS_DIR / "template_masalah.docx"
+OUTPUT_DOCX = DOCS_DIR / "template_masalah_terisi.docx"
+OUTPUT_MD = DOCS_DIR / "DRAFT_TEMPLATE_MASALAH.md"
 
 def build_content():
     return {

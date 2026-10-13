@@ -1,0 +1,15 @@
+# Core dependencies for ACTION 2026 Data Analysis & Infographics
+# Compatible with Python 3.10, 3.11, 3.12, 3.13
+
+ipykernel>=7.0.0
+ipython>=9.0.0
+matplotlib>=3.9.0
+nbformat>=5.10.0
+numpy>=2.0.0
+openpyxl>=3.1.0
+pandas>=2.2.0
+pdfplumber>=0.11.0
+python-docx>=1.1.0
+requests>=2.31.0
+scikit-learn>=1.5.0
+scipy>=1.14.0

@@ -1,13 +1,40 @@
-# Python-generated files
+# Byte-compiled / optimized / DLL files
 __pycache__/
-*.py[oc]
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
 build/
 dist/
 wheels/
-*.egg-info
+*.egg-info/
 
 # Virtual environments
-.venv
+.venv/
+venv/
+ENV/
+env/
 
-# Raw large PDFs (keep datasets in data/clean/)
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/*
+
+# Third-party / external reference materials (milik orang lain)
+references/
+*.zip
+*.tar.gz
+*.rar
+
+# Raw large PDFs (keep curated datasets in data/clean/)
 data/raw/*.pdf
+
+# OS & Editor metadata
+*:Zone.Identifier
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Environment variables / credentials
+.env
+.env.*

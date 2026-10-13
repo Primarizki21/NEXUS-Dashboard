@@ -16,12 +16,19 @@ CHARTS_DIR.mkdir(parents=True, exist_ok=True)
 
 NOTEBOOK_PATH = NOTEBOOK_DIR / "analisis_ketenagakerjaan_action2026.ipynb"
 
+import uuid
+
 def create_cell(cell_type, source):
-    return {
+    cell = {
         "cell_type": cell_type,
+        "id": str(uuid.uuid4())[:8],
         "metadata": {},
         "source": [line + "\n" for line in source.split("\n")]
     }
+    if cell_type == "code":
+        cell["execution_count"] = None
+        cell["outputs"] = []
+    return cell
 
 def build_notebook():
     cells = []
