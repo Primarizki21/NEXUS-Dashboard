@@ -38,3 +38,9 @@ Thumbs.db
 # Environment variables / credentials
 .env
 .env.*
+
+# Local AI agent orchestration & internal scratchpads (tidak relevan untuk publik/kolaborator)
+AGENTS.md
+agents.md
+CLAUDE.md
+*.local.md

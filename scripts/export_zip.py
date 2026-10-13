@@ -29,6 +29,12 @@ EXCLUDE_EXTS = {
     ".Identifier",
 }
 
+EXCLUDE_FILES = {
+    "AGENTS.md",
+    "agents.md",
+    "CLAUDE.md",
+}
+
 def is_excluded(path: Path) -> bool:
     for part in path.parts:
         if part in EXCLUDE_DIRS:
@@ -36,6 +42,8 @@ def is_excluded(path: Path) -> bool:
     if path.suffix in EXCLUDE_EXTS:
         return True
     if ":Zone.Identifier" in path.name:
+        return True
+    if path.name in EXCLUDE_FILES:
         return True
     return False
 
