@@ -8,3 +8,6 @@ wheels/
 
 # Virtual environments
 .venv
+
+# Raw large PDFs (keep datasets in data/clean/)
+data/raw/*.pdf
