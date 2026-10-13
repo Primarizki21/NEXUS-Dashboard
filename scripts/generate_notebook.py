@@ -59,26 +59,20 @@ Melalui eksplorasi data resmi Survei Angkatan Kerja Nasional (Sakernas) periode 
     # Cell 2: Setup Code
     # ----------------------------------------------------
     cells.append(create_cell("code", """import os
-import pandas as pd
-import numpy as np
+from pathlib import Path
+from IPython.display import display, Image
+import matplotlib
+matplotlib.use('Agg')  # Headless rendering murni tanpa GUI pop-up
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mticker
-from pathlib import Path
+import numpy as np
+import pandas as pd
 from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
 
-import os
-import pandas as pd
-import numpy as np
-import matplotlib
-matplotlib.use('Agg')  # Headless publication rendering
-import matplotlib.pyplot as plt
-import matplotlib.ticker as mticker
-from pathlib import Path
-from sklearn.preprocessing import StandardScaler
-from sklearn.cluster import KMeans
-from sklearn.metrics import silhouette_score
+# Matikan mode interaktif agar tidak memicu pop-up window GUI eksternal
+plt.ioff()
 
 # Path Setup
 DATA_DIR = Path("../data/clean")
@@ -192,7 +186,8 @@ ax2.set_title("B. Pangsa Usia dalam Total Penganggur", fontsize=12, pad=12)
 plt.tight_layout()
 fig.savefig(CHARTS_DIR / "01_krisis_pengangguran_usia_muda.svg", format="svg", bbox_inches="tight")
 fig.savefig(CHARTS_DIR / "01_krisis_pengangguran_usia_muda.png", dpi=300, bbox_inches="tight")
-plt.show()"""))
+plt.close(fig)
+display(Image(filename=str(CHARTS_DIR / "01_krisis_pengangguran_usia_muda.png")))"""))
 
     # ----------------------------------------------------
     # Cell 5: Bab 2 Narrative
@@ -271,7 +266,8 @@ ax.legend(loc="lower right", frameon=True, framealpha=0.9, edgecolor="#E2E8F0")
 plt.tight_layout()
 fig.savefig(CHARTS_DIR / "02_paradoks_pengangguran_terdidik.svg", format="svg", bbox_inches="tight")
 fig.savefig(CHARTS_DIR / "02_paradoks_pengangguran_terdidik.png", dpi=300, bbox_inches="tight")
-plt.show()"""))
+plt.close(fig)
+display(Image(filename=str(CHARTS_DIR / "02_paradoks_pengangguran_terdidik.png")))"""))
 
     # ----------------------------------------------------
     # Cell 7: Bab 3 Narrative
@@ -361,7 +357,8 @@ ax.legend(loc="upper right", frameon=True, framealpha=0.9, edgecolor="#E2E8F0")
 plt.tight_layout()
 fig.savefig(CHARTS_DIR / "03_disparitas_regional_dan_ilusi_informal.svg", format="svg", bbox_inches="tight")
 fig.savefig(CHARTS_DIR / "03_disparitas_regional_dan_ilusi_informal.png", dpi=300, bbox_inches="tight")
-plt.show()"""))
+plt.close(fig)
+display(Image(filename=str(CHARTS_DIR / "03_disparitas_regional_dan_ilusi_informal.png")))"""))
 
     # ----------------------------------------------------
     # Cell 9: Bab 4 Narrative
@@ -429,7 +426,8 @@ ax.legend(loc="upper right", frameon=True, framealpha=0.9, edgecolor="#E2E8F0", 
 plt.tight_layout()
 fig.savefig(CHARTS_DIR / "04_trajektori_pemulihan_longitudinal.svg", format="svg", bbox_inches="tight")
 fig.savefig(CHARTS_DIR / "04_trajektori_pemulihan_longitudinal.png", dpi=300, bbox_inches="tight")
-plt.show()"""))
+plt.close(fig)
+display(Image(filename=str(CHARTS_DIR / "04_trajektori_pemulihan_longitudinal.png")))"""))
 
     # ----------------------------------------------------
     # Cell 11: Bab 5 Narrative
@@ -513,7 +511,8 @@ ax.legend(loc="lower right", frameon=True, framealpha=0.9, edgecolor="#E2E8F0")
 plt.tight_layout()
 fig.savefig(CHARTS_DIR / "05_profil_tiga_klaster_ketenagakerjaan.svg", format="svg", bbox_inches="tight")
 fig.savefig(CHARTS_DIR / "05_profil_tiga_klaster_ketenagakerjaan.png", dpi=300, bbox_inches="tight")
-plt.show()"""))
+plt.close(fig)
+display(Image(filename=str(CHARTS_DIR / "05_profil_tiga_klaster_ketenagakerjaan.png")))"""))
 
     # ----------------------------------------------------
     # Cell 13: Closing Conclusion Narrative
