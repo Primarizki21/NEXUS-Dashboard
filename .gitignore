@@ -39,8 +39,6 @@ Thumbs.db
 .env
 .env.*
 
-# Local AI agent orchestration & internal scratchpads (tidak relevan untuk publik/kolaborator)
-AGENTS.md
-agents.md
+# Local AI agent scratchpads & personal logs
 CLAUDE.md
 *.local.md
