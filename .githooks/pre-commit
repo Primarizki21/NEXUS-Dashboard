@@ -1,0 +1,18 @@
+#!/bin/sh
+# Git hook: Mencegah commit langsung ke branch main / master
+
+current_branch=$(git symbolic-ref --short HEAD 2>/dev/null)
+
+if [ "$current_branch" = "main" ] || [ "$current_branch" = "master" ]; then
+    echo "======================================================================"
+    echo " [DITOLAK] Commit langsung ke branch '$current_branch' tidak diizinkan!"
+    echo " Repositori ini menerapkan kolaborasi berbasis Feature Branch."
+    echo ""
+    echo " Silakan pindah ke feature branch sebelum commit:"
+    echo "   git checkout -b feat/<nama-fitur>"
+    echo "   git commit -m \"...\""
+    echo "======================================================================"
+    exit 1
+fi
+
+exit 0
