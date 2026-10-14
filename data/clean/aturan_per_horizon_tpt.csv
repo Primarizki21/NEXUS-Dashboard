@@ -1,0 +1,4 @@
+Horizon,Model_Terpilih,MASE,MAPE (%),RMSE
+h = 1 (2025),Naive (Baseline),0.885,9.55,0.546
+h = 2 (2026),Holt Exponential Smoothing,1.156,13.13,0.793
+h = 3 (2027),Rata-Rata Bergerak (MA-3),1.059,12.03,0.772

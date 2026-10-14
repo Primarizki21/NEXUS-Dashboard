@@ -1,0 +1,4 @@
+Variabel,Koef_Domestik (Beta),Koef_Spasial (Theta),Efek_Langsung (Direct),Efek_Limpahan (Spillover / Indirect),Efek_Total
+Informalitas (%),-0.0813,-0.0366,-0.0815,-0.04,-0.1215
+log(Upah),0.3549,4.3112,0.3791,4.4313,4.8104
+Rasio Mismatch Terdidik,0.0499,0.8781,0.0549,0.9019,0.9568

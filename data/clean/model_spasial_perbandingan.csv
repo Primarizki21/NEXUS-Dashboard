@@ -1,0 +1,6 @@
+Model,Param,LogLik,AIC,rho_lambda,R2,Terpilih
+OLS (Standar Non-Spasial),4,-57.15,122.31,-,0.391,False
+SLX (Spatial Lag of X),7,-51.56,117.11,-,0.547,False
+SAR (Spatial Autoregressive),5,-56.28,122.56,0.24,0.425,False
+SEM (Spatial Error Model),5,-56.16,122.31,0.33,0.384,False
+SDM (Spatial Durbin Model),8,-51.55,119.09,0.03,0.547,True
