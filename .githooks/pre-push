@@ -1,0 +1,15 @@
+#!/bin/sh
+# Git hook: Mencegah push langsung ke branch main / master
+
+while read -r local_ref local_oid remote_ref remote_oid; do
+    if [ "$remote_ref" = "refs/heads/main" ] || [ "$remote_ref" = "refs/heads/master" ]; then
+        echo "======================================================================"
+        echo " [DITOLAK] Push langsung ke branch 'main'/'master' tidak diizinkan!"
+        echo " Silakan push ke feature branch kamu lalu buat Pull Request (PR):"
+        echo "   git push -u origin <nama-feature-branch>"
+        echo "======================================================================"
+        exit 1
+    fi
+done
+
+exit 0

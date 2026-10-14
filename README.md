@@ -65,6 +65,26 @@ uv run jupyter lab
 
 ---
 
+## 🤝 Alur Kolaborasi (Git Workflow)
+
+Repositori ini menerapkan aturan kolaborasi ketat: **dilarang melakukan commit atau push langsung ke branch `main`**.
+
+1. **Aktifkan Git Hook (Wajib Sekali di Awal):**
+   ```bash
+   git config core.hooksPath .githooks
+   ```
+2. **Kerjakan di Feature Branch:**
+   ```bash
+   git checkout -b feat/<nama-fitur>
+   # Kerjakan analisis, lalu commit dan push:
+   git push -u origin feat/<nama-fitur>
+   ```
+3. **Buat Pull Request (PR):** Buka PR di GitHub untuk digabungkan ke `main`.
+
+Panduan lengkap tercantum di [CONTRIBUTING.md](CONTRIBUTING.md).
+
+---
+
 ## 📊 Menjalankan Analisis & Regenerasi Output
 
 1. **Jalankan Ulang Pipeline Statistik Lengkap:**
