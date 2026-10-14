@@ -1,0 +1,4 @@
+Variabel,VIF,Status
+Informalitas (%),1.733,Bebas Multikolinearitas (VIF < 5)
+log(Upah Buruh),1.14,Bebas Multikolinearitas (VIF < 5)
+Rasio Mismatch Terdidik,1.56,Bebas Multikolinearitas (VIF < 5)

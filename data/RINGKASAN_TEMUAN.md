@@ -16,6 +16,11 @@
 | **Pangsa Pemuda dalam Total Pengangguran** | **56,70%** | Lebih dari separuh penganggur di Indonesia adalah generasi muda usia 15–24 tahun. |
 | **Korelasi Negatif TPT vs Informalitas** | **r = -0,782** | Semakin tinggi proporsi pekerja informal di suatu provinsi, TPT-nya justru semakin rendah (pengangguran semu). |
 | **Korelasi Positif TPT vs Tingkat Upah** | **r = +0,641** | Provinsi dengan upah buruh tinggi (pusat industri/urban) mengalami penumpukan pengangguran terbuka yang lebih besar. |
+| **Autokorelasi Spasial Global (Moran's I)** | **I = +0,246 (p = 0,012)** | Pengangguran antar-provinsi terbukti signifikan membentuk aglomerasi spasial regional di Indonesia. |
+| **Limpahan Spasial Upah (LeSage-Pace SDM)** | **+4,43** | Kenaikan upah buruh memicu limpahan migrasi pencari kerja masif ke wilayah-wilayah tetangga. |
+| **Jurang Gender TPT Terlebar (Jambi & Aceh)** | **Hingga 2,84 Kali Lipat** | Di Jambi, TPT perempuan mencapai 7,62% vs laki-laki 2,68% (selisih +4,94 poin). |
+| **Dekomposisi Ragam Panel (Between-Prov)** | **79,58%** | Struktur utama ketenagakerjaan bersifat lintas-wilayah (justifikasi pemodelan klaster & spasial). |
+| **Proyeksi Jangka Menengah Menuju 2030** | **4,68% pada 2030** | Model Holt Damped memproyeksikan TPT melandai bertahap mencapai target RPJMN 2025–2029. |
 
 ---
 

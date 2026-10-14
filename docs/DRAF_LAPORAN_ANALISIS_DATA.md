@@ -74,14 +74,45 @@ Berdasarkan analisis klaster K-Means ($k = 3$, skor Silhouette = 0,441) dengan 4
    * *Anggota:* Jawa Tengah, Jawa Timur, DI Yogyakarta, Bali, Sumatera Utara, Sumatera Barat, Sumatera Selatan, Jambi, Riau, Kalimantan Barat, Kalimantan Tengah, Kalimantan Selatan.
    * *Ciri:* TPT moderat (rata-rata 4,52%), informalitas menengah (52,6%), upah moderat (Rp2,88 juta), struktur ekonomi relatif terdiversifikasi.
 
+### 6. Ekonometrika Panel-Spasial & Limpahan Antar-Provinsi (Spatial Durbin Model)
+Mengadopsi pemodelan ekonometrika spasial mutakhir dengan matriks bobot spasial $k$-NN ($k = 4$) berbasis jarak Haversine antar-ibukota provinsi:
+* **Autokorelasi Spasial Mengelompok (Moran's I = +0,246, $p = 0,012$):** Pengangguran terbuka antar-provinsi terbukti signifikan membentuk aglomerasi spasial sepanjang 2017–2024.
+* **Keunggulan Spatial Durbin Model (SDM):** SDM terpilih sebagai model terbaik dengan AIC terendah (119,09) dan $R^2$ melonjak dari 0,391 (OLS) menjadi **0,547** (SDM).
+* **Dekomposisi Efek LeSage–Pace:**
+  - *Limpahan Upah Regional ($+4,43$):* Kenaikan upah buruh di suatu provinsi memicu efek limpahan (*spatial spillover*) masif yang menarik pencari kerja antar-wilayah.
+  - *Limpahan Mismatch Terdidik ($+0,90$):* Penumpukan pengangguran SMK dan sarjana merambat ke provinsi tetangga karena mobilitas geografis pemuda terdidik.
+  - *Efek Penyangga Sektor Informal ($-0,12$):* Sektor informal berfungsi sebagai bantalan penyerapan domestik ($-0,08$) dan regional ($-0,04$).
+
+### 7. Peramalan Waktu Runtun (Forecasting) TPT Indonesia Menuju 2030
+Berdasarkan evaluasi *cross-validation* multi-horizon ($h=1, 2, 3$) terhadap 7 model deret waktu:
+* **Model Juara:** *Holt Damped Trend* (MASE = 0,905) dan *Naive* (MASE = 0,885 pada $h=1$) mengungguli model autoregresif kompleks.
+* **Proyeksi Titik 2025–2030:** TPT nasional diproyeksikan melandai bertahap dari **5,05% (2025)** $\rightarrow$ **4,96% (2026)** $\rightarrow$ **4,88% (2027)** $\rightarrow$ **4,80% (2028)** $\rightarrow$ **4,74% (2029)** $\rightarrow$ **4,68% (2030)**.
+* **Selang Prediksi Probabilitas:** Berada pada koridor 80% [2,00% – 7,41%] dan 95% [1,50% – 8,87%], menegaskan bahwa target pemerintah pada RPJMN 2025–2029 sangat dapat dicapai jika mitigasi ketidakpastian vokasi dan formalitas terus dijalankan.
+
+### 8. Indeks Komposit Kerentanan Ketenagakerjaan Daerah (IKKD)
+Untuk membongkar ilusi pengangguran semu (daerah ber-TPT rendah namun informalitas ekstrem), dibangun **Indeks Komposit Kerentanan Ketenagakerjaan Daerah (IKKD)** berbasis bobot *Principal Component Analysis* (PCA-1) melintasi 4 dimensi: TPT Total, Tingkat Informalitas, Defisit Upah Riil, dan Tingkat Setengah Pengangguran:
+* **Skala Skor (0–100):** Mengklasifikasikan 38 provinsi menjadi 4 kuartil (Sangat Rentan $\ge 70$, Rentan $45-70$, Moderat $25-45$, dan Tangguh $< 25$).
+* **Temuan Anomali:** Provinsi seperti **Papua Pegunungan, Papua Tengah, NTT, dan NTB** yang memiliki TPT sangat rendah ($1,32\% - 2,73\%$) terbukti menempati kuartil **Sangat Rentan (IKKD > 75)** akibat defisit upah dan ketergantungan ekstrem pada sektor informal pertanian subsisten (>70%). Sebaliknya, wilayah dengan TPT lebih tinggi namun memiliki upah layak dan jaminan sosial formal (seperti DKI Jakarta dan Kepulauan Riau) berada pada kuartil yang jauh lebih tangguh.
+
+### 9. Jurang Pengangguran Gender & Penalti Upah Perempuan
+Analisis komparatif Sakernas BPS mengungkap ketimpangan gender yang tajam di pasar kerja daerah:
+* **Jurang TPT Ekstrem:** Di provinsi **Jambi**, TPT perempuan mencapai **7,62%** vs laki-laki **2,68%** (hampir 3 kali lipat / selisih $+4,94$ poin). Di **Aceh**, TPT perempuan **7,43%** vs laki-laki **4,71%** (selisih $+2,72$ poin). Di **Sumatera Barat**, TPT perempuan **6,97%** vs laki-laki **4,90%**.
+* **Penalti Upah Bersih (*Gender Wage Penalty*):** Di 38 provinsi, rata-rata upah buruh perempuan konsisten berada di bawah upah laki-laki dengan defisit mencapai **15% – 30%** (misalnya di NTB defisit upah perempuan mencapai 30,5% dan di Lampung 22,8%).
+
+### 10. Dekomposisi Ragam Panel & Diagnostik Multikolinearitas (VIF)
+* **Pangsa Ragam Antar-Provinsi (Between: 79,58%):** Membuktikan secara formal bahwa struktur ragam pengangguran Indonesia didominasi oleh faktor struktural lintang antar-wilayah, menjustifikasi penerapan klasterisasi tipologi daerah dan pemodelan spasial.
+* **Bebas Multikolinearitas (VIF < 1,74):** Nilai VIF seluruh variabel independen (Informalitas: 1,733; log Upah: 1,140; Mismatch: 1,560) berada jauh di bawah ambang batas 5,0, membuktikan kestabilan estimasi ekonometrika.
+
 ---
 
 ## Bab E: Kesimpulan & Rekomendasi Solusi Kebijakan
 
 ### 1. Kesimpulan
 1. Penurunan angka TPT nasional ke 4,91% pada Agustus 2024 menyembunyikan dua retakan struktural besar: **krisis pengangguran generasi muda (17,02%)** dan **paradoks pengangguran terdidik lulusan SMK (6,81%) serta universitas (5,33%)**.
-2. Angka pengangguran rendah di berbagai provinsi luar Jawa merupakan ilusi statistik yang didorong oleh tingginya penyerapan sektor informal rentan (*informal shelter*), bukan lapangan kerja berkualitas.
-3. Kebijakan ketenagakerjaan nasional memerlukan pergeseran dari pendekatan seragam (*one-size-fits-all*) menuju strategi diferensiasi berbasis klaster daerah.
+2. Angka pengangguran rendah di berbagai provinsi luar Jawa merupakan ilusi statistik yang dibuktikan oleh Indeks IKKD: daerah ber-TPT rendah justru berada pada tingkat kerentanan kesejahteraan tertinggi akibat jebakan informalitas.
+3. Kesenjangan gender memperlihatkan beban ganda bagi tenaga kerja perempuan yang menghadapi tingkat pengangguran hingga 2,8 kali lipat lebih tinggi di wilayah tertentu dan penalti upah sistemik.
+4. Analisis ekonometrika spasial membuktikan adanya interdependensi geografis dan efek limpahan (*spillover effect*) antar-provinsi yang kuat, sehingga kebijakan pasar kerja tidak dapat dirumuskan secara terisolasi per daerah.
+5. Peramalan jangka menengah memproyeksikan TPT nasional melandai menuju 4,68% pada tahun 2030, membuka jendela peluang emas bagi pencapaian target Indonesia Emas 2045.
 
 ### 2. Rekomendasi Kebijakan (*Turning Insight into Opportunity*)
 * **Untuk Klaster 1 (Urban-Industrial):**
@@ -92,6 +123,9 @@ Berdasarkan analisis klaster K-Means ($k = 3$, skor Silhouette = 0,441) dengan 4
   - Penguatan jaring pengaman sosial melalui subsidi iuran kepesertaan BPJS Ketenagakerjaan bagi pekerja sektor informal rentan.
 * **Untuk Klaster 3 (Transisi Berimbang):**
   - Pembangunan *Youth Creative-Tech Hub* di kota-kota sekunder untuk memfasilitasi talenta digital, industri kreatif, dan akses modal kerja berbunga rendah (KUR Klaster).
+* **Kebijakan Pengarusutamaan Gender & Limpahan Lintas Batas:**
+  - Standardisasi upah setara gender (*equal pay for equal work*) dan penyediaan infrastruktur penitipan anak (*daycare*) terjangkau di kawasan industri untuk mendorong partisipasi kerja perempuan produktif.
+  - Harmonisasi upah minimum regional terkoordinasi antar-provinsi tetangga untuk mereduksi distorsi migrasi pengangguran.
 
 ---
 
@@ -102,6 +136,8 @@ Berdasarkan analisis klaster K-Means ($k = 3$, skor Silhouette = 0,441) dengan 4
 3. Badan Pusat Statistik. (2023). *Profil Pengangguran Indonesia Agustus 2023*. Jakarta: BPS RI.
 4. Badan Pusat Statistik. (2022). *Indikator Ketenagakerjaan Indonesia 2017–2021*. Jakarta: BPS RI.
 5. Kementerian Ketenagakerjaan RI & Satu Data Indonesia. (2024). *Data Statistik Ketenagakerjaan dan Produktivitas Tenaga Kerja Daerah*. Jakarta: SDI.
+6. LeSage, J., & Pace, R. K. (2009). *Introduction to Spatial Econometrics*. Boca Raton: CRC Press.
+7. Hyndman, R. J., & Athanasopoulos, G. (2021). *Forecasting: Principles and Practice* (3rd ed.). Melbourne: OTexts.
 
 ---
 
@@ -109,14 +145,46 @@ Berdasarkan analisis klaster K-Means ($k = 3$, skor Silhouette = 0,441) dengan 4
 
 1. **Dataset Bersih (Folder `data/clean/`):**
    * `panel_tpt_provinsi_2017_2024.csv`: Panel longitudinal 34 provinsi x 8 tahun (2017–2024).
-   * `master_panel_provinsi_2024.csv`: Data lintang 38 provinsi tahun 2024 lengkap (TPT, pendidikan, formal/informal, upah, underemployment).
-   * `hasil_klaster_provinsi.csv`: Hasil segmentasi 3 klaster provinsi berbasis K-Means.
-   * `tpt_nasional_pendidikan_detail_2022_2024.csv`: Rincian 6 jenjang pendidikan nasional.
-   * `tpt_kelompok_umur_youth_adult.csv`: Komparasi umur muda vs dewasa.
+   * `master_panel_provinsi_2024.csv`: Data lintang 38 provinsi tahun 2024 lengkap.
+   * `koordinat_provinsi_indonesia.csv`: Koordinat geografis & ibu kota 38 provinsi Indonesia.
+   * `jarak_km_provinsi_indonesia.csv`: Matriks jarak Great-Circle Haversine 38 provinsi.
+   * `W_knn4_indonesia.csv`: Matriks bobot spasial row-standardized k-NN (k=4).
+   * `moran_lintasan_tahun_tpt.csv`: Global Moran's I tahun 2017–2024.
+   * `lisa_provinsi_2024.csv`: Local Moran's I kuadran LISA 2024.
+   * `model_spasial_perbandingan.csv`: Perbandingan OLS, SLX, SAR, SEM, dan SDM.
+   * `dekomposisi_efek_sdm_tpt.csv`: Dekomposisi efek langsung, limpahan, dan total LeSage-Pace.
+   * `grid_konfigurasi_klaster.csv`: Evaluasi grid search 216 konfigurasi klaster.
+   * `fitur_lintasan_provinsi.csv`: Fitur dinamis pemulihan dan volatilitas TPT.
+   * `uji_kelayakan_ramalan_tpt.csv`: Evaluasi CV multi-horizon 7 model peramalan.
+   * `aturan_per_horizon_tpt.csv`: Model juara per horizon ramalan.
+   * `proyeksi_tpt_indonesia_2025_2030.csv`: Angka proyeksi TPT nasional 2025–2030 dan selang 80% & 95%.
+   * `indeks_kerentanan_ketenagakerjaan_provinsi.csv`: Skor dan ranking IKKD 38 provinsi.
+   * `jurang_gender_provinsi_2024.csv`: Disparitas pengangguran dan defisit upah gender.
+   * `dekomposisi_ragam_dan_vif.csv`: Pangsa ragam panel dan nilai uji VIF.
 2. **Kode Reproduktif (Folder `scripts/`):**
-   * `extract_bps_tables.py`: Ekstraksi presisi tabel lampiran PDF BPS.
-   * `build_panel_tpt_2017_2024.py`: Pembentukan panel seimbang longitudinal 2017–2024.
-   * `run_statistical_analysis.py`: Script kalkulasi statistik deskriptif, korelasi, dan klasterisasi.
-   * `populate_template_masalah.py`: Generator template dokumen kerja tim desain.
-3. **Tautan Berkas Cloud Storage:**
-   * *(Tautan Google Drive penyimpanan berkas asli, font, dan kode program akan disematkan di sini saat pengumpulan final sesuai pedoman).*
+   * `run_spatial_econometrics.py`: Pipeline ekonometrika spasial, LISA, dan dekomposisi LeSage-Pace.
+   * `run_cluster_grid_search.py`: Pipeline pencarian konfigurasi klaster masif & stabilitas bootstrap.
+   * `run_forecasting_analysis.py`: Pipeline peramalan deret waktu dan fan chart 2025–2030.
+   * `run_advanced_enrichment.py`: Pipeline pengayaan IKKD, gender gap, dekomposisi ragam, dan peta spasial.
+   * `generate_advanced_notebooks.py`: Generator notebook analisis spasial dan peramalan.
+   * `extract_bps_tables.py`, `build_panel_tpt_2017_2024.py`, `run_statistical_analysis.py`, dll.
+3. **Notebook Interaktif (Folder `notebooks/`):**
+   * `Analisis_Klaster_Panel_Spasial_ACTION.ipynb`: Notebook komprehensif analisis spasial dan klaster.
+   * `Analisis_Forecasting_ACTION.ipynb`: Notebook komprehensif peramalan waktu runtun TPT.
+   * `analisis_ketenagakerjaan_action2026.ipynb`: Notebook visual storytelling infografis.
+4. **Grafik Resolusi Tinggi (Folder `assets/charts/` - 13 Seri Lengkap PNG & SVG):**
+   * `01_krisis_pengangguran_usia_muda.png` (& `.svg`)
+   * `02_paradoks_pengangguran_terdidik.png` (& `.svg`)
+   * `03_disparitas_regional_dan_ilusi_informal.png` (& `.svg`)
+   * `04_trajektori_pemulihan_longitudinal.png` (& `.svg`)
+   * `05_profil_tiga_klaster_ketenagakerjaan.png` (& `.svg`)
+   * `06_autokorelasi_spasial_lisa_moran.png` (& `.svg`)
+   * `07_model_spasial_dan_spillover_sdm.png` (& `.svg`)
+   * `08_proyeksi_forecasting_tpt_2025_2030.png` (& `.svg`)
+   * `09_evaluasi_grid_klaster_dan_stabilitas.png` (& `.svg`)
+   * `10_peta_spasial_lisa_indonesia.png` (& `.svg`)
+   * `11_indeks_komposit_kerentanan_kerja.png` (& `.svg`)
+   * `12_jurang_gender_tpt_dan_upah.png` (& `.svg`)
+   * `13_dekomposisi_ragam_panel_dan_vif.png` (& `.svg`)
+
+

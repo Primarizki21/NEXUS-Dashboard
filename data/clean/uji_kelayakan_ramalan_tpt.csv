@@ -1,0 +1,22 @@
+Model,Horizon,RMSE,MAE,MAPE (%),MASE
+Naive (Baseline),h = 1,0.546,0.54,9.55,0.885
+Naive (Baseline),h = 2,0.891,0.847,15.3,1.388
+Naive (Baseline),h = 3,1.233,1.153,21.23,1.891
+Drift (Tren Deterministik),h = 1,0.792,0.743,12.8,1.218
+Drift (Tren Deterministik),h = 2,1.38,1.268,22.59,2.079
+Drift (Tren Deterministik),h = 3,2.092,1.924,35.25,3.154
+Rata-Rata Bergerak (MA-3),h = 1,0.843,0.79,14.53,1.295
+Rata-Rata Bergerak (MA-3),h = 2,0.932,0.782,14.64,1.282
+Rata-Rata Bergerak (MA-3),h = 3,0.772,0.646,12.03,1.059
+Holt Exponential Smoothing,h = 1,0.636,0.616,11.28,1.009
+Holt Exponential Smoothing,h = 2,0.793,0.705,13.13,1.156
+Holt Exponential Smoothing,h = 3,0.881,0.756,14.17,1.24
+Holt Damped Trend,h = 1,0.658,0.628,11.58,1.029
+Holt Damped Trend,h = 2,0.836,0.75,13.98,1.229
+Holt Damped Trend,h = 3,0.947,0.824,15.47,1.351
+"ARIMA (1,1,0) Orde AICc",h = 1,0.795,0.764,13.27,1.252
+"ARIMA (1,1,0) Orde AICc",h = 2,1.017,0.997,17.88,1.635
+"ARIMA (1,1,0) Orde AICc",h = 3,1.133,1.038,18.82,1.702
+Ridge Regression (Lag-2),h = 1,1.077,0.949,16.7,1.555
+Ridge Regression (Lag-2),h = 2,1.694,1.555,28.04,2.549
+Ridge Regression (Lag-2),h = 3,2.594,2.383,44.23,3.906
