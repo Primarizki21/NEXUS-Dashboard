@@ -103,6 +103,22 @@ Analisis komparatif Sakernas BPS mengungkap ketimpangan gender yang tajam di pas
 * **Pangsa Ragam Antar-Provinsi (Between: 79,58%):** Membuktikan secara formal bahwa struktur ragam pengangguran Indonesia didominasi oleh faktor struktural lintang antar-wilayah, menjustifikasi penerapan klasterisasi tipologi daerah dan pemodelan spasial.
 * **Bebas Multikolinearitas (VIF < 1,74):** Nilai VIF seluruh variabel independen (Informalitas: 1,733; log Upah: 1,140; Mismatch: 1,560) berada jauh di bawah ambang batas 5,0, membuktikan kestabilan estimasi ekonometrika.
 
+### 11. Gunung Es Utilisasi Kerja: Lonjakan Setengah Penganggur & Standar ILO LU2
+Di balik narasi pemulihan TPT nasional yang melandai ke 4,91% (turun dari 5,32% pada Agustus 2023), analisis data agregat Sakernas membongkar kemerosotan mutu jam kerja:
+* **Lonjakan Setengah Penganggur (+23,8%):** Jumlah setengah penganggur (pekerja dengan jam kerja kurang dari 35 jam per minggu yang masih mencari atau bersedia menerima pekerjaan tambahan) melonjak drastis dari **9,34 juta orang (6,68%)** pada Agustus 2023 menjadi **11,56 juta orang (7,99%)** pada Agustus 2024 (bertambah +2,22 juta orang).
+* **Labor Underutilization Rate (Standar ILO LU2):** Menggabungkan pengangguran terbuka (7,47 juta) dan setengah penganggur (11,56 juta), tingkat defisit utilisasi waktu kerja nasional tercatat sebesar **12,51% (19,03 juta orang)**, mengalami kenaikan dari 11,64% (17,20 juta orang) pada 2023. Hal ini membuktikan bahwa tenaga kerja yang keluar dari status TPT sebagian besar tidak terserap ke pekerjaan formal tetap, melainkan beralih ke pekerjaan paruh waktu berupah rendah (*underemployment trap*).
+
+### 12. Dikotomi Pasar Kerja: Urban Queue vs Rural Trap
+Disparitas ketenagakerjaan Indonesia menunjukkan keterbelahan geografis antara perkotaan dan perdesaan:
+* **Kawasan Perkotaan (Urban Queue):** Menghadapi tingginya pengangguran terbuka (TPT 5,79%) dan penumpukan krisis pengangguran pemuda 15-24 tahun yang menyentuh **19,86%** (hampir 1 dari 5 pemuda kota menganggur terbuka). Hal ini mencerminkan fenomena antrean kerja formal di mana angkatan kerja terdidik memilih menunggu pekerjaan berkualitas.
+* **Kawasan Perdesaan (Rural Trap):** TPT tampak rendah semu (3,67%), namun tingkat setengah pengangguran mencapai **10,60%** (1,74 kali lipat lebih tinggi dari perkotaan). Masyarakat perdesaan yang didominasi sektor pertanian tidak memiliki kemampuan finansial untuk menganggur (*too poor to be unemployed*), sehingga terpaksa bekerja dengan jam kerja yang sangat terbatas.
+
+### 13. Skenario Peluang Kerja RPJMN 2025-2029 (Target 5,40 Juta Kesempatan Kerja)
+Untuk merealisasikan tema *Turning Insight into Opportunity* dan mendukung target RPJMN 2025-2029 (TPT nasional 4,00% - 4,50%), pemodelan menghasilkan kuota kebutuhan lapangan kerja baru per klaster:
+* **Klaster 1 (Urban-Industrial):** Target penurunan TPT ke < 5,20% membutuhkan penciptaan **1,85 juta lowongan kerja formal** industri manufaktur dan jasa teknologi tinggi.
+* **Klaster 2 (Agraris-Informal):** Target reduksi setengah pengangguran ke < 7,00% membutuhkan peningkatan kapasitas waktu kerja bagi **2,10 juta pekerja penuh** melalui hilirisasi komoditas dan modernisasi alat pertanian.
+* **Klaster 3 (Transisi Berimbang):** Target penurunan TPT ke < 3,80% membutuhkan penciptaan **1,45 juta pekerjaan bernilai tambah** di sektor ekonomi kreatif, pariwisata, dan platform digital pemuda.
+* **Total Kebutuhan Kesempatan Kerja Nasional:** **5,40 juta lapangan kerja berkualitas** hingga 2029.
 ---
 
 ## Bab E: Kesimpulan & Rekomendasi Solusi Kebijakan

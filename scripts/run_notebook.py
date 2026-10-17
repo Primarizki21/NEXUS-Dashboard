@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Headless runner for Jupyter Notebooks.
-Executes notebooks/analisis_ketenagakerjaan_action2026.ipynb end-to-end
+Executes all notebooks in notebooks/ (or a targeted notebook) end-to-end
 and saves all executed cells, outputs, and embedded visualizations in-place.
 """
 
@@ -12,9 +12,10 @@ import nbformat
 from nbclient import NotebookClient
 
 ROOT_DIR = Path(__file__).resolve().parent.parent
-DEFAULT_NOTEBOOK = ROOT_DIR / "notebooks" / "analisis_ketenagakerjaan_action2026.ipynb"
+NOTEBOOKS_DIR = ROOT_DIR / "notebooks"
+DEFAULT_NOTEBOOK = NOTEBOOKS_DIR / "analisis_ketenagakerjaan_action2026.ipynb"
 
-def run_notebook(notebook_path: Path = DEFAULT_NOTEBOOK, output_path: Path = None):
+def run_notebook(notebook_path: Path = DEFAULT_NOTEBOOK, output_path: Path = None, verify_assets: bool = False) -> dict:
     if output_path is None:
         output_path = notebook_path
         
@@ -50,8 +51,60 @@ def run_notebook(notebook_path: Path = DEFAULT_NOTEBOOK, output_path: Path = Non
     # Save executed notebook
     nbformat.write(nb, output_path)
     print(f"💾 Saved executed notebook with all outputs to: {output_path.relative_to(ROOT_DIR)}")
+    if verify_assets:
+        charts_dir = ROOT_DIR / "assets" / "charts"
+        charts = sorted(list(charts_dir.glob("*.png")))
+        print(f"\n📊 Verified {len(charts)} exported charts in {charts_dir.relative_to(ROOT_DIR)}:")
+        for chart in charts:
+            size_kb = chart.stat().st_size / 1024
+            print(f"   - {chart.name} ({size_kb:.1f} KB)")
+            
+    return {
+        "notebook": notebook_path.name,
+        "total_cells": len(nb.cells),
+        "code_cells": len(code_cells),
+        "elapsed": elapsed,
+        "status": "success"
+    }
 
-    # Verify generated assets
+def main():
+    args = sys.argv[1:]
+    if args and args[0] not in ("--all", "-a"):
+        target = Path(args[0])
+        if not target.is_absolute():
+            candidate = NOTEBOOKS_DIR / target.name
+            if candidate.exists():
+                target = candidate
+            elif (ROOT_DIR / target).exists():
+                target = ROOT_DIR / target
+        run_notebook(target, verify_assets=True)
+        return
+
+    # Default / --all: run all notebooks in notebooks/
+    notebooks = sorted(list(NOTEBOOKS_DIR.glob("*.ipynb")))
+    if not notebooks:
+        print(f"⚠️  No notebooks found in {NOTEBOOKS_DIR}")
+        return
+
+    print(f"==================================================")
+    print(f"🚀 Running all {len(notebooks)} notebooks in {NOTEBOOKS_DIR.relative_to(ROOT_DIR)}/")
+    print(f"==================================================")
+    
+    results = []
+    total_start = time.time()
+    for idx, nb_path in enumerate(notebooks, 1):
+        print(f"\n>>> [{idx}/{len(notebooks)}] Executing: {nb_path.name}")
+        res = run_notebook(nb_path, verify_assets=False)
+        results.append(res)
+        
+    total_elapsed = time.time() - total_start
+    print(f"\n==================================================")
+    print(f"🏁 Execution Summary ({total_elapsed:.2f}s total):")
+    print(f"==================================================")
+    for r in results:
+        print(f" ✅ {r['notebook']}: {r['code_cells']} code cells, {r['elapsed']:.2f}s")
+        
+    # Final asset check
     charts_dir = ROOT_DIR / "assets" / "charts"
     charts = sorted(list(charts_dir.glob("*.png")))
     print(f"\n📊 Verified {len(charts)} exported charts in {charts_dir.relative_to(ROOT_DIR)}:")
@@ -60,5 +113,4 @@ def run_notebook(notebook_path: Path = DEFAULT_NOTEBOOK, output_path: Path = Non
         print(f"   - {chart.name} ({size_kb:.1f} KB)")
 
 if __name__ == "__main__":
-    target = Path(sys.argv[1]) if len(sys.argv) > 1 else DEFAULT_NOTEBOOK
-    run_notebook(target)
+    main()
