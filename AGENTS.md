@@ -129,3 +129,15 @@ Setiap agen/kontributor wajib mengikuti protokol 5 langkah:
     1. Mengonfirmasi keberadaan dan dimensi data yang dimuat.
     2. Menjalankan pemeriksaan awal relevan (misal: uji stasioneritas/asumsi sebelum pemodelan, pengecekan nilai hilang).
     3. Menampilkan ringkasan ringkas yang membuktikan bahwa proses komputasi di cell tersebut benar-benar berhasil dijalankan.
+
+### Prinsip 3: Integritas Dokumen OOXML & Skrip Pembangun Terpusat (Docx/OOXML Integrity)
+* **Pola Kesalahan:**
+  1. Melakukan manipulasi raw XML ad-hoc pada dokumen Word (.docx) menggunakan fungsi seperti `xml.etree.ElementTree.SubElement`. Pemanggilan ini menempelkan properti `<w:pPr>` dan `<w:rPr>` di akhir elemen anak (setelah teks atau run), yang melanggar urutan baku skema OOXML ECMA-376 dan merusak deklarasi namespace `mc:Ignorable`, sehingga Microsoft Word memunculkan pesan "unreadable contents".
+  2. Melakukan patching langsung pada berkas biner `.docx` alih-alih memperbaiki skrip pembuat dokumen (`scripts/populate_template_masalah.py`), merusak prinsip *single source of truth*.
+  3. Menyisipkan angka penomoran manual ("1. ", "2. ") pada paragraf yang sudah memiliki definisi penomoran Word (`w:numPr`), menyebabkan penomoran ganda ("1. 1. "), serta membiarkan placeholder kosong membentuk nomor hantu.
+* **Standar Pencegahan:**
+  * **Single Source of Truth:** Seluruh perubahan teks, struktur, font, dan tabel dokumen wajib dikelola melalui generator Python terpusat (`scripts/populate_template_masalah.py`). Dilarang memodifikasi ZIP/XML berkas `.docx` secara ad-hoc tanpa generator reproduktif.
+  * **Patuhi Skema Elemen OOXML:** Gunakan API resmi `python-docx`. Jika memodifikasi oxml, pastikan urutan elemen skema dipatuhi (`<w:pPr>` selalu elemen pertama `<w:p>`, `<w:rPr>` selalu mendahului `<w:t>`, dan `<w:tblBorders>` diletakkan sebelum `<w:tblLook>`).
+  * **Hormati Penomoran Otomatis:** Jangan menambahkan angka manual pada paragraf yang memiliki list styling. Hapus elemen placeholder berlebih langsung dari parent XML.
+  * **Harmonisasi Font Penuh:** Setel font `Lexend 12pt` hitam pada style dokumen (`doc.styles['normal']`) serta atribut run (`w:ascii`, `w:hAnsi`, `w:eastAsia`, `w:cs`).
+  * **Validasi Skema Wajib:** Setiap regenerasi `.docx` wajib diverifikasi menggunakan validator skema OpenXML (`validate.py`) dengan hasil `All validations PASSED!`.
