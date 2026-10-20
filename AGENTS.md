@@ -43,9 +43,11 @@ Setiap agen/kontributor wajib mengikuti protokol 5 langkah:
    * `karpathy-guidelines`: *Simplicity first*, kode seringkas mungkin, tanpa abstraksi berlebihan.
 2. **To-Do List:** Tetapkan daftar tugas dengan kriteria keberhasilan yang dapat diverifikasi.
 3. **Surgical Execution:** Tulis script seminimal mungkin yang menyelesaikan tugas pengolahan/analisis data.
-4. **Verification:** Eksekusi script secara langsung, cek konsistensi angka dan ketiadaan nilai hilang tak terduga.
+4. **Verification (Multi-Environment):** Eksekusi script secara langsung, cek konsistensi angka dan ketiadaan nilai hilang tak terduga. Untuk file notebook (.ipynb) atau modul interaktif, verifikasi wajib dijalankan sukses dari dua working directory: root repositori (`.`) dan folder `notebooks/`.
 5. **Atomic Commit:** Lakukan commit git terpisah untuk setiap capaian logis yang telah diverifikasi.
 6. **Feature Branch Only:** Dilarang commit atau push langsung ke `main`. Setiap perubahan wajib dibuat di branch terpisah (`feat/*`, `fix/*`) dan melalui Pull Request.
+7. **Environment-Agnostic Execution:** Dilarang mengasumsikan satu *working directory* tunggal atau menggunakan *hardcoded relative path* yang rapuh terhadap konteks eksekusi (IDE vs terminal vs runner otomatis).
+8. **Self-Verifying Outputs:** Setiap tahap persiapan atau pemuatan data wajib menghasilkan diagnostik atau validasi konkret (inspeksi dimensi, kelengkapan, atau uji asumsi awal), bukan hanya mencetak teks status tanpa bukti eksekusi.
 
 ---
 
@@ -100,3 +102,30 @@ Setiap agen/kontributor wajib mengikuti protokol 5 langkah:
     - Rincian Babak I s.d. Babak V (Prelude, Data hasil kalkulasi, Tautan sumber data resmi, dan Rekomendasi visualisasi).
     - Matriks Solusi / Kebijakan (*Turning Insight into Opportunity*).
   * Menyusun draf teks Laporan Resmi bab Pengolahan Data dan Deskripsi Data.
+
+---
+
+## 5. Rekam Jejak Kesalahan & Invariant Teknis (Lessons Learned)
+
+### Prinsip 1: Ketahanan Jalur dan Konteks Eksekusi (Context-Agnostic Paths)
+* **Pola Kesalahan:**
+  Mengasumsikan *working directory* selalu berada di lokasi tertentu (misal: subfolder tempat file berada), sehingga pemanggilan file data atau modul eksternal menggunakan jalur relatif statis. Ketika pengguna menjalankan kode melalui IDE (seperti VS Code atau JupyterLab) yang menetapkan *working directory* di root proyek, eksekusi gagal dengan `FileNotFoundError` dan alur analisis terputus.
+* **Standar Pencegahan:**
+  * Seluruh modul, skrip, dan notebook wajib menerapkan resolusi jalur adaptif:
+    ```python
+    from pathlib import Path
+
+    DATA_DIR = Path("../data/clean") if (Path("../data/clean")).exists() else Path("data/clean")
+    CHARTS_DIR = Path("../assets/charts") if (Path("../assets/charts")).exists() else Path("assets/charts")
+    CHARTS_DIR.mkdir(parents=True, exist_ok=True)
+    ```
+  * Generator otomatis yang memproduksi artefak kode wajib menyematkan logika resolusi adaptif ini secara konsisten.
+
+### Prinsip 2: Keterlihatan dan Validasi Mandiri Eksekusi (Self-Verifying Execution)
+* **Pola Kesalahan:**
+  Cell awal hanya memuat *import* atau mencetak teks deklaratif (misal: "setup selesai") tanpa memvalidasi objek data atau asumsi dasar. Jika cell berikutnya gagal, pengguna kesulitan membedakan apakah lingkungan belum siap, data gagal dimuat, atau eksekusi tidak berjalan.
+* **Standar Pencegahan:**
+  * Setiap tahapan inisialisasi dan pemuatan data wajib bersifat *self-verifying*:
+    1. Mengonfirmasi keberadaan dan dimensi data yang dimuat.
+    2. Menjalankan pemeriksaan awal relevan (misal: uji stasioneritas/asumsi sebelum pemodelan, pengecekan nilai hilang).
+    3. Menampilkan ringkasan ringkas yang membuktikan bahwa proses komputasi di cell tersebut benar-benar berhasil dijalankan.
