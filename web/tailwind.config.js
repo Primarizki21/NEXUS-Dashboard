@@ -63,7 +63,11 @@ export default {
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
         mono: ['JetBrains Mono', 'monospace'],
-      }
+      },
+      fontSize: {
+        '2xs': ['0.6875rem', { lineHeight: '0.875rem' }],
+        '3xs': ['0.625rem', { lineHeight: '0.75rem' }],
+      },
     },
   },
   plugins: [tailwindcssAnimate],

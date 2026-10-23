@@ -51,24 +51,23 @@ export const PolicySimulator: React.FC<PolicySimulatorProps> = ({ data }) => {
 
   return (
     <div className="space-y-12 animate-fade-in">
-      {/* Header */}
-      <div className="border-b border-slate-800 pb-6 flex flex-col md:flex-row md:items-end justify-between gap-4">
+      <div className="border-b border-border pb-6 flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
-          <div className="inline-flex items-center space-x-2 text-xs font-mono text-cyan-400 mb-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
+          <div className="inline-flex items-center space-x-2 text-xs font-mono text-cyan-500 dark:text-cyan-400 mb-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-cyan-500 dark:bg-cyan-400"></span>
             <span>MODUL 3 : DECISION SUPPORT SYSTEM & POLICY LAB</span>
           </div>
-          <h1 className="text-2xl sm:text-4xl font-extrabold text-white tracking-tight">
+          <h1 className="text-2xl sm:text-4xl font-extrabold text-foreground tracking-tight">
             Simulator Kebijakan Ketenagakerjaan RPJMN
           </h1>
-          <p className="text-sm text-slate-400 mt-1 max-w-2xl">
+          <p className="text-sm text-muted-foreground mt-1 max-w-2xl">
             Simulasikan 3 tuas intervensi berbasis klaster wilayah untuk menguji pencapaian target penyerapan 5,40 juta kesempatan kerja berkualitas dan penurunan TPT menuju 4,30% pada 2029.
           </p>
         </div>
 
         <button
           onClick={handleReset}
-          className="inline-flex items-center space-x-2 px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-xs font-mono text-slate-300 hover:text-white hover:bg-slate-850 cursor-pointer transition-colors"
+          className="inline-flex items-center space-x-2 px-3 py-1.5 rounded-lg bg-card border border-border text-xs font-mono text-muted-foreground hover:text-foreground hover:bg-muted cursor-pointer transition-colors"
         >
           <RotateCcw className="w-3.5 h-3.5" />
           <span>Reset Tuas Kebijakan</span>
@@ -76,17 +75,17 @@ export const PolicySimulator: React.FC<PolicySimulatorProps> = ({ data }) => {
       </div>
 
       {/* Aggregate Real-Time Simulator Dashboard */}
-      <section className="p-8 rounded-2xl bg-gradient-to-br from-slate-900 via-slate-950 to-slate-900 border border-slate-800 relative overflow-hidden">
+      <section className="p-8 rounded-2xl bg-card border border-border relative overflow-hidden shadow-xs">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 items-center">
           <div className="lg:col-span-2 space-y-3">
-            <span className="text-xs font-mono text-cyan-400 uppercase tracking-wider block">
+            <span className="text-xs font-mono text-cyan-600 dark:text-cyan-400 uppercase tracking-wider block">
               Total Akumulasi Kesempatan Kerja Tercipta:
             </span>
             <div className="flex items-baseline space-x-3">
-              <span className="text-4xl sm:text-5xl font-black font-mono tracking-tight text-white">
+              <span className="text-4xl sm:text-5xl font-black font-mono tracking-tight text-foreground">
                 {(totalJobsCreated / 1000000).toFixed(2)} Juta
               </span>
-              <span className="text-sm font-mono text-slate-400">
+              <span className="text-sm font-mono text-muted-foreground">
                 / 5.40 Juta Target RPJMN
               </span>
             </div>
@@ -94,10 +93,10 @@ export const PolicySimulator: React.FC<PolicySimulatorProps> = ({ data }) => {
             {/* Progress Bar */}
             <div className="space-y-1 pt-1">
               <div className="flex justify-between text-xs font-mono">
-                <span className="text-slate-400">Pencapaian Target Nasional:</span>
-                <span className="font-bold text-cyan-400">{progressPct}%</span>
+                <span className="text-muted-foreground">Pencapaian Target Nasional:</span>
+                <span className="font-bold text-cyan-600 dark:text-cyan-400">{progressPct}%</span>
               </div>
-              <div className="w-full bg-slate-950 rounded-full h-3 overflow-hidden border border-slate-800">
+              <div className="w-full bg-muted rounded-full h-3 overflow-hidden border border-border">
                 <div
                   className="bg-gradient-to-r from-cyan-500 to-emerald-400 h-full rounded-full transition-all duration-300"
                   style={{ width: `${progressPct}%` }}
@@ -107,23 +106,23 @@ export const PolicySimulator: React.FC<PolicySimulatorProps> = ({ data }) => {
           </div>
 
           {/* Outcome 1: TPT Impact */}
-          <div className="p-4 rounded-xl bg-slate-950/90 border border-slate-800 text-center font-mono">
-            <span className="text-xs text-slate-400 block font-sans">Proyeksi TPT Nasional</span>
-            <span className="text-3xl font-extrabold text-emerald-400 my-1 block">
+          <div className="p-4 rounded-xl bg-muted/40 border border-border text-center font-mono">
+            <span className="text-xs text-muted-foreground block font-sans">Proyeksi TPT Nasional</span>
+            <span className="text-3xl font-extrabold text-emerald-500 dark:text-emerald-400 my-1 block">
               {simulatedTPT}%
             </span>
-            <span className="text-2xs text-slate-400">
+            <span className="text-2xs text-muted-foreground">
               Baseline 2024: 4.91% (-{(baselineTPT - simulatedTPT).toFixed(2)} poin)
             </span>
           </div>
 
           {/* Outcome 2: Underemployment Impact */}
-          <div className="p-4 rounded-xl bg-slate-950/90 border border-slate-800 text-center font-mono">
-            <span className="text-xs text-slate-400 block font-sans">Setengah Penganggur</span>
-            <span className="text-3xl font-extrabold text-amber-400 my-1 block">
+          <div className="p-4 rounded-xl bg-muted/40 border border-border text-center font-mono">
+            <span className="text-xs text-muted-foreground block font-sans">Setengah Penganggur</span>
+            <span className="text-3xl font-extrabold text-amber-500 dark:text-amber-400 my-1 block">
               {simulatedUnderemp} Jt
             </span>
-            <span className="text-2xs text-slate-400">
+            <span className="text-2xs text-muted-foreground">
               Tereduksi -{underempReduction} Juta Orang
             </span>
           </div>
@@ -133,37 +132,37 @@ export const PolicySimulator: React.FC<PolicySimulatorProps> = ({ data }) => {
       {/* 3 Interactive Sliders */}
       <section className="space-y-6">
         <div>
-          <span className="text-xs font-mono text-cyan-400 uppercase tracking-wider block mb-1">
+          <span className="text-xs font-mono text-cyan-600 dark:text-cyan-400 uppercase tracking-wider block mb-1">
             Tuas Intervensi Terarah per Klaster Wilayah
           </span>
-          <h2 className="text-xl font-bold text-white tracking-tight">
+          <h2 className="text-xl font-bold text-foreground tracking-tight">
             Sesuaikan Intensitas Kebijakan di Setiap Klaster
           </h2>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Lever 1: Klaster 1 Urban Trap */}
-          <div className="p-6 rounded-2xl bg-slate-900/80 border border-slate-800 flex flex-col justify-between space-y-6">
+          <div className="p-6 rounded-2xl bg-card border border-border flex flex-col justify-between space-y-6 shadow-xs">
             <div className="space-y-3">
               <div className="flex items-center space-x-3">
-                <div className="p-2.5 rounded-lg bg-red-950/60 border border-red-800 text-red-400">
+                <div className="p-2.5 rounded-lg bg-red-500/10 border border-red-500/20 text-red-500 dark:text-red-400">
                   <Building className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-sm text-white">1. Link-and-Match Vokasi & Magang Industri</h3>
-                  <span className="text-xs text-slate-400 font-mono">Fokus Klaster 1 : Urban-Industrial Trap</span>
+                  <h3 className="font-bold text-sm text-foreground">1. Link-and-Match Vokasi & Magang Industri</h3>
+                  <span className="text-xs text-muted-foreground font-sans">Fokus Klaster 1 : Urban-Industrial Trap</span>
                 </div>
               </div>
 
-              <p className="text-xs text-slate-300 leading-relaxed">
+              <p className="text-xs text-muted-foreground leading-relaxed">
                 Standardisasi kurikulum SMK bersama konsorsium industri manufaktur, insentif superdeduction tax 200%, dan standardisasi upah magang formal di 8 provinsi urban.
               </p>
 
               {/* Slider Input */}
               <div className="space-y-2 pt-2">
                 <div className="flex justify-between items-center text-xs font-mono">
-                  <span className="text-slate-400">Tingkat Penetrasi:</span>
-                  <span className="text-base font-bold text-red-400">{vokasiLevel}%</span>
+                  <span className="text-muted-foreground">Tingkat Penetrasi:</span>
+                  <span className="text-base font-bold text-red-500 dark:text-red-400">{vokasiLevel}%</span>
                 </div>
                 <input
                   type="range"
@@ -172,44 +171,44 @@ export const PolicySimulator: React.FC<PolicySimulatorProps> = ({ data }) => {
                   step="5"
                   value={vokasiLevel}
                   onChange={(e) => setVokasiLevel(parseInt(e.target.value))}
-                  className="w-full h-2 bg-slate-950 rounded-lg appearance-none cursor-pointer accent-red-500 border border-slate-800"
+                  className="w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer accent-red-500 border border-border"
                 />
-                <div className="flex justify-between text-3xs font-mono text-slate-400">
-                  <span>0% (Status Quo)</span>
-                  <span>50% (Moderat)</span>
-                  <span>100% (Maksimal)</span>
+                <div className="flex justify-between text-2xs font-sans text-muted-foreground pt-1">
+                  <span>0% <span className="opacity-75">(Status Quo)</span></span>
+                  <span>50% <span className="opacity-75">(Moderat)</span></span>
+                  <span>100% <span className="opacity-75">(Maksimal)</span></span>
                 </div>
               </div>
             </div>
 
-            <div className="p-3 rounded-lg bg-slate-950 border border-slate-800 text-xs font-mono flex items-center justify-between">
-              <span className="text-slate-400">Serapan Lapangan Kerja:</span>
-              <span className="text-white font-bold text-sm">{(jobs1 / 1000000).toFixed(2)} Juta</span>
+            <div className="p-3 rounded-lg bg-muted/40 border border-border text-xs flex items-center justify-between">
+              <span className="text-muted-foreground">Serapan Lapangan Kerja:</span>
+              <span className="text-foreground font-bold text-sm font-mono">{(jobs1 / 1000000).toFixed(2)} Juta</span>
             </div>
           </div>
 
           {/* Lever 2: Klaster 2 Agrarian Shelter */}
-          <div className="p-6 rounded-2xl bg-slate-900/80 border border-slate-800 flex flex-col justify-between space-y-6">
+          <div className="p-6 rounded-2xl bg-card border border-border flex flex-col justify-between space-y-6 shadow-xs">
             <div className="space-y-3">
               <div className="flex items-center space-x-3">
-                <div className="p-2.5 rounded-lg bg-amber-950/60 border border-amber-800 text-amber-400">
+                <div className="p-2.5 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-500 dark:text-amber-400">
                   <Tractor className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-sm text-white">2. Hilirisasi Pertanian & Formalisasi Desa</h3>
-                  <span className="text-xs text-slate-400 font-mono">Fokus Klaster 2 : Agraris-Informal Shelter</span>
+                  <h3 className="font-bold text-sm text-foreground">2. Hilirisasi Pertanian & Formalisasi Desa</h3>
+                  <span className="text-xs text-muted-foreground font-sans">Fokus Klaster 2 : Agraris-Informal Shelter</span>
                 </div>
               </div>
 
-              <p className="text-xs text-slate-300 leading-relaxed">
+              <p className="text-xs text-muted-foreground leading-relaxed">
                 Pembangunan unit pengolahan komoditas lokal, korporatisasi petani, jaminan sosial ketenagakerjaan, dan transisi pekerja paruh waktu menjadi pekerja penuh waktu di 18 provinsi.
               </p>
 
               {/* Slider Input */}
               <div className="space-y-2 pt-2">
                 <div className="flex justify-between items-center text-xs font-mono">
-                  <span className="text-slate-400">Tingkat Penetrasi:</span>
-                  <span className="text-base font-bold text-amber-400">{hilirisasiLevel}%</span>
+                  <span className="text-muted-foreground">Tingkat Penetrasi:</span>
+                  <span className="text-base font-bold text-amber-500 dark:text-amber-400">{hilirisasiLevel}%</span>
                 </div>
                 <input
                   type="range"
@@ -218,44 +217,44 @@ export const PolicySimulator: React.FC<PolicySimulatorProps> = ({ data }) => {
                   step="5"
                   value={hilirisasiLevel}
                   onChange={(e) => setHilirisasiLevel(parseInt(e.target.value))}
-                  className="w-full h-2 bg-slate-950 rounded-lg appearance-none cursor-pointer accent-amber-500 border border-slate-800"
+                  className="w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer accent-amber-500 border border-border"
                 />
-                <div className="flex justify-between text-3xs font-mono text-slate-400">
-                  <span>0% (Status Quo)</span>
-                  <span>50% (Moderat)</span>
-                  <span>100% (Maksimal)</span>
+                <div className="flex justify-between text-2xs font-sans text-muted-foreground pt-1">
+                  <span>0% <span className="opacity-75">(Status Quo)</span></span>
+                  <span>50% <span className="opacity-75">(Moderat)</span></span>
+                  <span>100% <span className="opacity-75">(Maksimal)</span></span>
                 </div>
               </div>
             </div>
 
-            <div className="p-3 rounded-lg bg-slate-950 border border-slate-800 text-xs font-mono flex items-center justify-between">
-              <span className="text-slate-400">Serapan Lapangan Kerja:</span>
-              <span className="text-white font-bold text-sm">{(jobs2 / 1000000).toFixed(2)} Juta</span>
+            <div className="p-3 rounded-lg bg-muted/40 border border-border text-xs flex items-center justify-between">
+              <span className="text-muted-foreground">Serapan Lapangan Kerja:</span>
+              <span className="text-foreground font-bold text-sm font-mono">{(jobs2 / 1000000).toFixed(2)} Juta</span>
             </div>
           </div>
 
           {/* Lever 3: Klaster 3 Transisi Berimbang */}
-          <div className="p-6 rounded-2xl bg-slate-900/80 border border-slate-800 flex flex-col justify-between space-y-6">
+          <div className="p-6 rounded-2xl bg-card border border-border flex flex-col justify-between space-y-6 shadow-xs">
             <div className="space-y-3">
               <div className="flex items-center space-x-3">
-                <div className="p-2.5 rounded-lg bg-emerald-950/60 border border-emerald-800 text-emerald-400">
+                <div className="p-2.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 dark:text-emerald-400">
                   <Laptop className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-sm text-white">3. Inkubasi Wirausaha & Ekonomi Kreatif</h3>
-                  <span className="text-xs text-slate-400 font-mono">Fokus Klaster 3 : Transisi Berimbang</span>
+                  <h3 className="font-bold text-sm text-foreground">3. Inkubasi Wirausaha & Ekonomi Kreatif</h3>
+                  <span className="text-xs text-muted-foreground font-sans">Fokus Klaster 3 : Transisi Berimbang</span>
                 </div>
               </div>
 
-              <p className="text-xs text-slate-300 leading-relaxed">
+              <p className="text-xs text-muted-foreground leading-relaxed">
                 Pembiayaan modal kerja padat karya, inkubasi bisnis startup pemuda, pendampingan digitalisasi UMKM perdagangan, dan jasa mandiri di 12 provinsi penyangga.
               </p>
 
               {/* Slider Input */}
               <div className="space-y-2 pt-2">
                 <div className="flex justify-between items-center text-xs font-mono">
-                  <span className="text-slate-400">Tingkat Penetrasi:</span>
-                  <span className="text-base font-bold text-emerald-400">{digitalLevel}%</span>
+                  <span className="text-muted-foreground">Tingkat Penetrasi:</span>
+                  <span className="text-base font-bold text-emerald-500 dark:text-emerald-400">{digitalLevel}%</span>
                 </div>
                 <input
                   type="range"
@@ -264,42 +263,42 @@ export const PolicySimulator: React.FC<PolicySimulatorProps> = ({ data }) => {
                   step="5"
                   value={digitalLevel}
                   onChange={(e) => setDigitalLevel(parseInt(e.target.value))}
-                  className="w-full h-2 bg-slate-950 rounded-lg appearance-none cursor-pointer accent-emerald-500 border border-slate-800"
+                  className="w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer accent-emerald-500 border border-border"
                 />
-                <div className="flex justify-between text-3xs font-mono text-slate-400">
-                  <span>0% (Status Quo)</span>
-                  <span>50% (Moderat)</span>
-                  <span>100% (Maksimal)</span>
+                <div className="flex justify-between text-2xs font-sans text-muted-foreground pt-1">
+                  <span>0% <span className="opacity-75">(Status Quo)</span></span>
+                  <span>50% <span className="opacity-75">(Moderat)</span></span>
+                  <span>100% <span className="opacity-75">(Maksimal)</span></span>
                 </div>
               </div>
             </div>
 
-            <div className="p-3 rounded-lg bg-slate-950 border border-slate-800 text-xs font-mono flex items-center justify-between">
-              <span className="text-slate-400">Serapan Lapangan Kerja:</span>
-              <span className="text-white font-bold text-sm">{(jobs3 / 1000000).toFixed(2)} Juta</span>
+            <div className="p-3 rounded-lg bg-muted/40 border border-border text-xs flex items-center justify-between">
+              <span className="text-muted-foreground">Serapan Lapangan Kerja:</span>
+              <span className="text-foreground font-bold text-sm font-mono">{(jobs3 / 1000000).toFixed(2)} Juta</span>
             </div>
           </div>
         </div>
       </section>
 
       {/* Matriks Kebijakan RPJMN 2025-2029 */}
-      <section className="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 space-y-4">
-        <h3 className="text-lg font-bold text-white">Rencana Aksi Kebijakan Terarah Menuju 2029</h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs text-slate-300 leading-relaxed">
-          <div className="p-4 rounded-xl bg-slate-950 border border-slate-850 space-y-2">
-            <h4 className="font-bold text-red-400">Klaster 1 : Target TPT &lt; 5.20%</h4>
+      <section className="p-6 rounded-2xl bg-card border border-border space-y-4 shadow-xs">
+        <h3 className="text-lg font-bold text-foreground">Rencana Aksi Kebijakan Terarah Menuju 2029</h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs text-muted-foreground leading-relaxed">
+          <div className="p-4 rounded-xl bg-muted/40 border border-border space-y-2">
+            <h4 className="font-bold text-red-500 dark:text-red-400">Klaster 1 : Target TPT &lt; 5.20%</h4>
             <p>
               Mengatasi kemacetan lulusan SMK dan sarjana dengan integrasi kurikulum magang terakreditasi dan bursa kerja nasional terpadu untuk mereduksi durasi tunggu pencari kerja muda.
             </p>
           </div>
-          <div className="p-4 rounded-xl bg-slate-950 border border-slate-850 space-y-2">
-            <h4 className="font-bold text-amber-400">Klaster 2 : Setengah Penganggur &lt; 7.0%</h4>
+          <div className="p-4 rounded-xl bg-muted/40 border border-border space-y-2">
+            <h4 className="font-bold text-amber-500 dark:text-amber-400">Klaster 2 : Setengah Penganggur &lt; 7.0%</h4>
             <p>
               Mengentaskan perangkap desa melalui pembiayaan kredit alsintan modern, hilirisasi agro-maritim perdesaan, serta integrasi jaminan BPJS Ketenagakerjaan bagi petani gurem.
             </p>
           </div>
-          <div className="p-4 rounded-xl bg-slate-950 border border-slate-850 space-y-2">
-            <h4 className="font-bold text-emerald-400">Klaster 3 : Target TPT &lt; 3.80%</h4>
+          <div className="p-4 rounded-xl bg-muted/40 border border-border space-y-2">
+            <h4 className="font-bold text-emerald-500 dark:text-emerald-400">Klaster 3 : Target TPT &lt; 3.80%</h4>
             <p>
               Mendorong diversifikasi industri kreatif dan digitalisasi rantai pasok logistik, memastikan pemuda di Jawa Tengah, Jawa Timur, dan Bali memiliki opsi karir mandiri berkualitas.
             </p>

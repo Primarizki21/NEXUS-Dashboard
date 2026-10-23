@@ -14,31 +14,31 @@ export const MetricBadge: React.FC<MetricBadgeProps> = ({
   variant = 'cyan'
 }) => {
   const variantStyles = {
-    cyan: 'bg-cyan-950/40 border-cyan-800/60 text-cyan-400',
-    emerald: 'bg-emerald-950/40 border-emerald-800/60 text-emerald-400',
-    amber: 'bg-amber-950/40 border-amber-800/60 text-amber-400',
-    rose: 'bg-rose-950/40 border-rose-800/60 text-rose-400',
-    slate: 'bg-slate-900 border-slate-800 text-slate-300'
+    cyan: 'bg-cyan-500/10 border-cyan-500/30 text-cyan-800 dark:text-cyan-300',
+    emerald: 'bg-emerald-500/10 border-emerald-500/30 text-emerald-800 dark:text-emerald-300',
+    amber: 'bg-amber-500/10 border-amber-500/30 text-amber-800 dark:text-amber-300',
+    rose: 'bg-rose-500/10 border-rose-500/30 text-rose-800 dark:text-rose-300',
+    slate: 'bg-card border-border text-foreground'
   };
 
   const textStyles = {
-    cyan: 'text-cyan-400',
-    emerald: 'text-emerald-400',
-    amber: 'text-amber-400',
-    rose: 'text-rose-400',
-    slate: 'text-slate-200'
+    cyan: 'text-cyan-700 dark:text-cyan-400',
+    emerald: 'text-emerald-700 dark:text-emerald-400',
+    amber: 'text-amber-700 dark:text-amber-400',
+    rose: 'text-rose-700 dark:text-rose-400',
+    slate: 'text-foreground'
   };
 
   return (
     <div className={`p-4 rounded-xl border transition-all ${variantStyles[variant]}`}>
-      <span className="text-xs font-mono tracking-wider uppercase opacity-75 block mb-1">
+      <span className="text-[11px] font-sans font-semibold tracking-wider uppercase opacity-85 block mb-1">
         {label}
       </span>
       <div className={`text-2xl font-bold font-mono tracking-tight ${textStyles[variant]}`}>
         {value}
       </div>
       {subtext && (
-        <span className="text-xs opacity-70 mt-1 block">
+        <span className="text-xs opacity-75 mt-1 block font-sans">
           {subtext}
         </span>
       )}

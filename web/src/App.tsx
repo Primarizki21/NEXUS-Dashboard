@@ -43,7 +43,7 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className={`min-h-screen ${isDark ? 'dark bg-slate-950 text-slate-100' : 'bg-slate-50 text-slate-900'} transition-colors duration-200 flex flex-col justify-between`}>
+    <div className="min-h-screen bg-background text-foreground transition-colors duration-200 flex flex-col justify-between">
       <div>
         <Navbar
           currentTab={currentTab}

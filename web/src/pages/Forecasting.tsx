@@ -66,30 +66,30 @@ export const Forecasting: React.FC<ForecastingProps> = ({ data }) => {
   return (
     <div className="space-y-12 animate-fade-in">
       {/* Header */}
-      <div className="border-b border-slate-800 pb-6 flex flex-col md:flex-row md:items-end justify-between gap-4">
+      <div className="border-b border-border pb-6 flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
-          <div className="inline-flex items-center space-x-2 text-xs font-mono text-cyan-400 mb-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
+          <div className="inline-flex items-center space-x-2 text-xs font-mono text-cyan-600 dark:text-cyan-400 mb-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-cyan-600 dark:bg-cyan-400"></span>
             <span>MODUL 4 : LEAK-FREE TIME-SERIES CROSS-VALIDATION</span>
           </div>
-          <h1 className="text-2xl sm:text-4xl font-extrabold text-white tracking-tight">
+          <h1 className="text-2xl sm:text-4xl font-extrabold text-foreground tracking-tight">
             Peramalan Waktu Runtun TPT Indonesia Menuju 2030
           </h1>
-          <p className="text-sm text-slate-400 mt-1 max-w-2xl">
+          <p className="text-sm text-muted-foreground mt-1 max-w-2xl">
             Proyeksi jangka menengah menggunakan validasi silang multi-horizon bebas bocor (walk-forward CV) dengan kuantisasi selang ketidakpastian 80% dan 95%.
           </p>
         </div>
 
         {/* Micro Benchmarks */}
         <div className="flex flex-wrap gap-2 text-xs font-mono">
-          <div className="px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-300">
-            <span className="text-slate-400">Model Terpilih:</span> <strong className="text-cyan-400">Holt Damped Trend</strong>
+          <div className="px-3 py-1.5 rounded-lg bg-card border border-border text-foreground">
+            <span className="text-muted-foreground">Model Terpilih:</span> <strong className="text-cyan-600 dark:text-cyan-400">Holt Damped Trend</strong>
           </div>
-          <div className="px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-300">
-            <span className="text-slate-400">MASE h=1:</span> <strong className="text-emerald-400">0.905</strong>
+          <div className="px-3 py-1.5 rounded-lg bg-card border border-border text-foreground">
+            <span className="text-muted-foreground">MASE h=1:</span> <strong className="text-emerald-600 dark:text-emerald-400">0.905</strong>
           </div>
-          <div className="px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-300">
-            <span className="text-slate-400">Target 2030:</span> <strong className="text-amber-400">4.68%</strong>
+          <div className="px-3 py-1.5 rounded-lg bg-card border border-border text-foreground">
+            <span className="text-muted-foreground">Target 2030:</span> <strong className="text-amber-600 dark:text-amber-400">4.68%</strong>
           </div>
         </div>
       </div>
@@ -123,20 +123,20 @@ export const Forecasting: React.FC<ForecastingProps> = ({ data }) => {
       </div>
 
       {/* Fanchart Interactive Visualization */}
-      <section className="p-6 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-6">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-slate-800 pb-4">
+      <section className="p-6 rounded-2xl bg-card border border-border space-y-6 shadow-xs">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-border pb-4">
           <div>
-            <span className="text-xs font-mono text-cyan-400 uppercase tracking-wider block mb-1">
+            <span className="text-xs font-mono text-cyan-600 dark:text-cyan-400 uppercase tracking-wider block mb-1">
               Fanchart Ketidakpastian Multi-Horizon
             </span>
-            <h3 className="text-lg font-bold text-white">Lintasan Historis (2017-2024) dan Proyeksi (2025-2030)</h3>
+            <h3 className="text-lg font-bold text-foreground">Lintasan Historis (2017-2024) dan Proyeksi (2025-2030)</h3>
           </div>
 
           <div className="flex items-center space-x-2">
             <button
               onClick={() => setShow80CI(!show80CI)}
               className={`px-3 py-1 rounded-lg text-xs font-mono transition-all ${
-                show80CI ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/40' : 'bg-slate-950 text-slate-400 border border-slate-800'
+                show80CI ? 'bg-cyan-500/20 text-cyan-600 dark:text-cyan-400 border border-cyan-500/40 font-bold' : 'bg-muted/50 text-muted-foreground border border-border'
               }`}
             >
               Selang 80% {show80CI ? 'Aktif' : 'Nonaktif'}
@@ -144,14 +144,13 @@ export const Forecasting: React.FC<ForecastingProps> = ({ data }) => {
             <button
               onClick={() => setShow95CI(!show95CI)}
               className={`px-3 py-1 rounded-lg text-xs font-mono transition-all ${
-                show95CI ? 'bg-indigo-500/20 text-indigo-400 border border-indigo-500/40' : 'bg-slate-950 text-slate-400 border border-slate-800'
+                show95CI ? 'bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 border border-indigo-500/40 font-bold' : 'bg-muted/50 text-muted-foreground border border-border'
               }`}
             >
               Selang 95% {show95CI ? 'Aktif' : 'Nonaktif'}
             </button>
           </div>
         </div>
-
         {/* SVG Fanchart Canvas */}
         <div className="relative w-full bg-slate-950 rounded-xl border border-slate-800 p-4 overflow-hidden">
           <svg viewBox="0 0 900 320" className="w-full h-auto select-none">
@@ -231,23 +230,23 @@ export const Forecasting: React.FC<ForecastingProps> = ({ data }) => {
         </div>
 
         {/* Selected Year Inspector Card */}
-        <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 text-xs font-mono">
+        <div className="p-4 rounded-xl bg-muted/40 border border-border flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 text-xs font-mono">
           <div>
-            <span className="text-slate-400 block font-sans">Tahun Terpilih : <strong>{currentPoint.year}</strong> ({currentPoint.type === 'forecast' ? 'Proyeksi' : 'Historis'})</span>
-            <span className="text-xl font-bold text-white font-mono mt-0.5 block">
+            <span className="text-muted-foreground block font-sans">Tahun Terpilih : <strong className="text-foreground">{currentPoint.year}</strong> ({currentPoint.type === 'forecast' ? 'Proyeksi' : 'Historis'})</span>
+            <span className="text-xl font-bold text-foreground font-mono mt-0.5 block">
               Titik Estimasi TPT : {currentPoint.tpt.toFixed(2)}%
             </span>
           </div>
 
           {currentPoint.type === 'forecast' && (
-            <div className="flex flex-wrap gap-4 text-slate-300">
-              <div className="p-2 rounded bg-slate-900 border border-slate-800">
-                <span className="text-2xs text-slate-400 block font-sans">Selang 80% CI</span>
-                <span className="font-bold text-cyan-400">[{currentPoint.lower_80}% - {currentPoint.upper_80}%]</span>
+            <div className="flex flex-wrap gap-4 text-foreground">
+              <div className="p-2 rounded bg-muted/60 border border-border">
+                <span className="text-2xs text-muted-foreground block font-sans">Selang 80% CI</span>
+                <span className="font-bold text-cyan-600 dark:text-cyan-400">[{currentPoint.lower_80}% - {currentPoint.upper_80}%]</span>
               </div>
-              <div className="p-2 rounded bg-slate-900 border border-slate-800">
-                <span className="text-2xs text-slate-400 block font-sans">Selang 95% CI</span>
-                <span className="font-bold text-indigo-400">[{currentPoint.lower_95}% - {currentPoint.upper_95}%]</span>
+              <div className="p-2 rounded bg-muted/60 border border-border">
+                <span className="text-2xs text-muted-foreground block font-sans">Selang 95% CI</span>
+                <span className="font-bold text-indigo-600 dark:text-indigo-400">[{currentPoint.lower_95}% - {currentPoint.upper_95}%]</span>
               </div>
             </div>
           )}
@@ -257,15 +256,15 @@ export const Forecasting: React.FC<ForecastingProps> = ({ data }) => {
       {/* Model Benchmark Ranking Matrix (Walk-Forward CV) */}
       <section className="space-y-4">
         <div>
-          <h3 className="text-lg font-bold text-white">Matriks Evaluasi Kinerja Model Peramalan (Walk-Forward CV)</h3>
-          <p className="text-xs text-slate-400">
+          <h3 className="text-lg font-bold text-foreground">Matriks Evaluasi Kinerja Model Peramalan (Walk-Forward CV)</h3>
+          <p className="text-xs text-muted-foreground">
             Prinsip Parsimoni : Model sederhana dengan penahan tren terbukti mengungguli model kompleks yang overfitting terhadap guncangan COVID 2020.
           </p>
         </div>
 
-        <div className="overflow-x-auto rounded-xl border border-slate-800 bg-slate-900/60">
-          <table className="w-full text-left text-xs text-slate-300 font-mono">
-            <thead className="bg-slate-950 text-slate-400 uppercase text-2xs border-b border-slate-800">
+        <div className="overflow-x-auto rounded-xl border border-border bg-card shadow-xs">
+          <table className="w-full text-left text-xs text-foreground font-mono">
+            <thead className="bg-muted/50 text-muted-foreground uppercase text-2xs border-b border-border">
               <tr>
                 <th className="py-3 px-3">Peringkat</th>
                 <th className="py-3 px-4 font-sans">Model Peramalan</th>
@@ -275,24 +274,24 @@ export const Forecasting: React.FC<ForecastingProps> = ({ data }) => {
                 <th className="py-3 px-4 font-sans">Status Seleksi</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800/60">
+            <tbody className="divide-y divide-border/60">
               {modelsRanking.map((m) => {
                 const isWinner = m.rank === 1;
                 return (
                   <tr
                     key={m.name}
-                    className={isWinner ? 'bg-cyan-950/30 text-cyan-300 font-semibold' : 'hover:bg-slate-800/40'}
+                    className={isWinner ? 'bg-primary/10 text-primary font-semibold' : 'hover:bg-muted/50'}
                   >
                     <td className="py-3 px-3 font-bold text-center">{m.rank}</td>
-                    <td className="py-3 px-4 font-sans text-white">{m.name}</td>
+                    <td className="py-3 px-4 font-sans text-foreground">{m.name}</td>
                     <td className="py-3 px-3 text-right">{m.mase1}</td>
-                    <td className="py-3 px-3 text-right font-bold text-white">{m.mase3}</td>
-                    <td className="py-3 px-3 text-right text-emerald-400">{m.mape}</td>
+                    <td className="py-3 px-3 text-right font-bold text-foreground">{m.mase3}</td>
+                    <td className="py-3 px-3 text-right text-emerald-600 dark:text-emerald-400">{m.mape}</td>
                     <td className="py-3 px-4 font-sans">
                       <span className={`px-2 py-0.5 rounded text-2xs ${
                         isWinner 
-                          ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/40 font-bold' 
-                          : 'bg-slate-950 text-slate-400 border border-slate-800'
+                          ? 'bg-cyan-500/20 text-cyan-600 dark:text-cyan-400 border border-cyan-500/40 font-bold' 
+                          : 'bg-muted border border-border text-muted-foreground'
                       }`}>
                         {m.status}
                       </span>
