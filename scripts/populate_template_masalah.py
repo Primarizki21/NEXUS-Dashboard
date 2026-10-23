@@ -8,6 +8,8 @@ Compliant with antislop R-02 (Zero em dashes).
 import docx
 from docx.shared import Inches, Pt, RGBColor
 from docx.enum.text import WD_ALIGN_PARAGRAPH
+from docx.oxml import OxmlElement
+from docx.oxml.ns import qn
 from pathlib import Path
 
 ROOT_DIR = Path(__file__).resolve().parent.parent
@@ -123,85 +125,178 @@ def generate_markdown(c):
         md.append(f"| **{k_name.strip()}** | **{weight.strip()}** | {m['strategi']} |")
     return "\n".join(md)
 
+def format_run(run, bold=False, italic=False, font_name="Lexend", size_pt=12, color_rgb=None):
+    run.font.name = font_name
+    run.font.size = Pt(size_pt)
+    run.bold = bold
+    run.italic = italic
+    run.font.color.rgb = color_rgb if color_rgb is not None else RGBColor(0, 0, 0)
+    rPr = run._element.get_or_add_rPr()
+    rFonts = rPr.find(qn('w:rFonts'))
+    if rFonts is not None:
+        rFonts.set(qn('w:eastAsia'), font_name)
+        rFonts.set(qn('w:cs'), font_name)
+    return run
+
+def set_p_runs(p, runs_spec):
+    p._element.clear_content()
+    for item in runs_spec:
+        text = item[0]
+        bold = item[1] if len(item) > 1 else False
+        italic = item[2] if len(item) > 2 else False
+        r = p.add_run(text)
+        format_run(r, bold=bold, italic=italic)
+
 def update_docx(c):
     doc = docx.Document(INPUT_DOCX)
     
-    # Update header metadata
-    doc.paragraphs[0].text = c['lomba']
-    doc.paragraphs[1].text = c['penyelenggara']
-    doc.paragraphs[2].text = f"“{c['tim']}”"
-    doc.paragraphs[4].text = f"Tema\t\t: {c['tema']}"
-    doc.paragraphs[5].text = f"Subtema\t: {c['subtema']}"
-    doc.paragraphs[6].text = f"Judul\t\t: “{c['judul']}”"
-    
-    # Fill Research questions (p8 to p11)
-    doc.paragraphs[8].text = f"1. {c['rqs'][0]}"
-    doc.paragraphs[9].text = f"2. {c['rqs'][1]}"
-    doc.paragraphs[10].text = f"3. {c['rqs'][2]}"
-    doc.paragraphs[11].text = f"4. {c['rqs'][3]}"
-    doc.paragraphs[12].text = "" # empty placeholder
-    
-    # Fill Bagian Infografis (p15 to p19)
-    for i in range(5):
-        doc.paragraphs[15 + i].text = c['roadmap'][i]
+    # Fix section gutter attribute for schema compliance
+    for s in doc.sections:
+        s.gutter = Inches(0)
         
-    # Clear remaining template body after p21 and rebuild structured sections
+    # Configure Normal style to Lexend 12pt black
+    style = doc.styles['normal']
+    style.font.name = 'Lexend'
+    style.font.size = Pt(12)
+    style.font.color.rgb = RGBColor(0, 0, 0)
+    
+    # Update header metadata
+    set_p_runs(doc.paragraphs[0], [(c['lomba'], True, False)])
+    set_p_runs(doc.paragraphs[1], [(c['penyelenggara'], True, False)])
+    set_p_runs(doc.paragraphs[2], [(f"“{c['tim']}”", False, False)])
+    set_p_runs(doc.paragraphs[4], [("Tema\t\t: ", True, False), (c['tema'], False, False)])
+    set_p_runs(doc.paragraphs[5], [("Subtema\t: ", True, False), (c['subtema'], False, False)])
+    set_p_runs(doc.paragraphs[6], [("Judul\t\t: ", True, False), (f"“{c['judul']}”", False, False)])
+    
+    # Fill Research questions (p8 to p11) - do not prepend number as w:numPr handles it
+    for i in range(4):
+        set_p_runs(doc.paragraphs[8 + i], [(c['rqs'][i], False, False)])
+        
+    # Cleanly remove p12 (5th placeholder item)
+    p12_elem = doc.paragraphs[12]._element
+    p12_elem.getparent().remove(p12_elem)
+    
+    # Fill Bagian Infografis (p14 to p18 after p12 deletion)
+    for i in range(5):
+        set_p_runs(doc.paragraphs[14 + i], [(c['roadmap'][i], False, False)])
+        
+    # Clear remaining template body after index 20 (where 'Isi Infografis' is at index 20)
     p_len = len(doc.paragraphs)
-    for idx in range(p_len - 1, 21, -1):
+    for idx in range(p_len - 1, 20, -1):
         p_elem = doc.paragraphs[idx]._element
         p_elem.getparent().remove(p_elem)
         
     # Append structured sections
     for sec in c['sections']:
         h = doc.add_paragraph()
-        h_run = h.add_run(f"\n{sec['num']}: {sec['sub']}")
-        h_run.bold = True
-        h_run.font.size = Pt(13)
-        h_run.font.color.rgb = RGBColor(0, 51, 102)
+        h.paragraph_format.space_before = Pt(14)
+        h.paragraph_format.space_after = Pt(4)
+        r_h = h.add_run(f"{sec['num']}: {sec['sub']}")
+        format_run(r_h, bold=True, size_pt=12)
         
         p_pre = doc.add_paragraph()
-        p_pre.add_run("Prelude: ").bold = True
-        p_pre.add_run(sec['prelude'])
+        p_pre.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
+        p_pre.paragraph_format.space_after = Pt(4)
+        r_pre_lbl = p_pre.add_run("Prelude: ")
+        format_run(r_pre_lbl, bold=True)
+        r_pre_txt = p_pre.add_run(sec['prelude'])
+        format_run(r_pre_txt, bold=False)
         
         p_data = doc.add_paragraph()
-        p_data.add_run("Data Resmi BPS: ").bold = True
-        p_data.add_run(sec['data'])
+        p_data.paragraph_format.space_after = Pt(4)
+        r_data_lbl = p_data.add_run("Data Resmi BPS:\n")
+        format_run(r_data_lbl, bold=True)
+        r_data_txt = p_data.add_run(sec['data'])
+        format_run(r_data_txt, bold=False)
         
         p_link = doc.add_paragraph()
-        p_link.add_run("Link Sumber: ").bold = True
-        p_link.add_run(sec['link'])
+        p_link.paragraph_format.space_after = Pt(4)
+        r_link_lbl = p_link.add_run("Link Sumber:\n")
+        format_run(r_link_lbl, bold=True)
+        r_link_txt = p_link.add_run(sec['link'])
+        format_run(r_link_txt, bold=False)
         
         p_viz = doc.add_paragraph()
-        p_viz.add_run("Rekomendasi Visualisasi: ").bold = True
-        p_viz.add_run(sec['viz'])
+        p_viz.paragraph_format.space_after = Pt(8)
+        r_viz_lbl = p_viz.add_run("Rekomendasi Visualisasi:\n")
+        format_run(r_viz_lbl, bold=True)
+        r_viz_txt = p_viz.add_run(sec['viz'])
+        format_run(r_viz_txt, bold=False)
         
     # Add Matriks Penilaian
-    h_mat = doc.add_paragraph()
-    h_mat_run = h_mat.add_run("\nMatriks Penilaian Babak Penyisihan (ACTION 2026)")
-    h_mat_run.bold = True
-    h_mat_run.font.size = Pt(13)
+    p_mat = doc.add_paragraph()
+    p_mat.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    p_mat.paragraph_format.space_before = Pt(18)
+    p_mat.paragraph_format.space_after = Pt(8)
+    r_mat = p_mat.add_run("Matriks Penilaian Babak Penyisihan (ACTION 2026)")
+    format_run(r_mat, bold=True, size_pt=12)
     
     table = doc.add_table(rows=1, cols=3)
-    hdr_cells = table.rows[0].cells
-    hdr_cells[0].text = 'Kriteria Penilaian'
-    hdr_cells[1].text = 'Bobot'
-    hdr_cells[2].text = 'Strategi Pemenuhan dalam Karya'
-    for cell in hdr_cells:
-        for p in cell.paragraphs:
-            for r in p.runs:
-                r.bold = True
-                
+    tblPr = table._element.xpath('w:tblPr')[0]
+    tblLook = tblPr.find(qn('w:tblLook'))
+    borders = OxmlElement('w:tblBorders')
+    for b in ['top', 'left', 'bottom', 'right', 'insideH', 'insideV']:
+        el = OxmlElement(f'w:{b}')
+        el.set(qn('w:val'), 'single')
+        el.set(qn('w:sz'), '4')
+        el.set(qn('w:space'), '0')
+        el.set(qn('w:color'), 'CCCCCC')
+        borders.append(el)
+        
+    if tblLook is not None:
+        tblLook.addprevious(borders)
+    else:
+        tblPr.append(borders)
+        
+    headers = ['Kriteria Penilaian', 'Bobot', 'Strategi Pemenuhan dalam Karya']
+    for i, h_text in enumerate(headers):
+        cell = table.rows[0].cells[i]
+        tcPr = cell._element.get_or_add_tcPr()
+        shd = OxmlElement('w:shd')
+        shd.set(qn('w:val'), 'clear')
+        shd.set(qn('w:color'), 'auto')
+        shd.set(qn('w:fill'), 'F2F2F2')
+        tcPr.append(shd)
+        
+        p = cell.paragraphs[0]
+        p.alignment = WD_ALIGN_PARAGRAPH.CENTER if i == 1 else WD_ALIGN_PARAGRAPH.LEFT
+        p.paragraph_format.space_before = Pt(4)
+        p.paragraph_format.space_after = Pt(4)
+        r = p.add_run(h_text)
+        format_run(r, bold=True, size_pt=12)
+        
     for m in c['matriks']:
-        row_cells = table.add_row().cells
+        row = table.add_row()
         k_name, weight = m['kriteria'].split('(')
         weight = weight.replace(')', '')
-        row_cells[0].text = k_name.strip()
-        row_cells[1].text = weight.strip()
-        row_cells[2].text = m['strategi']
         
+        p0 = row.cells[0].paragraphs[0]
+        p0.paragraph_format.space_before = Pt(4)
+        p0.paragraph_format.space_after = Pt(4)
+        r0 = p0.add_run(k_name.strip())
+        format_run(r0, bold=True, size_pt=12)
+        
+        p1 = row.cells[1].paragraphs[0]
+        p1.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        p1.paragraph_format.space_before = Pt(4)
+        p1.paragraph_format.space_after = Pt(4)
+        r1 = p1.add_run(weight.strip())
+        format_run(r1, bold=True, size_pt=12)
+        
+        p2 = row.cells[2].paragraphs[0]
+        p2.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
+        p2.paragraph_format.space_before = Pt(4)
+        p2.paragraph_format.space_after = Pt(4)
+        r2 = p2.add_run(m['strategi'])
+        format_run(r2, bold=False, size_pt=12)
+        
+    col_widths = [Inches(1.8), Inches(0.8), Inches(4.1)]
+    for row in table.rows:
+        for idx, width in enumerate(col_widths):
+            row.cells[idx].width = width
+            
     doc.save(OUTPUT_DOCX)
     print(f"Docx file saved successfully: {OUTPUT_DOCX}")
-
 def main():
     c = build_content()
     

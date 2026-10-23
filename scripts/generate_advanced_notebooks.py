@@ -47,6 +47,7 @@ def build_spatial_notebook():
     cells.append(create_cell("code", """import warnings
 warnings.filterwarnings('ignore')
 import os, math
+from pathlib import Path
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -62,8 +63,16 @@ BATA  = '#C0392B'
 PASIR = '#D9B26F'
 ABU   = '#8896A0'
 
-DATA_DIR = '../data/clean'
-CHARTS_DIR = '../assets/charts'
+# Path Setup yang adaptif terhadap root direktori maupun folder notebooks
+DATA_DIR = Path("../data/clean")
+if not DATA_DIR.exists():
+    DATA_DIR = Path("data/clean")
+
+CHARTS_DIR = Path("../assets/charts")
+if not CHARTS_DIR.exists():
+    CHARTS_DIR = Path("assets/charts")
+CHARTS_DIR.mkdir(parents=True, exist_ok=True)
+
 print("Setup selesai. Siap membaca data resmi BPS.")"""))
 
     cells.append(create_cell("markdown", """## 1. Memuat Data Panel & Georeferensi 38 Provinsi Indonesia"""))
@@ -207,6 +216,7 @@ def build_forecasting_notebook():
     cells.append(create_cell("code", """import warnings
 warnings.filterwarnings('ignore')
 import os
+from pathlib import Path
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -222,17 +232,57 @@ BATA  = '#C0392B'
 PASIR = '#D9B26F'
 ABU   = '#8896A0'
 
-DATA_DIR = '../data/clean'
+# Path Setup yang adaptif terhadap root direktori maupun folder notebooks
+DATA_DIR = Path("../data/clean")
+if not DATA_DIR.exists():
+    DATA_DIR = Path("data/clean")
+
+CHARTS_DIR = Path("../assets/charts")
+if not CHARTS_DIR.exists():
+    CHARTS_DIR = Path("assets/charts")
+CHARTS_DIR.mkdir(parents=True, exist_ok=True)
+
 print("Setup selesai. Siap menjalankan pemodelan peramalan.")"""))
 
-    cells.append(create_cell("markdown", """## 1. Memuat Deret Waktu Historis TPT Nasional BPS (2017–2024)"""))
+    cells.append(create_cell("markdown", """## 1. Memuat Deret Waktu Historis TPT Nasional BPS (2017–2024) & Uji Pra-Model"""))
     cells.append(create_cell("code", """panel_hist = pd.read_csv(f'{DATA_DIR}/panel_tpt_provinsi_2017_2024.csv')
 idn_row = panel_hist[panel_hist["Provinsi"] == "Indonesia"].iloc[0]
 
 years = np.array([2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024])
-y_series = np.array([idn_row[f"TPT_{yr}"] for yr in years])
+y_series = np.array([idn_row[f"TPT_{yr}"] for yr in years], dtype=float)
 
 df_ts = pd.DataFrame({"Tahun": years, "TPT_Nasional": y_series})
+print(f"Data Deret Waktu TPT Nasional BPS: {years[0]} - {years[-1]} (T = {len(y_series)})")
+print(f"Nilai Historis (%): {[float(x) for x in np.round(y_series, 2)]}")
+
+# Uji Pra-Model: Stasioneritas (ADF & KPSS) dan Kekuatan Tren LOESS
+def test_stationarity(y):
+    dy = np.diff(y)
+    ylag = y[:-1]
+    X_adf = np.column_stack([np.ones(len(dy)), ylag])
+    b, _, _, _ = np.linalg.lstsq(X_adf, dy, rcond=None)
+    res = dy - X_adf @ b
+    se = np.sqrt(np.sum(res ** 2) / (len(dy) - 2)) / (np.std(ylag) * np.sqrt(len(dy)) + 1e-9)
+    t_adf = b[1] / se if se > 0 else 0
+    
+    e_kpss = y - np.mean(y)
+    S = np.cumsum(e_kpss)
+    s2 = np.sum(e_kpss ** 2) / len(y)
+    kpss_stat = np.sum(S ** 2) / (len(y) ** 2 * s2) if s2 > 0 else 0
+    return t_adf, kpss_stat
+
+adf_level, kpss_level = test_stationarity(y_series)
+adf_diff, kpss_diff = test_stationarity(np.diff(y_series))
+
+ma3 = np.convolve(y_series, np.ones(3)/3, mode='valid')
+trend_strength = 1 - np.var(y_series[1:-1] - ma3) / np.var(y_series[1:-1])
+
+print(f"Kekuatan Tren        : {trend_strength:.3f} (Komponen tren dominan pasca-pandemi)")
+print(f"ADF Level            : {adf_level:.3f} (Non-stasioner, p > 0.05)")
+print(f"KPSS Level           : {kpss_level:.3f} (Non-stasioner)")
+print(f"ADF Diferensiasi d=1 : {adf_diff:.3f} (Stasioner pada first-difference)")
+print(f"KPSS Diferensiasi d=1: {kpss_diff:.3f} (Stasioner pada first-difference)")
+
 display(df_ts)"""))
 
     cells.append(create_cell("markdown", """## 2. Uji Kelayakan Ramalan & Evaluasi Cross-Validation Multi-Horizon"""))
@@ -292,8 +342,9 @@ for yr, val in zip(future_years, proj_point):
     ax.annotate(f"{val:.2f}%", (yr, val), textcoords="offset points", xytext=(0, 7), ha='center', fontweight="bold", color=BATA)
 
 plt.tight_layout()
+fig.savefig(f'{CHARTS_DIR}/08_proyeksi_forecasting_tpt_2025_2030.svg', format="svg", bbox_inches="tight")
+fig.savefig(f'{CHARTS_DIR}/08_proyeksi_forecasting_tpt_2025_2030.png', dpi=300, bbox_inches="tight")
 plt.show()"""))
-
     nb_data = {
         "cells": cells,
         "metadata": {
