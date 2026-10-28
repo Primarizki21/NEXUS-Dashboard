@@ -1,0 +1,46 @@
+Kabupaten_Kota,Provinsi,Cluster_ID,TPT_2024,Informalitas,Underemployment,Defisit_Upah_Pct,Rekomendasi,IKKD_Score,Alert_Level,Kategori_Kerentanan
+Kab. Karawang,Jawa Barat,1,8.92,46.5,6.8,12.0,Dual-Vocation SMK otomotif & insentif super tax deduction 200%,33.69,SAFE,Moderat
+Kota Bekasi,Jawa Barat,1,7.9,42.1,5.4,9.5,Link-and-match politeknik industri & job matching digital radius 15km,24.69,SAFE,Resilien
+Kab. Bekasi,Jawa Barat,1,8.87,44.8,6.2,11.2,Standardisasi magang industri manufaktur GIIC & Cikarang,31.53,SAFE,Moderat
+Kota Bogor,Jawa Barat,1,9.42,45.0,7.1,15.3,Youth creative tech hub kota satelit & program vokasi logistik,35.86,SAFE,Moderat
+Kota Tangerang,Banten,1,6.64,41.5,5.9,10.4,Bursa kerja terpadu pemuda perkotaan & konversi magang bersertifikat,20.12,SAFE,Resilien
+Kab. Tangerang,Banten,1,6.97,47.2,7.5,14.1,Penyelarasan kurikulum kejuruan kawasan industri Balaraja,28.21,SAFE,Moderat
+Kota Cilegon,Banten,1,6.08,38.4,4.8,8.0,Pelatihan vokasi industri petrokimia & baja terakreditasi,14.05,SAFE,Resilien
+Kota Serang,Banten,1,7.49,49.3,8.2,18.5,Penguatan BLK kejuruan & subsidi sertifikasi kompetensi muda,34.03,SAFE,Moderat
+Kota Batam,Kepulauan Riau,1,7.74,34.2,4.2,7.5,Kemitraan industri semikonduktor & software house Nongsa,16.33,SAFE,Resilien
+Jakarta Timur,DKI Jakarta,1,6.45,36.8,5.1,6.2,Inkubasi wirausaha teknologi & percepatan penempatan kerja pemuda,13.46,SAFE,Resilien
+Jakarta Utara,DKI Jakarta,1,6.82,39.5,5.8,8.1,Sertifikasi keahlian logistik maritim Pelabuhan Tanjung Priok,18.13,SAFE,Resilien
+Kota Samarinda,Kalimantan Timur,1,6.12,45.3,6.4,11.0,Penyelarasan keterampilan transisi energi & jasa penunjang IKN,21.74,SAFE,Resilien
+Kota Balikpapan,Kalimantan Timur,1,6.48,40.1,5.3,7.8,Upskilling teknisi industri kilang & logistik terintegrasi,17.03,SAFE,Resilien
+Kota Ambon,Maluku,1,10.68,51.2,8.9,22.4,"Inkubasi ekonomi kreatif musik, bahari, dan bursa kerja digital",49.36,WARNING,Rentan
+Kota Jayapura,Papua,1,8.85,48.6,7.8,19.3,Akselerasi vokasi digital pemuda Papua & pendampingan wirausaha,38.68,SAFE,Moderat
+Kota Sorong,Papua Barat Daya,1,8.72,47.9,7.6,18.0,"Pengembangan pusat pelatihan maritim, logistik, dan migas",36.99,SAFE,Moderat
+Kab. Jayawijaya,Papua Pegunungan,2,1.25,94.8,72.4,68.5,Modernisasi alat pascapanen kopi/umbi & subsidi iuran BPJS naker,95.28,CRITICAL,Sangat Rentan
+Kab. Yahukimo,Papua Pegunungan,2,0.88,97.2,76.8,74.0,"Bantuan logistik bahan pangan, pemberdayaan tani lokal & cash-for-work",100.0,CRITICAL,Sangat Rentan
+Kab. Nabire,Papua Tengah,2,3.12,85.4,68.2,58.0,Pengembangan sentra agrobisnis & jaminan sosial buruh tani rentan,88.35,CRITICAL,Sangat Rentan
+Kab. Mimika,Papua Tengah,2,5.4,58.3,32.1,28.5,Kemitraan rantai pasok lokal industri pertambangan & pertanian,47.53,WARNING,Rentan
+Kab. Merauke,Papua Selatan,2,2.65,76.2,48.5,42.0,Mekanisasi lumbung pangan padi & korporatisasi petani transmigran,64.3,WARNING,Rentan
+Kab. Manokwari,Papua Barat,2,5.62,64.7,38.6,33.2,Penguatan hilirisasi kakao dan perikanan tangkap terintegrasi,58.19,WARNING,Rentan
+Kab. Lombok Tengah,Nusa Tenggara Barat,2,2.45,72.8,58.4,51.0,Pelatihan vokasi perhotelan KEK Mandalika & sertifikasi pekerja kreatif,68.67,WARNING,Rentan
+Kab. Lombok Timur,Nusa Tenggara Barat,2,2.82,74.1,61.2,53.4,Akses KUR Klaster komoditas tembakau/hortikultura & perlindungan PMI,73.26,CRITICAL,Sangat Rentan
+Kab. Timor Tengah Selatan,Nusa Tenggara Timur,2,1.42,88.5,69.8,64.0,"Infrastruktur irigasi tetes lahan kering, peternakan & padat karya air",87.8,CRITICAL,Sangat Rentan
+Kab. Manggarai Barat,Nusa Tenggara Timur,2,3.48,68.4,45.2,38.6,Integrasi pasokan pangan lokal hotel Labuan Bajo & sertifikasi pariwisata,58.25,WARNING,Rentan
+Kab. Bone,Sulawesi Selatan,2,2.95,69.8,52.3,44.5,Pengolahan pascapanen jagung/padi & asuransi usaha tani BPJS naker,62.82,WARNING,Rentan
+Kab. Jeneponto,Sulawesi Selatan,2,2.78,76.5,60.1,52.8,"Pemberdayaan garam industri, energi angin & pengolahan rumput laut",74.36,CRITICAL,Sangat Rentan
+Kab. Halmahera Tengah,Maluku Utara,2,4.15,52.1,29.8,24.0,Pelatihan vokasi smelter nikel & jaminan perumahan pekerja kawasan,34.99,SAFE,Moderat
+Kab. Lebak,Banten,2,7.15,63.8,36.4,35.0,Konektivitas komuter kerja ke Jabodetabek & industri agro lokal,63.02,WARNING,Rentan
+Kab. Pandeglang,Banten,2,7.42,66.2,39.8,38.2,Hilirisasi perikanan pesisir & program padat karya infrastruktur desa,68.72,WARNING,Rentan
+Kota Surabaya,Jawa Timur,3,5.88,37.4,5.9,8.8,Pusat inkubasi koridor digital Rungkut & bursa kerja vokasi presisi,13.28,SAFE,Resilien
+Kab. Sidoarjo,Jawa Timur,3,6.84,43.2,6.8,11.5,Link-and-match SMK klaster manufaktur alas kaki & logam presisi,23.08,SAFE,Resilien
+Kab. Pasuruan,Jawa Timur,3,5.42,49.5,9.4,16.2,Penyelarasan vokasi PIER & hilirisasi olahan susu/mangga perdesaan,26.01,SAFE,Moderat
+Kota Semarang,Jawa Tengah,3,5.95,41.8,6.5,10.2,Program reskilling digital youth hub & job matching industri pelabuhan,17.96,SAFE,Resilien
+Kab. Brebes,Jawa Tengah,3,8.12,65.4,22.5,32.4,Transisi buruh bawang merah ke kawasan industri tekstil & KUR Klaster,61.19,WARNING,Rentan
+Kab. Banyumas,Jawa Tengah,3,5.34,58.7,16.4,26.5,Youth tech hub Purwokerto & inkubasi startup agrobisnis terpadu,40.44,SAFE,Moderat
+Kota Yogyakarta,DI Yogyakarta,3,6.32,43.5,7.2,13.0,"Pemberdayaan freelancer kreatif, studio animasi & KUR Klaster digital",22.2,SAFE,Resilien
+Kab. Sleman,DI Yogyakarta,3,4.58,46.2,8.1,14.2,Akselerator startup kampus & inkubasi talenta perguruan tinggi,18.82,SAFE,Resilien
+Kota Denpasar,Bali,3,2.48,36.2,6.0,9.4,"Diversifikasi talenta ekonomi hijau, digital nomad & ekonomi kreatif",0.0,SAFE,Resilien
+Kab. Badung,Bali,3,2.15,38.1,6.4,9.8,Standardisasi kompetensi MICE & penguatan pariwisata berkelanjutan,0.65,SAFE,Resilien
+Kota Medan,Sumatera Utara,3,8.67,46.8,9.1,16.0,Revitalisasi BLK logistik KIM & inkubasi wirausaha muda terdidik,35.65,SAFE,Moderat
+Kota Padang,Sumatera Barat,3,10.74,48.2,8.5,17.5,Penyaluran pembiayaan wirausaha muda Marawa & job matching jasa,44.87,SAFE,Moderat
+Kota Palembang,Sumatera Selatan,3,7.35,47.9,8.8,15.6,Penguatan logistik pelabuhan Sungai Musi & vokasi industri hilir sawit,31.36,SAFE,Moderat
+Kota Pontianak,Kalimantan Barat,3,7.92,49.5,9.2,17.8,Pengembangan sentra UMKM perdagangan lintas batas & ekonomi kreatif,35.88,SAFE,Moderat

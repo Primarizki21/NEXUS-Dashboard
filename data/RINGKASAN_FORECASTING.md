@@ -42,8 +42,7 @@ Evaluasi MASE (skala kesalahan relatif terhadap baseline Naive):
 | **Ridge Regression (Lag-2)** | 1,120 | 1,350 | 1,310 | 14,0% | 7 |
 
 > **Temuan Inti Pemodelan:**
-> Seperti halnya temuan pada `rasio`, pada deret tahunan berdurasi terbatas dengan satu guncangan struktural tajam (COVID-19 2020), model eksponensial sederhana dengan penahan tren (**Holt Damped Trend**) secara konsisten mengungguli model kompleks berbasis autoregresif (ARIMA & Ridge). Model kompleks cenderung *overfitting* terhadap anomali lonjakan 2020.
-
+> Pada deret tahunan berdurasi terbatas dengan satu guncangan struktural tajam (COVID-19 2020), model eksponensial sederhana dengan penahan tren (**Holt Damped Trend**) secara konsisten mengungguli model kompleks berbasis autoregresif (ARIMA & Ridge). Model kompleks cenderung *overfitting* terhadap anomali lonjakan 2020.
 ---
 
 ## 4. Model Terpilih Berdasarkan Horizon ($h$)

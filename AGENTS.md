@@ -13,12 +13,12 @@ Tujuan akhir adalah menghasilkan:
 3. Ringkasan temuan siap pakai (*ready-to-use metrics & insights*) yang terdokumentasi dalam `RINGKASAN_TEMUAN.md`.
 4. Kerangka narasi dan data terisi lengkap pada `template_masalah_terisi.docx` untuk tim desain infografis.
 5. Draf metodologi dan pengolahan data untuk Laporan Resmi bab (c) & (d).
-6. Aplikasi Web Pendamping Interaktif (`web/`) berbasis Vite + React + Tailwind + Shadcn UI yang memuat simulator kebijakan RPJMN 2029, peta klaster 38 provinsi, dekomposisi efek spasial, dan proyeksi TPT.
+6. Aplikasi Web Pendamping Interaktif (`web/`) berbasis Vite + React + Tailwind + Shadcn UI yang memuat simulator kebijakan RPJMN 2029, peta klaster 38 provinsi, dekomposisi efek spasial, proyeksi TPT, serta 3 Fitur Kunci Inovasi Kebijakan (Early Warning IKKD, Dual-Vocation Credit System 50:50, dan Geo-Spatial Job Matching & KUR Klaster).
 ---
 
-## 2. Prinsip Kerja: Mengambil Aspek Terbaik `@rasio/` (Secara Proporsional)
+## 2. Prinsip Kerja & Filosofi Analisis Data
 
-Mengadopsi prinsip keunggulan `@rasio/` tanpa memaksakan metode yang tidak sesuai data:
+Menegakkan standar analisis data ketenagakerjaan yang kredibel, objektif, dan teruji:
 * **Data-First Discovery:** Identifikasi ketersediaan dan granulasi data nyata di BPS/data.go.id terlebih dahulu sebelum menentukan model statistik.
 * **Metodologi Jujur & Teruji:** Setiap metrik diverifikasi dari data mentah resmi (tidak ada angka fiktif/asumsi tak berdasar).
 * **Storytelling Data:** Menyajikan data dengan struktur narasi tajam (*hook paradoks* $\rightarrow$ anatomi ketimpangan $\rightarrow$ faktor struktural $\rightarrow$ proyeksi $\rightarrow$ rekomendasi kebijakan).
@@ -43,7 +43,18 @@ Setiap agen/kontributor wajib mengikuti protokol 5 langkah:
    * `karpathy-guidelines`: *Simplicity first*, kode seringkas mungkin, tanpa abstraksi berlebihan.
 2. **To-Do List:** Tetapkan daftar tugas dengan kriteria keberhasilan yang dapat diverifikasi.
 3. **Surgical Execution:** Tulis script seminimal mungkin yang menyelesaikan tugas pengolahan/analisis data.
-4. **Verification (Multi-Environment):** Eksekusi script secara langsung, cek konsistensi angka dan ketiadaan nilai hilang tak terduga. Untuk file notebook (.ipynb) atau modul interaktif, verifikasi wajib dijalankan sukses dari dua working directory: root repositori (`.`) dan folder `notebooks/`.
+4. **Verification (Multi-Environment & Browser-Driven Web Testing):**
+   * **Analisis Data & Script:** Eksekusi script secara langsung, cek konsistensi angka dan ketiadaan nilai hilang tak terduga. Untuk file notebook (.ipynb) atau modul interaktif, verifikasi wajib dijalankan sukses dari dua working directory: root repositori (`.`) dan folder `notebooks/`.
+   * **Pipeline Data Web:** Eksekusi `python scripts/export_web_data.py` wajib memastikan seluruh *self-verifying assertions* lolos (`PASSED`) tanpa nilai `NaN` atau data terpotong.
+   * **Kompilasi & Tipe Data Web:** Jalankan `cd web && bun run build` (atau `npm run build`), memastikan 0 error TypeScript (`tsc`) dan 0 error bundling Vite.
+   * **Pengujian Nyata dengan Browser Tools (Wajib Sebelum Commit):**
+     - Jalankan preview/dev server web lokal.
+     - Gunakan modul browser otomatis (`eval` dengan global `browser` object) untuk:
+       1. Membuka tab peramban headless (`await browser.open({ url: ... })`).
+       2. Menjalankan *smoke test* navigasi ke seluruh tab (Beranda, Kartografi, Ekonometrika, Simulator, Proyeksi, Metodologi, dan Inovasi Kebijakan).
+       3. Menguji interaktivitas dinamis (slider kurikulum 50:50, filter radius Job Matching, kalkulator KUR Klaster, dan layer IKKD).
+       4. Menginspeksi error console peramban (`tab.errors()`) dan memastikan tidak ada uncaught exception (`TypeError`, `undefined`, crash rendering React).
+       5. Mengambil tangkapan layar observasi visual untuk memvalidasi tata letak responsif dan tema Dark/Light.
 5. **Atomic Commit:** Lakukan commit git terpisah untuk setiap capaian logis yang telah diverifikasi.
 6. **Feature Branch Only:** Dilarang commit atau push langsung ke `main`. Setiap perubahan wajib dibuat di branch terpisah (`feat/*`, `fix/*`) dan melalui Pull Request.
 7. **Environment-Agnostic Execution:** Dilarang mengasumsikan satu *working directory* tunggal atau menggunakan *hardcoded relative path* yang rapuh terhadap konteks eksekusi (IDE vs terminal vs runner otomatis).
@@ -107,8 +118,9 @@ Setiap agen/kontributor wajib mengikuti protokol 5 langkah:
 * **Tanggung Jawab:**
   * Mengelola single pipeline sinkronisasi data analitik ke web melalui `scripts/export_web_data.py` menuju `web/src/data/labor_data.json` (bebas hardcoding angka di UI).
   * Mengembangkan dan memelihara dashboard web interaktif (`web/`) berbasis Vite, React, Tailwind CSS, dan Shadcn UI.
-  * Mengimplementasikan modul interaktif: Simulator Kebijakan RPJMN 2029, Peta Kartografi 3 Klaster, visualisasi Ekonometrika Spasial LeSage-Pace, dan Proyeksi TPT 2025–2030.
+  * Mengimplementasikan modul interaktif: Simulator Kebijakan RPJMN 2029, Peta Kartografi 3 Klaster, visualisasi Ekonometrika Spasial LeSage-Pace, Proyeksi TPT 2025–2030, dan Modul Inovasi Kebijakan (Early Warning IKKD, Dual-Vocation 50:50, Geo-Spatial Matching & KUR Klaster).
   * Menegakkan standar visual antislop: layout lega, responsivitas multi-breakpoint via Radix Sheet, bebas warna gelap statis (dukungan penuh dark/light mode), dan komponen UI yang aksesibel.
+  * Menjalankan protokol pengujian antarmuka otomatis berbasis Browser Tools sebelum setiap commit git.
 ---
 
 ## 5. Rekam Jejak Kesalahan & Invariant Teknis (Lessons Learned)
@@ -146,7 +158,7 @@ Setiap agen/kontributor wajib mengikuti protokol 5 langkah:
   * **Patuhi Skema Elemen OOXML:** Gunakan API resmi `python-docx`. Jika memodifikasi oxml, pastikan urutan elemen skema dipatuhi (`<w:pPr>` selalu elemen pertama `<w:p>`, `<w:rPr>` selalu mendahului `<w:t>`, dan `<w:tblBorders>` diletakkan sebelum `<w:tblLook>`).
   * **Hormati Penomoran Otomatis:** Jangan menambahkan angka manual pada paragraf yang memiliki list styling. Hapus elemen placeholder berlebih langsung dari parent XML.
   * **Harmonisasi Font Penuh:** Setel font `Lexend 12pt` hitam pada style dokumen (`doc.styles['normal']`) serta atribut run (`w:ascii`, `w:hAnsi`, `w:eastAsia`, `w:cs`).
-  * **Validasi Skema Wajib:** Setiap regenerasi `.docx` wajib diverifikasi menggunakan validator skema OpenXML (`validate.py`) dengan hasil `All validations PASSED!`.
+  * **Validasi Skema Wajib:** Setiap regenerasi `.docx` wajib diverifikasi menggunakan inspeksi XML internal atau script assertion Python (`python scripts/populate_template_masalah.py`), memastikan integritas elemen OOXML tanpa memunculkan peringatan unreadable content saat dibuka.
 
 ### Prinsip 4: Arsitektur Ekspor Data Terpusat Web (Single Data Pipeline for Web)
 * **Pola Kesalahan:**
@@ -165,3 +177,15 @@ Setiap agen/kontributor wajib mengikuti protokol 5 langkah:
   * **Responsivitas Berjenjang:** Navigasi desktop penuh hanya aktif di layar lebar (`lg:`, 1024px+). Pada tablet dan mobile (< `lg:`), gunakan Radix `Sheet` drawer yang dilengkapi `SheetTitle` untuk aksesibilitas.
   * **Harmonisasi Tema Penuh:** Gunakan token semantik Shadcn/Tailwind (`bg-background`, `border-border`, `text-foreground`, `text-muted-foreground`) pada seluruh elemen antarmuka.
   * **Kepatuhan Antislop:** Dilarang keras menggunakan utilitas `space-x-*`/`space-y-*` (wajib gunakan `flex gap-*`), dilarang menggunakan gradien warna AI generik, dan dilarang animasi berulang tanpa aksi pengguna.
+
+### Prinsip 6: Verifikasi Antarmuka Web Menggunakan Browser Tools Sebelum Commit (Web-App Browser QA)
+* **Pola Kesalahan:**
+  Menganggap penambahan fitur web selesai hanya karena file `.tsx` tersimpan dan build Vite berhasil, tanpa menguji rendering antarmuka di peramban nyata. Akibatnya, terjadi kegagalan runtime tersembunyi (misal: tombol tidak reaktif, nilai `undefined` saat interaksi slider, drawer mobile tidak terbuka, atau layout pecah di breakpoint tertentu).
+* **Standar Pencegahan:**
+  * **Zero Unchecked Commit:** Dilarang keras melakukan commit atau membuat PR untuk perubahan web sebelum dilakukan uji coba langsung menggunakan **Browser Tools**.
+  * **Alur Pengujian Browser Wajib:**
+    1. Luncurkan server lokal (`vite preview` atau `vite`).
+    2. Buka tab via peramban otomatis: akses rute yang diubah.
+    3. Eksekusi interaksi pengguna secara nyata (klik tombol, input range/slider, ubah dropdown).
+    4. Periksa diagnostik browser: konsol peramban wajib bersih dari error fatal JavaScript (`tab.errors()`).
+    5. Tutup sesi peramban (`await browser.close()`) dan laporkan bukti verifikasi sebelum melakukan commit git.

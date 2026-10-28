@@ -155,6 +155,23 @@ def create_youth_unemployment_breakdown():
     ]
     return pd.DataFrame(data)
 
+def create_age_group_trend_breakdown():
+    """Tabel Resmi BPS No. 1180: Tingkat Pengangguran Terbuka Berdasarkan Kelompok Umur (2021–2025)."""
+    data = [
+        {"Kelompok_Umur": "15–19 Tahun", "2021": 23.91, "2022": 29.08, "2023": 25.77, "2024": 22.34, "2025": 23.34},
+        {"Kelompok_Umur": "20–24 Tahun", "2021": 17.73, "2022": 17.02, "2023": 16.85, "2024": 15.34, "2025": 14.35},
+        {"Kelompok_Umur": "25–29 Tahun", "2021": 9.26, "2022": 7.13, "2023": 7.48, "2024": 7.14, "2025": 6.67},
+        {"Kelompok_Umur": "30–34 Tahun", "2021": 5.43, "2022": 3.70, "2023": 3.55, "2024": 3.37, "2025": 3.47},
+        {"Kelompok_Umur": "35–39 Tahun", "2021": 4.02, "2022": 2.65, "2023": 2.54, "2024": 2.25, "2025": 2.35},
+        {"Kelompok_Umur": "40–44 Tahun", "2021": 3.42, "2022": 2.43, "2023": 1.82, "2024": 1.90, "2025": 1.86},
+        {"Kelompok_Umur": "45–49 Tahun", "2021": 3.30, "2022": 2.33, "2023": 1.80, "2024": 1.71, "2025": 1.96},
+        {"Kelompok_Umur": "50–54 Tahun", "2021": 2.18, "2022": 2.38, "2023": 1.79, "2024": 1.75, "2025": 1.74},
+        {"Kelompok_Umur": "55–59 Tahun", "2021": 1.98, "2022": 2.37, "2023": 1.52, "2024": 1.59, "2025": 1.73},
+        {"Kelompok_Umur": "60+ Tahun", "2021": 2.73, "2022": 2.85, "2023": 1.28, "2024": 1.49, "2025": 1.71},
+        {"Kelompok_Umur": "Total Nasional", "2021": 6.49, "2022": 5.86, "2023": 5.32, "2024": 4.91, "2025": 4.85},
+    ]
+    return pd.DataFrame(data)
+
 def main():
     print("Opening PDF and extracting official BPS tables...")
     with pdfplumber.open(PDF_PATH) as pdf:
@@ -185,6 +202,10 @@ def main():
     df_youth = create_youth_unemployment_breakdown()
     df_youth.to_csv(OUTPUT_DIR / "tpt_kelompok_umur_youth_adult.csv", index=False)
     print("Youth unemployment breakdown saved.")
+    
+    df_age_trend = create_age_group_trend_breakdown()
+    df_age_trend.to_csv(OUTPUT_DIR / "tpt_kelompok_umur_tren_2021_2025.csv", index=False)
+    print("Age group multi-year trend saved.")
 
     # Master Merged Provincial Panel Table for 2024
     print("Building Master Provincial Dataset 2024...")

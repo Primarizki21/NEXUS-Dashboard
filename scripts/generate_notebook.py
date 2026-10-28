@@ -116,6 +116,7 @@ plt.rcParams.update({
 
 # Load Curated Clean Datasets
 df_youth = pd.read_csv(DATA_DIR / "tpt_kelompok_umur_youth_adult.csv")
+df_age_trend = pd.read_csv(DATA_DIR / "tpt_kelompok_umur_tren_2021_2025.csv")
 df_edu = pd.read_csv(DATA_DIR / "tpt_nasional_pendidikan_detail_2022_2024.csv")
 df_panel_hist = pd.read_csv(DATA_DIR / "panel_tpt_provinsi_2017_2024.csv")
 df_master_2024 = pd.read_csv(DATA_DIR / "master_panel_provinsi_2024.csv")
@@ -128,15 +129,16 @@ print("Seluruh dataset resmi BPS berhasil dimuat dengan status 100% lengkap tanp
     # ----------------------------------------------------
     cells.append(create_cell("markdown", """## Bab 1: The Demographic Cliff : Krisis Ketenagakerjaan Generasi Muda
 
-Indonesia saat ini berada di tengah jendela peluang emas bonus demografi, di mana rasio ketergantungan penduduk mencapai titik terendah dalam sejarah. Secara teori ekonomi kependudukan, melimpahnya penduduk usia produktif seharusnya menjadi motor penggerak industrialisasi dan lompatan pendapatan per kapita. 
+Target Indonesia Emas 2045 dan puncak bonus demografi mempertegas urgensi penyerapan angkatan kerja muda dalam menyeimbangkan pertumbuhan ekonomi nasional (SDG 8) dengan pengentasan kemiskinan (SDG 1). Secara teori ekonomi kependudukan, melimpahnya penduduk usia produktif seharusnya menjadi motor penggerak industrialisasi dan lompatan pendapatan per kapita. 
 
-Namun, data resmi Sakernas BPS mengungkap kenyataan yang kontras: beban pengangguran nasional terkonsentrasi secara asimetris pada pundak generasi muda.
+Namun di balik optimisme tersebut, pasar kerja nasional menyimpan retakan tajam: lebih dari separuh penganggur di Indonesia adalah generasi muda. Transisi dari bangku sekolah menuju dunia kerja (*school-to-work transition*) berubah menjadi jurang pemisah, di mana angkatan kerja muda menghadapi dinding ketidakpastian yang berisiko memicu efek luka permanen (*scarring effect*) pada prospek pendapatan seumur hidup mereka.
 
 ### Fakta Data BPS:
-* TPT kelompok usia muda (15–24 tahun) per Agustus 2024 mencapai **17,02%**.
-* Sebagai perbandingan, TPT kelompok usia dewasa (25–59 tahun) hanya sebesar **2,45%**.
-* Rasio kesenjangan pengangguran muda terhadap dewasa tercatat mencapai **6,95 kali lipat**.
-* Pangsa pemuda dalam total penganggur terbuka nasional mencapai **56,70%**. Artinya, lebih dari satu dari setiap dua penganggur di Indonesia adalah anak muda.
+* **TPT Usia Muda (15–24 tahun)** per Agustus 2024 mencapai **17,02%**, sedangkan TPT Usia Dewasa (25–59 tahun) hanya sebesar **2,45%**.
+* **Rasio ketimpangan** pengangguran muda terhadap dewasa mencapai **6,95 kali lipat**.
+* **Pangsa pemuda** dalam total pengangguran terbuka nasional mencapai **56,70%** (lebih dari 1 dari setiap 2 penganggur di Indonesia adalah pemuda; 4,23 juta jiwa dari 7,47 juta penganggur terbuka nasional).
+* **TPT nasional** per Agustus 2024 berada pada level **4,91%** (152,11 juta angkatan kerja; 144,64 juta bekerja; 7,47 juta penganggur terbuka).
+* **Persistensi Deret Waktu Multi-Tahun (2021–2025):** Data BPS membuktikan bahwa krisis pengangguran muda bukan fluktuasi temporer. TPT kelompok umur 15–19 tahun konsisten bercokol di kisaran 22%–29% (terakhir 23,34% pada 2025), dan kelompok 20–24 tahun di kisaran 14%–17% (14,35% pada 2025), berbanding terbalik dengan kelompok usia dewasa (25–59 tahun) yang stabil rendah di bawah 3,5% dan rata-rata nasional (~4,8%–4,9%).
 
 ### Mekanisme Struktural:
 Kesenjangan ekstrem ini berakar pada terhambatnya proses transisi dari sekolah ke dunia kerja (*school-to-work transition*). Angkatan kerja baru menghadapi persyaratan rekrutmen yang kaku (misalnya kewajiban pengalaman kerja 1–2 tahun untuk posisi tingkat pemula), sementara ekosistem pemagangan sering kali tidak terhubung dengan penyerapan kerja permanen. 
@@ -146,55 +148,122 @@ Kondisi ini menimbulkan ancaman *scarring effect*: keterlambatan memasuki pasar 
     # ----------------------------------------------------
     # Cell 4: Chart 1 Code
     # ----------------------------------------------------
-    cells.append(create_cell("code", """# Grafik 1: Divergensi Generasi — Krisis Ketenagakerjaan Generasi Muda
-fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5.5), gridspec_kw={'width_ratios': [1.3, 1]})
-fig.suptitle("DIVERGENSI GENERASI : BEBAN PENGANGGURAN TERTUMPUK PADA USIA MUDA", 
-             fontsize=15, weight='bold', color=COLOR_TEXT, y=1.02)
+    cells.append(create_cell("code", """# Grafik 1A: Tren Persistensi Pengangguran Usia Muda (2021–2025)
+years = [2021, 2022, 2023, 2024, 2025]
+row_15_19 = df_age_trend[df_age_trend["Kelompok_Umur"].str.contains("15–19")].iloc[0]
+row_20_24 = df_age_trend[df_age_trend["Kelompok_Umur"].str.contains("20–24")].iloc[0]
+row_25_29 = df_age_trend[df_age_trend["Kelompok_Umur"].str.contains("25–29")].iloc[0]
+row_total = df_age_trend[df_age_trend["Kelompok_Umur"].str.contains("Total")].iloc[0]
 
-# Subplot 1: Bar Chart Komparasi TPT
-kelompok = ["Usia Muda (15–24 Th)", "Usia Dewasa (25–59 Th)", "Lanjut Usia (60+ Th)"]
-tpt_vals = [17.02, 2.45, 0.38]
-colors = [COLOR_CORAL, COLOR_NAVY, COLOR_SLATE]
+y_15_19 = [float(row_15_19[str(yr)]) for yr in years]
+y_20_24 = [float(row_20_24[str(yr)]) for yr in years]
+y_25_29 = [float(row_25_29[str(yr)]) for yr in years]
+y_total = [float(row_total[str(yr)]) for yr in years]
 
-bars = ax1.barh(kelompok, tpt_vals, color=colors, height=0.55, edgecolor="none")
-ax1.set_xlabel("Tingkat Pengangguran Terbuka (TPT) (%)", weight="bold")
-ax1.set_xlim(0, 22)
-ax1.grid(axis="x", alpha=0.5)
+fig1, ax1 = plt.subplots(figsize=(10.5, 5.5))
+ax1.plot(years, y_15_19, marker='o', color=COLOR_CORAL, linewidth=2.8, markersize=7, label="Usia 15–19 Tahun (Sekolah / Fresh Grad)")
+ax1.plot(years, y_20_24, marker='s', color=COLOR_AMBER, linewidth=2.5, markersize=6.5, label="Usia 20–24 Tahun (Lulusan Vokasi / PT)")
+ax1.plot(years, y_25_29, marker='d', color=COLOR_TEAL, linewidth=2.0, markersize=6, linestyle=':', label="Usia 25–29 Tahun (Transisi Karir Awal)")
+ax1.plot(years, y_total, marker='^', color=COLOR_NAVY, linewidth=2.2, markersize=6.5, linestyle='--', label="Rata-rata Nasional (Semua Kelompok Umur)")
 
-# Value Labels
-for bar in bars:
-    w = bar.get_width()
-    ax1.text(w + 0.4, bar.get_y() + bar.get_height()/2, f"{w:.2f}%", 
-             va="center", ha="left", weight="bold", color=COLOR_TEXT, fontsize=11)
+for yr, v in zip(years, y_15_19):
+    ax1.text(yr, v + 0.8, f"{v:.1f}%", ha="center", va="bottom", fontsize=8.5, weight="bold", color=COLOR_CORAL)
+for yr, v in zip(years, y_20_24):
+    ax1.text(yr, v + 0.7, f"{v:.1f}%", ha="center", va="bottom", fontsize=8.5, weight="bold", color=COLOR_AMBER)
+for yr, v in zip(years, y_25_29):
+    ax1.text(yr, v + 0.6, f"{v:.2f}%", ha="center", va="bottom", fontsize=8.5, weight="bold", color=COLOR_TEAL)
+for yr, v in zip(years, y_total):
+    ax1.text(yr, v - 1.2, f"{v:.2f}%", ha="center", va="top", fontsize=8.5, weight="bold", color=COLOR_NAVY)
+ax1.set_title("TREN PERSISTENSI PENGANGGURAN USIA MUDA DI INDONESIA (2021–2025)\\nTingkat Pengangguran Terbuka (TPT) Berdasarkan Sakernas BPS", 
+              fontsize=12, weight="bold", color=COLOR_TEXT, pad=14)
+ax1.set_xlabel("Tahun Pengamatan BPS Sakernas", fontsize=10, weight="bold")
+ax1.set_ylabel("Tingkat Pengangguran Terbuka (%)", fontsize=10, weight="bold")
+ax1.set_xlim(2020.6, 2025.4)
+ax1.set_ylim(0, 32)
+ax1.set_xticks(years)
+ax1.grid(True, linestyle=":", alpha=0.6)
+ax1.legend(loc="upper right", fontsize=9, framealpha=0.92, edgecolor="#CBD5E1")
+plt.tight_layout()
+fig1.savefig(CHARTS_DIR / "01a_tren_pengangguran_usia_muda.svg", format="svg", bbox_inches="tight")
+fig1.savefig(CHARTS_DIR / "01a_tren_pengangguran_usia_muda.png", dpi=300, bbox_inches="tight")
+plt.close(fig1)
+display(Image(filename=str(CHARTS_DIR / "01a_tren_pengangguran_usia_muda.png")))"""))
 
-# Annotate Ratio Gap
-ax1.annotate("Kesenjangan 6,95x Lipat!\\n(TPT Muda vs Dewasa)",
-             xy=(17.02, 0), xytext=(12.5, 0.7),
-             arrowprops=dict(facecolor=COLOR_CORAL, shrink=0.08, width=1.5, headwidth=6),
-             bbox=dict(boxstyle="round,pad=0.5", facecolor="#FFE4E6", edgecolor=COLOR_CORAL, alpha=0.9),
-             fontsize=10, weight="bold", color=COLOR_CORAL)
+    # ----------------------------------------------------
+    # Cell 5: Chart 1B (Grouped Bar Chart 2023 vs 2024)
+    # ----------------------------------------------------
+    cells.append(create_cell("code", """# Grafik 1B: Komparasi TPT Menurut Kelompok Umur (Agustus 2023 vs Agustus 2024)
+df_3groups = df_youth[~df_youth["Kelompok_Umur"].str.contains("Rasio")].copy()
+groups = df_3groups["Kelompok_Umur"].tolist()
+tpt_23 = df_3groups["TPT_Ags2023"].tolist()
+tpt_24 = df_3groups["TPT_Ags2024"].tolist()
 
-ax1.set_title("A. Tingkat Pengangguran per Kelompok Umur (Ags 2024)", fontsize=12, pad=12)
-ax1.invert_yaxis()
+fig2, ax2 = plt.subplots(figsize=(11, 5.5))
+y_pos = np.arange(len(groups))
+height = 0.32
 
-# Subplot 2: Donut Chart Komposisi Penganggur
-shares = [56.70, 41.20, 2.10]
-labels_donut = ["Pemuda\\n56,7%", "Dewasa\\n41,2%", "Lansia\\n2,1%"]
-donut_colors = [COLOR_CORAL, COLOR_NAVY, COLOR_SLATE]
+labels_clean = ["Usia Muda (15–24 Tahun)", "Usia Dewasa (25–59 Tahun)", "Lanjut Usia (60+ Tahun)"]
 
-wedges, texts = ax2.pie(shares, labels=labels_donut, colors=donut_colors, startangle=140,
+bars_24 = ax2.barh(y_pos - height/2, tpt_24, height=height, color=[COLOR_CORAL, COLOR_NAVY, COLOR_SLATE],
+                   edgecolor="none", label="Sakernas Agustus 2024")
+bars_23 = ax2.barh(y_pos + height/2, tpt_23, height=height, color=["#FDA4AF", "#93C5FD", "#CBD5E1"],
+                   edgecolor="none", label="Sakernas Agustus 2023")
+
+for bar, val in zip(bars_24, tpt_24):
+    ax2.text(bar.get_width() + 0.35, bar.get_y() + bar.get_height()/2, f"{val:.2f}% (2024)",
+             va="center", ha="left", weight="bold", color=COLOR_TEXT, fontsize=9.5)
+for bar, val in zip(bars_23, tpt_23):
+    ax2.text(bar.get_width() + 0.35, bar.get_y() + bar.get_height()/2, f"{val:.2f}% (2023)",
+             va="center", ha="left", color="#475569", fontsize=9)
+
+ax2.annotate("Kesenjangan Antar-Generasi:\\n• Rasio 2024: 6,95x Lipat (17,02% vs 2,45%)\\n• Rasio 2023: 7,08x Lipat (19,40% vs 2,74%)",
+             xy=(tpt_24[0], 0 - height/2), xytext=(8.5, 0.7),
+             arrowprops=dict(facecolor=COLOR_CORAL, shrink=0.08, width=1.5, headwidth=5),
+             bbox=dict(boxstyle="round,pad=0.5", facecolor="#FFF1F2", edgecolor=COLOR_CORAL, alpha=0.95),
+             fontsize=9.5, weight="bold", color=COLOR_CORAL)
+
+ax2.set_yticks(y_pos)
+ax2.set_yticklabels(labels_clean, weight="bold", fontsize=10)
+ax2.invert_yaxis()
+ax2.set_xlabel("Tingkat Pengangguran Terbuka (TPT) (%)", fontsize=10, weight="bold")
+ax2.set_xlim(0, 23)
+ax2.grid(axis="x", linestyle=":", alpha=0.6)
+ax2.set_title("KOMPARASI TPT MENURUT KELOMPOK UMUR (AGUSTUS 2023 VS AGUSTUS 2024)\\nSumber Data: Survei Angkatan Kerja Nasional (Sakernas) BPS",
+              fontsize=12, weight="bold", color=COLOR_TEXT, pad=14)
+ax2.legend(loc="lower right", fontsize=9.5, framealpha=0.92, edgecolor="#CBD5E1")
+plt.tight_layout()
+fig2.savefig(CHARTS_DIR / "01b_komparasi_tpt_kelompok_umur.svg", format="svg", bbox_inches="tight")
+fig2.savefig(CHARTS_DIR / "01b_komparasi_tpt_kelompok_umur.png", dpi=300, bbox_inches="tight")
+fig2.savefig(CHARTS_DIR / "01_krisis_pengangguran_usia_muda.svg", format="svg", bbox_inches="tight")
+fig2.savefig(CHARTS_DIR / "01_krisis_pengangguran_usia_muda.png", dpi=300, bbox_inches="tight")
+plt.close(fig2)
+display(Image(filename=str(CHARTS_DIR / "01b_komparasi_tpt_kelompok_umur.png")))"""))
+
+    # ----------------------------------------------------
+    # Cell 6: Chart 1C (Donut Chart Agustus 2024)
+    # ----------------------------------------------------
+    cells.append(create_cell("code", """# Grafik 1C: Komposisi Penganggur Terbuka Menurut Kelompok Umur (Agustus 2024)
+df_3groups = df_youth[~df_youth["Kelompok_Umur"].str.contains("Rasio")].copy()
+shares = df_3groups["Share_Penganggur_%"].tolist()
+labels_pie = [f"Pemuda (15–24 Th)\\n{shares[0]:.1f}% (4,23 Jt)",
+              f"Dewasa (25–59 Th)\\n{shares[1]:.1f}% (3,08 Jt)",
+              f"Lansia (60+ Th)\\n{shares[2]:.1f}% (0,16 Jt)"]
+pie_colors = [COLOR_CORAL, COLOR_NAVY, COLOR_SLATE]
+
+fig3, ax3 = plt.subplots(figsize=(8.5, 6))
+wedges, texts = ax3.pie(shares, labels=labels_pie, colors=pie_colors, startangle=140,
                         wedgeprops=dict(width=0.45, edgecolor="white", linewidth=2.5),
-                        textprops=dict(weight="bold", color=COLOR_TEXT, fontsize=11))
+                        textprops=dict(weight="bold", color=COLOR_TEXT, fontsize=10.5))
 
-# Center circle callout
-ax2.text(0, 0, "56,7%\\nPEMUDA", ha="center", va="center", fontsize=13, weight="bold", color=COLOR_CORAL)
-ax2.set_title("B. Pangsa Usia dalam Total Penganggur", fontsize=12, pad=12)
+ax3.text(0, 0, f"{shares[0]:.1f}%\\nPEMUDA\\n(4,23 Jt)", ha="center", va="center", fontsize=12.5, weight="bold", color=COLOR_CORAL)
+ax3.set_title("KOMPOSISI PENGANGGUR TERBUKA NASIONAL MENURUT KELOMPOK UMUR\\nSakernas BPS Agustus 2024 (Total: 7,47 Juta Jiwa Penganggur)",
+              fontsize=11.5, weight="bold", color=COLOR_TEXT, pad=14)
 
 plt.tight_layout()
-fig.savefig(CHARTS_DIR / "01_krisis_pengangguran_usia_muda.svg", format="svg", bbox_inches="tight")
-fig.savefig(CHARTS_DIR / "01_krisis_pengangguran_usia_muda.png", dpi=300, bbox_inches="tight")
-plt.close(fig)
-display(Image(filename=str(CHARTS_DIR / "01_krisis_pengangguran_usia_muda.png")))"""))
+fig3.savefig(CHARTS_DIR / "01c_komposisi_penganggur_usia.svg", format="svg", bbox_inches="tight")
+fig3.savefig(CHARTS_DIR / "01c_komposisi_penganggur_usia.png", dpi=300, bbox_inches="tight")
+plt.close(fig3)
+display(Image(filename=str(CHARTS_DIR / "01c_komposisi_penganggur_usia.png")))"""))
 
     # ----------------------------------------------------
     # Cell 5: Bab 2 Narrative
@@ -520,6 +589,158 @@ fig.savefig(CHARTS_DIR / "05_profil_tiga_klaster_ketenagakerjaan.svg", format="s
 fig.savefig(CHARTS_DIR / "05_profil_tiga_klaster_ketenagakerjaan.png", dpi=300, bbox_inches="tight")
 plt.close(fig)
 display(Image(filename=str(CHARTS_DIR / "05_profil_tiga_klaster_ketenagakerjaan.png")))"""))
+
+    # ----------------------------------------------------
+    # Cell 13: Stakeholder Synergy Narrative
+    # ----------------------------------------------------
+    cells.append(create_cell("markdown", """### Sinergi Ekosistem Stakeholder : Kerangka Aksi Multi-Aktor (A.K.S.I.)
+
+Implementasi intervensi 3 klaster pasar kerja tidak dapat dibebankan pada satu kementerian semata. Kerangka kerja NEXUS digerakkan melalui orkestrasi 4 pilar pemangku kepentingan (*multi-stakeholder governance*):
+1. **Pilar Regulasi (Pemerintah Pusat & Kementerian Terkait):** Kementerian PPN/Bappenas, Kemnaker, Kemenperin, dan Kemenkeu bertindak sebagai regulator makro, mengawal target RPJMN 2029 (5,40 juta lapangan kerja), memfasilitasi insentif *Super-Tax Deduction 200%*, dan mengalokasikan subsidi jaring pengaman jaminan sosial.
+2. **Pilar Industri (Dunia Usaha & Asosiasi Industri):** KADIN, APINDO, dan korporasi mitra membuka kuota magang industri berupah layak, menyerap 1,85 juta tenaga kerja formal, dan menjadi instruktur praktisi dalam kurikulum kejuruan terakreditasi.
+3. **Pilar Proteksi & Modal (Lembaga Pembiayaan & Jaminan Sosial):** BPJS Ketenagakerjaan dan Bank Himbara penyalur KUR memberikan subsidi iuran JKK/JKM bagi 3,5 juta pekerja rentan/informal serta menyalurkan pembiayaan wirausaha muda tanpa agunan tambahan.
+4. **Pilar Teritorial (Pemerintah Daerah & Balai Vokasi):** Dinas Tenaga Kerja Provinsi/Kab-Kota bersama SMK, politeknik, dan BLKI mengoperasikan dashboard *Early Warning IKKD* di 45 kab/kota prioritas, mengharmonisasikan upah minimum lintas batas, dan menerapkan kurikulum modular 50% teori : 50% industri."""))
+
+    # ----------------------------------------------------
+    # Cell 14: Stakeholder Synergy Chart Code
+    # ----------------------------------------------------
+    cells.append(create_cell("code", """# Grafik 6: Sinergi Ekosistem Stakeholder — Arsitektur Tata Kelola NEXUS
+import matplotlib.patches as patches
+
+fig, ax = plt.subplots(figsize=(14, 10), facecolor="#F8FAFC")
+ax.set_facecolor("#F8FAFC")
+ax.set_xlim(0, 100)
+ax.set_ylim(0, 100)
+ax.axis("off")
+
+NAVY = "#1E3A8A"
+TEAL = "#0D9488"
+CORAL = "#E11D48"
+AMBER = "#D97706"
+SLATE = "#475569"
+TEXT_MAIN = "#0F172A"
+
+# 1. Header
+ax.text(50, 96.8, "SINERGI EKOSISTEM STAKEHOLDER : ARSITEKTUR TATA KELOLA NEXUS",
+        ha="center", va="center", fontsize=15, weight="bold", color=TEXT_MAIN)
+ax.text(50, 93.8, "Kerangka Integrasi Multi-Aktor untuk Mengakselerasi Target 5,4 Juta Peluang Kerja & RPJMN 2029",
+        ha="center", va="center", fontsize=10.5, color=SLATE)
+
+# 2. Central Hub
+center_circle = patches.Circle((50, 50), 12.5, facecolor="#FFFFFF", edgecolor=NAVY, linewidth=2.5, zorder=3)
+ax.add_patch(center_circle)
+center_glow = patches.Circle((50, 50), 13.8, facecolor="none", edgecolor="#93C5FD", linewidth=1.5, linestyle="--", zorder=2)
+ax.add_patch(center_glow)
+
+ax.text(50, 55.5, "NEXUS CORE", ha="center", va="center", fontsize=11, weight="bold", color=NAVY, zorder=4)
+ax.text(50, 52.0, "SASARAN RPJMN 2029", ha="center", va="center", fontsize=8.5, weight="bold", color="#B91C1C", zorder=4)
+ax.text(50, 48.0, "5,40 Juta Lapangan Kerja\\nPenurunan TPT ke 4,30%\\nPencegahan Scarring Effect", 
+        ha="center", va="center", fontsize=8.5, color=TEXT_MAIN, zorder=4, linespacing=1.3)
+ax.text(50, 42.5, "Intervensi 3 Klaster Wilayah", ha="center", va="center", fontsize=8, weight="bold", color=TEAL, zorder=4)
+
+def draw_card(cx, cy, w, h, title, actors, roles, accent_color, tag_badge):
+    box = patches.FancyBboxPatch((cx - w/2, cy - h/2), w, h,
+                                 boxstyle="round,pad=0.8,rounding_size=2.0",
+                                 facecolor="#FFFFFF", edgecolor=accent_color, linewidth=2.0, zorder=3)
+    ax.add_patch(box)
+    
+    badge = patches.FancyBboxPatch((cx - w/2 + 1.2, cy + h/2 - 4.2), w - 2.4, 3.2,
+                                   boxstyle="round,pad=0.2,rounding_size=1.0",
+                                   facecolor=accent_color, edgecolor="none", zorder=4)
+    ax.add_patch(badge)
+    ax.text(cx, cy + h/2 - 2.6, f"{tag_badge} : {title.upper()}",
+            ha="center", va="center", fontsize=9.2, weight="bold", color="#FFFFFF", zorder=5)
+    
+    ax.text(cx, cy + h/2 - 6.2, f"Entitas Aktor: {actors}",
+            ha="center", va="center", fontsize=8.2, weight="bold", color=accent_color, zorder=4)
+    
+    start_y = cy + h/2 - 9.2
+    for i, role in enumerate(roles):
+        ax.text(cx - w/2 + 2.5, start_y - (i * 3.3), f"• {role}",
+                ha="left", va="center", fontsize=8.2, color=TEXT_MAIN, zorder=4)
+
+# 4 Cards
+draw_card(50, 78.5, 45, 20.5,
+          "Pemerintah Pusat & Kementerian Terkait",
+          "Kementerian PPN/Bappenas, Kemnaker, Kemenperin, Kemenkeu",
+          ["Penyusunan target ketenagakerjaan makro RPJMN 2025–2029",
+           "Fasilitasi insentif Super-Tax Deduction 200% penyerapan pemuda",
+           "Alokasi APBN untuk subsidi jaring pengaman Jamsostek pekerja rentan"],
+          NAVY, "PILAR REGULASI")
+
+draw_card(81, 50, 34, 22.5,
+          "Dunia Usaha & Asosiasi Industri",
+          "KADIN, APINDO, BUMN, Korporasi Mitra",
+          ["Penyediaan kuota magang industri berupah layak",
+           "Kemitraan kurikulum dual-vocation 50:50",
+           "Validasi kebutuhan spesifikasi keahlian riil",
+           "Penciptaan 1,85 juta lowongan formal urban"],
+          CORAL, "PILAR INDUSTRI")
+
+draw_card(50, 19.5, 45, 20.5,
+          "Lembaga Pembiayaan & Jaminan Sosial",
+          "BPJS Ketenagakerjaan, Bank Himbara Penyalur KUR, Kemenkop-UKM",
+          ["Subsidi iuran JKK dan JKM bagi 3,5 juta pekerja informal perdesaan",
+           "Penyaluran KUR Klaster wirausaha muda tanpa agunan tambahan",
+           "Pembiayaan modernisasi alsintan & hilirisasi komoditas agraris"],
+          AMBER, "PILAR PROTEKSI & MODAL")
+
+draw_card(19, 50, 34, 22.5,
+          "Pemda & Balai Vokasi Terpadu",
+          "Disnaker Provinsi/Kab-Kota, SMK, Politeknik, BLKI",
+          ["Operasionalisasi Early Warning IKKD di 45 kab/kota",
+           "Harmonisasi regulasi upah minimum lintas batas",
+           "Penerapan kurikulum modular SKKNI terapan",
+           "Fasilitasi bursa kerja pemuda berbasis geospasial"],
+          TEAL, "PILAR TERITORIAL")
+
+# Curved Connecting Arrows
+def draw_curved_arrow(x1, y1, x2, y2, rad, color):
+    arrow = patches.FancyArrowPatch((x1, y1), (x2, y2),
+                                    connectionstyle=f"arc3,rad={rad}",
+                                    arrowstyle="Simple,tail_width=2.5,head_width=9,head_length=9",
+                                    color=color, alpha=0.85, zorder=2)
+    ax.add_patch(arrow)
+
+draw_curved_arrow(64, 70, 72, 60, -0.22, NAVY)
+draw_curved_arrow(72, 40, 64, 28, -0.22, CORAL)
+draw_curved_arrow(36, 28, 28, 40, -0.22, AMBER)
+draw_curved_arrow(28, 60, 36, 70, -0.22, TEAL)
+
+# Synergy Flow Badges
+def draw_flow_badge(x, y, text, color):
+    ax.text(x, y, text, ha="center", va="center", fontsize=7.8, weight="bold", color="#FFFFFF",
+            bbox=dict(boxstyle="round,pad=0.35,rounding_size=0.6", facecolor=color, edgecolor="none", alpha=0.95),
+            zorder=6)
+
+draw_flow_badge(72, 68, "Insentif Pajak & Regulasi Magang", NAVY)
+draw_flow_badge(72, 32, "Formalisasi Kerja & Upah Layak", CORAL)
+draw_flow_badge(28, 32, "Jaring Pengaman & Modal Usaha", AMBER)
+draw_flow_badge(28, 68, "Deteksi IKKD & Talenta Terampil", TEAL)
+
+# Bidirectional Radial Links
+def draw_radial_link(x1, y1, x2, y2, color):
+    line = patches.FancyArrowPatch((x1, y1), (x2, y2),
+                                   arrowstyle="<|-|>,head_width=4,head_length=5",
+                                   color=color, linewidth=1.2, linestyle=":", alpha=0.7, zorder=1)
+    ax.add_patch(line)
+
+draw_radial_link(50, 68.2, 50, 62.5, NAVY)
+draw_radial_link(64, 50, 62.5, 50, CORAL)
+draw_radial_link(50, 29.8, 50, 37.5, AMBER)
+draw_radial_link(36, 50, 37.5, 50, TEAL)
+
+# Bottom Caption
+ax.text(50, 4.5, "Framework A.K.S.I. : Adaptasi Kompetensi • Kolaborasi Triple-Helix • Skalabilitas Insentif • Inklusi Jamsostek",
+        ha="center", va="center", fontsize=9.2, weight="bold", color=SLATE)
+ax.text(50, 2.2, "Sumber: Blueprint Solusi NEXUS & Rekomendasi Kebijakan ACTION 2026 | Dokumen Resmi Template Masalah",
+        ha="center", va="center", fontsize=8.0, color="#94A3B8")
+
+plt.tight_layout()
+fig.savefig(CHARTS_DIR / "16_sinergi_ekosistem_stakeholder.svg", format="svg", bbox_inches="tight")
+fig.savefig(CHARTS_DIR / "16_sinergi_ekosistem_stakeholder.png", dpi=300, bbox_inches="tight")
+plt.close(fig)
+display(Image(filename=str(CHARTS_DIR / "16_sinergi_ekosistem_stakeholder.png")))"""))
 
     # ----------------------------------------------------
     # Cell 13: Closing Conclusion Narrative
