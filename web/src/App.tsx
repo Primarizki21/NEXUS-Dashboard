@@ -7,6 +7,7 @@ import { SpatialModel } from './pages/SpatialModel';
 import { PolicySimulator } from './pages/PolicySimulator';
 import { Forecasting } from './pages/Forecasting';
 import { Methodology } from './pages/Methodology';
+import { PolicyInnovations } from './pages/PolicyInnovations';
 import rawData from './data/labor_data.json';
 import { LaborDataBundle } from './types';
 
@@ -19,7 +20,7 @@ export const App: React.FC = () => {
   useEffect(() => {
     const handleHash = () => {
       const hash = window.location.hash.replace('#', '');
-      if (['home', 'cartography', 'spatial', 'simulator', 'forecasting', 'methodology'].includes(hash)) {
+      if (['home', 'cartography', 'spatial', 'simulator', 'innovations', 'forecasting', 'methodology'].includes(hash)) {
         setCurrentTab(hash);
       }
     };
@@ -57,6 +58,7 @@ export const App: React.FC = () => {
           {currentTab === 'cartography' && <Cartography data={data} />}
           {currentTab === 'spatial' && <SpatialModel data={data} />}
           {currentTab === 'simulator' && <PolicySimulator data={data} />}
+          {currentTab === 'innovations' && <PolicyInnovations data={data} />}
           {currentTab === 'forecasting' && <Forecasting data={data} />}
           {currentTab === 'methodology' && <Methodology data={data} />}
         </main>

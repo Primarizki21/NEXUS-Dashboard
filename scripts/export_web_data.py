@@ -287,6 +287,311 @@ def build_web_data():
             "vif": round(float(r["VIF"]), 2),
             "status": clean_str(r["Status"])
         })
+    # 14. Key Policy Innovations (3 Fitur Kunci: IKKD Early Warning, Dual-Vocation, Geo-Spatial & KUR)
+    df_kk = pd.read_csv(DATA_DIR / "indikator_kerentanan_kabkota_prioritas_2024.csv")
+    kabkota_list = []
+    for _, r in df_kk.iterrows():
+        kabkota_list.append({
+            "name": clean_str(r["Kabupaten_Kota"]),
+            "provinsi": clean_str(r["Provinsi"]),
+            "cluster_id": int(r["Cluster_ID"]),
+            "tpt": round(float(r["TPT_2024"]), 2),
+            "informalitas": round(float(r["Informalitas"]), 2),
+            "underemployment": round(float(r["Underemployment"]), 2),
+            "defisit_upah_pct": round(float(r["Defisit_Upah_Pct"]), 2),
+            "ikkd_score": round(float(r["IKKD_Score"]), 2),
+            "alert_level": clean_str(r["Alert_Level"]),
+            "kategori": clean_str(r["Kategori_Kerentanan"]),
+            "rekomendasi": clean_str(r["Rekomendasi"])
+        })
+
+    # Summary counts for IKKD 38 provinces
+    prov_critical_cnt = sum(1 for p in provinces_list if p["ikkd_score"] >= 70.0)
+    prov_warning_cnt = sum(1 for p in provinces_list if 45.0 <= p["ikkd_score"] < 70.0)
+    prov_safe_cnt = sum(1 for p in provinces_list if p["ikkd_score"] < 45.0)
+
+    policy_innovations = {
+        "ikkd_early_warning": {
+            "title": "Early Warning Dashboard IKKD",
+            "subtitle": "Deteksi Dini Kerentanan Ketenagakerjaan Daerah hingga Tingkat Kabupaten/Kota",
+            "thresholds": {
+                "critical": 70.0,
+                "warning": 45.0,
+                "resilient": 25.0
+            },
+            "dimensions": [
+                {"name": "TPT Total", "weight": 0.25, "desc": "Tingkat pengangguran terbuka resmi Sakernas BPS"},
+                {"name": "Tingkat Informalitas", "weight": 0.35, "desc": "Proporsi pekerja di sektor informal tanpa jaminan sosial"},
+                {"name": "Defisit Upah Riil", "weight": 0.20, "desc": "Kesenjangan rerata upah lokal terhadap kebutuhan hidup layak"},
+                {"name": "Setengah Penganggur", "weight": 0.20, "desc": "Tenaga kerja jam kerja rendah (<35 jam) yang mencari jam tambahan"}
+            ],
+            "provinces_summary": {
+                "critical_count": prov_critical_cnt,
+                "warning_count": prov_warning_cnt,
+                "safe_count": prov_safe_cnt,
+                "total_provinces": len(provinces_list)
+            },
+            "kabkota_summary": {
+                "critical_count": sum(1 for k in kabkota_list if k["alert_level"] == "CRITICAL"),
+                "warning_count": sum(1 for k in kabkota_list if k["alert_level"] == "WARNING"),
+                "safe_count": sum(1 for k in kabkota_list if k["alert_level"] == "SAFE"),
+                "total_kabkota": len(kabkota_list)
+            },
+            "kabkota_prioritas": kabkota_list
+        },
+        "dual_vocation": {
+            "title": "Dual-Vocation Credit System",
+            "subtitle": "Kurikulum Modular Terakreditasi: 50% Teori Kampus/SMK & 50% Praktik Industri",
+            "default_ratio": {
+                "theory_pct": 50,
+                "industry_pct": 50
+            },
+            "tax_deduction_pct": 200,
+            "accreditation_standard": "Standar Kompetensi Kerja Nasional Indonesia (SKKNI) & Konsorsium Industri 2024",
+            "benchmark_impact": {
+                "status_quo_theory_pct": 70,
+                "status_quo_practice_pct": 30,
+                "baseline_job_readiness_pct": 52.4,
+                "target_job_readiness_pct": 88.7,
+                "baseline_waiting_months": 7.2,
+                "target_waiting_months": 2.8
+            },
+            "tracks": [
+                {
+                    "id": "mfg",
+                    "name": "Manufaktur Presisi & Mekatronika",
+                    "focus_cluster": "Klaster 1 : Urban-Industrial Trap (Jabar, Banten, Kepri)",
+                    "theory_modules": [
+                        "Pemodelan CAD/CAM 3D Berbasis Toleransi",
+                        "Logika Kontrol Otomasi PLC & Sensor Industri",
+                        "Metrologi Kualitas & Lean Manufacturing"
+                    ],
+                    "industry_modules": [
+                        "Pengoperasian Mesin Multi-Axis CNC Terapan",
+                        "Pemeliharaan Terencana Lini Robotika Pabrik",
+                        "Audit Kualitas Standardisasi Six Sigma & Kaizen"
+                    ],
+                    "industry_partners": [
+                        "Kawasan Industri Cikarang (GIIC/Jababeka)",
+                        "Kawasan Industri KIIC Karawang",
+                        "Batamindo Industrial Park"
+                    ]
+                },
+                {
+                    "id": "digital",
+                    "name": "Digital Engineering & Sistem Tertanam",
+                    "focus_cluster": "Klaster 1 & 3 : Pusat Inovasi Urban & Kota Sekunder",
+                    "theory_modules": [
+                        "Arsitektur Piranti Lunak Terdistribusi",
+                        "Jaringan Industrial IoT & Protokol SCADA",
+                        "Keamanan Siber Sistem Industri Kritis"
+                    ],
+                    "industry_modules": [
+                        "Pengembangan Full-Stack SaaS & Cloud DevOps",
+                        "Pemasangan & Integrasi Sensor IoT Pabrik Cerdas",
+                        "Testing Otomasi & Continuous Integration Industri"
+                    ],
+                    "industry_partners": [
+                        "Nongsa Digital Park Batam",
+                        "BSD Digital Hub Tangerang",
+                        "Surabaya Tech Valley & Koridor Inovasi Rungkut"
+                    ]
+                },
+                {
+                    "id": "agri",
+                    "name": "Agroteknologi Presisi & Pasca-Panen Modern",
+                    "focus_cluster": "Klaster 2 : Agraris-Informal Shelter (Penyangga Pangan)",
+                    "theory_modules": [
+                        "Teknologi Nutrisi Hidroponik & Smart Irrigation",
+                        "Bioteknologi Pengolahan Pangan & Fermentasi",
+                        "Manajemen Rantai Dingin & Logistik Pangan"
+                    ],
+                    "industry_modules": [
+                        "Operasional Drone Sprayer & Pemetaan Tanah Digital",
+                        "Standardisasi Kemasan Ekspor Berbasis HACCP",
+                        "Manajemen Tata Kelola Korporasi Petani Modern"
+                    ],
+                    "industry_partners": [
+                        "Pusat Riset Agroteknologi Lahan Kering",
+                        "Konsorsium Hortikultura & Perkebunan Rakyat",
+                        "Sentra Pengolahan Kakao & Kopi Hulu-Hilir"
+                    ]
+                },
+                {
+                    "id": "logistics",
+                    "name": "Logistik Maritim & Rantai Pasok Berkelanjutan",
+                    "focus_cluster": "Klaster 2 & 3 : Kawasan Pesisir & Penyangga Transisi",
+                    "theory_modules": [
+                        "Regulasi Kepabeanan, Freight Forwarding & Incoterms",
+                        "Perencanaan Rute Angkutan Multimoda Kepulauan",
+                        "Manajemen Inventori Berbasis ERP Warehouse"
+                    ],
+                    "industry_modules": [
+                        "Pengelolaan Operasional Container Depot Digital",
+                        "Audit Karbon Rantai Pasok Logistik Hijau",
+                        "Operasional Terminal Reefer Cold-Chain Terpadu"
+                    ],
+                    "industry_partners": [
+                        "Pelindo Logistics Terminal Hub",
+                        "Kawasan Industri Kariangau Balikpapan",
+                        "Kawasan Industri Terpadu Makassar"
+                    ]
+                }
+            ]
+        },
+        "job_matching_kur": {
+            "title": "Geo-Spatial Job Matching & Micro-Capital",
+            "subtitle": "Bursa Kerja Terlokalisasi Pemuda Terintegrasi Akses KUR Klaster Tanpa Agunan",
+            "radius_options_km": [10, 25, 50],
+            "kur_parameters": {
+                "subsidy_interest_pct": 6.0,
+                "max_limit_idr": 100000000,
+                "min_limit_idr": 10000000,
+                "default_loan_idr": 35000000,
+                "collateral_required": False,
+                "jobs_created_multiplier_per_100m": 2.4,
+                "target_npl_max_pct": 1.8
+            },
+            "vacancies": [
+                {
+                    "id": "vac-1",
+                    "title": "Junior CNC Operator & Tooling",
+                    "company": "PT Precision Die Casting",
+                    "location": "Cikarang, Kab. Bekasi",
+                    "provinsi": "Jawa Barat",
+                    "cluster_id": 1,
+                    "radius_km": 8.5,
+                    "quota": 35,
+                    "salary_range": "Rp 5.400.000 - Rp 6.200.000",
+                    "required_skill": "Dual-Vocation Manufaktur / Mesin CNC",
+                    "matched_candidates": 48
+                },
+                {
+                    "id": "vac-2",
+                    "title": "Industrial IoT Field Technician",
+                    "company": "PT Indo Automasi Cerdas",
+                    "location": "Batu Ampar, Kota Batam",
+                    "provinsi": "Kepulauan Riau",
+                    "cluster_id": 1,
+                    "radius_km": 12.0,
+                    "quota": 20,
+                    "salary_range": "Rp 4.900.000 - Rp 5.800.000",
+                    "required_skill": "Sensor Wiring & PLC Programming",
+                    "matched_candidates": 26
+                },
+                {
+                    "id": "vac-3",
+                    "title": "Teknisi Pemeliharaan Robotika",
+                    "company": "PT Surya Elektronik Nusantara",
+                    "location": "Balaraja, Kab. Tangerang",
+                    "provinsi": "Banten",
+                    "cluster_id": 1,
+                    "radius_km": 18.2,
+                    "quota": 15,
+                    "salary_range": "Rp 5.200.000 - Rp 6.000.000",
+                    "required_skill": "Mekatronika & Robot Arm Maintenance",
+                    "matched_candidates": 19
+                },
+                {
+                    "id": "vac-4",
+                    "title": "Supervisor Pasca-Panen Hortikultura",
+                    "company": "Koperasi Agrikultur Berdikari",
+                    "location": "Lombok Tengah, NTB",
+                    "provinsi": "Nusa Tenggara Barat",
+                    "cluster_id": 2,
+                    "radius_km": 14.5,
+                    "quota": 25,
+                    "salary_range": "Rp 3.100.000 - Rp 3.800.000",
+                    "required_skill": "HACCP Packaging & Sortir Dingin",
+                    "matched_candidates": 33
+                },
+                {
+                    "id": "vac-5",
+                    "title": "Operator Pilot Plant Pengolahan Kopi",
+                    "company": "PT Lembah Baliem Agro",
+                    "location": "Wamena, Kab. Jayawijaya",
+                    "provinsi": "Papua Pegunungan",
+                    "cluster_id": 2,
+                    "radius_km": 9.0,
+                    "quota": 18,
+                    "salary_range": "Rp 3.800.000 - Rp 4.500.000",
+                    "required_skill": "Roasting Standard & Quality Grading",
+                    "matched_candidates": 22
+                },
+                {
+                    "id": "vac-6",
+                    "title": "Frontend UI Developer & Creative Lead",
+                    "company": "Studio Digital Kreatif Nusantara",
+                    "location": "Kota Yogyakarta, DIY",
+                    "provinsi": "DI Yogyakarta",
+                    "cluster_id": 3,
+                    "radius_km": 6.8,
+                    "quota": 12,
+                    "salary_range": "Rp 3.900.000 - Rp 5.000.000",
+                    "required_skill": "React, TypeScript, Motion Design",
+                    "matched_candidates": 41
+                },
+                {
+                    "id": "vac-7",
+                    "title": "Asisten Pengelola Gudang Dingin Logistik",
+                    "company": "PT Jatim Cold Storage",
+                    "location": "Rungkut, Kota Surabaya",
+                    "provinsi": "Jawa Timur",
+                    "cluster_id": 3,
+                    "radius_km": 11.4,
+                    "quota": 30,
+                    "salary_range": "Rp 4.700.000 - Rp 5.300.000",
+                    "required_skill": "WMS Software & Cold Chain Tracking",
+                    "matched_candidates": 38
+                },
+                {
+                    "id": "vac-8",
+                    "title": "Teknisi Agro-Drone & Smart Sprayer",
+                    "company": "CV Bina Tani Presisi",
+                    "location": "Banyumas, Jawa Tengah",
+                    "provinsi": "Jawa Tengah",
+                    "cluster_id": 3,
+                    "radius_km": 21.0,
+                    "quota": 14,
+                    "salary_range": "Rp 3.300.000 - Rp 4.000.000",
+                    "required_skill": "Drone Remote Pilot License & GIS",
+                    "matched_candidates": 16
+                }
+            ],
+            "kur_clusters": [
+                {
+                    "id": "kur-1",
+                    "name": "Wirausaha Bengkel Vokasi Presisi",
+                    "cluster_target": "Klaster 1 (Penyangga Manufaktur)",
+                    "avg_loan": "Rp 45.000.000",
+                    "tenor_months": 24,
+                    "expected_jobs": 3,
+                    "desc": "Pembiayaan perkakas perkakas presisi, mesin bubut mini, dan alat kalibrasi untuk lulusan SMK otomotif.",
+                    "mitra_penjamin": "Konsorsium Industri Otomotif & Bank Penyalur KUR"
+                },
+                {
+                    "id": "kur-2",
+                    "name": "Sentra Olahan Pangan & Agrobisnis Pemuda",
+                    "cluster_target": "Klaster 2 (Kawasan Agraris)",
+                    "avg_loan": "Rp 35.000.000",
+                    "tenor_months": 36,
+                    "expected_jobs": 4,
+                    "desc": "Modal kerja pembelian alat pengering vakum, packaging kedap udara, dan sertifikasi halal komoditas lokal.",
+                    "mitra_penjamin": "Dinas Koperasi & Asosiasi Komoditas Daerah"
+                },
+                {
+                    "id": "kur-3",
+                    "name": "Studio Kreatif & Digital Agency Pemuda",
+                    "cluster_target": "Klaster 3 (Pusat Transisi Jasa)",
+                    "avg_loan": "Rp 25.000.000",
+                    "tenor_months": 18,
+                    "expected_jobs": 2,
+                    "desc": "Fasilitasi workstation grafis, lisensi piranti lunak, dan konektivitas berkecepatan tinggi bagi talenta muda daerah.",
+                    "mitra_penjamin": "Kemenparekraf & Inkubator Kampus Daerah"
+                }
+            ]
+        }
+    }
 
     # Construct the entire unified data bundle
     bundle = {
@@ -344,7 +649,8 @@ def build_web_data():
             "between_province_variance_pct": 79.58,
             "within_province_variance_pct": 20.42,
             "spatial_matrix_type": "k-Nearest Neighbors (k=4) row-standardized Great-Circle distance"
-        }
+        },
+        "policy_innovations": policy_innovations
     }
 
     # Save to WEB_DATA_DIR and DATA_DIR
@@ -361,6 +667,10 @@ def build_web_data():
     assert len(provinces_list) == 38, f"Expected 38 provinces, got {len(provinces_list)}"
     assert bundle["national_summary"]["tpt_2024"] == 4.91, "TPT 2024 mismatch"
     assert bundle["national_summary"]["youth_vulnerability_ratio"] == 6.95, "Youth ratio mismatch"
+    assert "policy_innovations" in bundle, "policy_innovations missing from bundle"
+    assert len(bundle["policy_innovations"]["ikkd_early_warning"]["kabkota_prioritas"]) == 45, "Expected 45 kabkota prioritas"
+    assert len(bundle["policy_innovations"]["dual_vocation"]["tracks"]) == 4, "Expected 4 vocation tracks"
+    assert len(bundle["policy_innovations"]["job_matching_kur"]["vacancies"]) == 8, "Expected 8 sample vacancies"
     print("All self-verification assertions PASSED!")
 
 if __name__ == "__main__":

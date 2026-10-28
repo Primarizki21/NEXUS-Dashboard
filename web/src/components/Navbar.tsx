@@ -7,9 +7,10 @@ import {
   TrendingUp, 
   FileText, 
   Sun, 
-  Moon, 
+  Moon,
   Menu, 
-  Compass 
+  Compass,
+  Sparkles
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -42,6 +43,7 @@ export const Navbar: React.FC<NavbarProps> = ({
     { id: 'cartography', label: 'Kartografi', icon: Map, badge: '3 Klaster' },
     { id: 'spatial', label: 'Ekonometrika', icon: GitFork, badge: 'LeSage-Pace' },
     { id: 'simulator', label: 'Simulator', icon: Sliders, badge: 'RPJMN 2029' },
+    { id: 'innovations', label: 'Inovasi', icon: Sparkles, badge: 'Fitur Kunci' },
     { id: 'forecasting', label: 'Proyeksi', icon: TrendingUp, badge: '2025-2030' },
     { id: 'methodology', label: 'Metodologi', icon: FileText, badge: 'Audit Data' },
   ];

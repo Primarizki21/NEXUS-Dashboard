@@ -11,7 +11,7 @@ interface CartographyProps {
 
 export const Cartography: React.FC<CartographyProps> = ({ data }) => {
   const { provinces, clusters } = data;
-  const [selectedLayer, setSelectedLayer] = useState<'cluster' | 'lisa' | 'tpt' | 'informal'>('cluster');
+  const [selectedLayer, setSelectedLayer] = useState<'cluster' | 'lisa' | 'tpt' | 'informal' | 'ikkd'>('cluster');
   const [selectedProvince, setSelectedProvince] = useState<Province>(provinces[0]);
   const [searchQuery, setSearchQuery] = useState('');
   const [islandFilter, setIslandFilter] = useState('Semua');
@@ -63,6 +63,12 @@ export const Cartography: React.FC<CartographyProps> = ({ data }) => {
       if (p.informal >= 70.0) return '#f59e0b';
       if (p.informal >= 50.0) return '#3b82f6';
       return '#10b981';
+    }
+    if (selectedLayer === 'ikkd') {
+      if (p.ikkd_score >= 70.0) return '#ef4444'; // Red: Sangat Rentan / Critical
+      if (p.ikkd_score >= 45.0) return '#f59e0b'; // Amber: Rentan / Warning
+      if (p.ikkd_score >= 25.0) return '#3b82f6'; // Blue: Moderat
+      return '#10b981'; // Green: Resilien
     }
     return '#06b6d4';
   };
@@ -197,6 +203,16 @@ export const Cartography: React.FC<CartographyProps> = ({ data }) => {
               >
                 Pangsa Informal (%)
               </button>
+              <button
+                onClick={() => setSelectedLayer('ikkd')}
+                className={`px-3 py-1 rounded-lg text-xs font-medium transition-all ${
+                  selectedLayer === 'ikkd'
+                    ? 'bg-cyan-500/20 text-cyan-600 dark:text-cyan-400 border border-cyan-500/40 font-bold'
+                    : 'bg-muted/50 text-muted-foreground border border-border hover:bg-muted'
+                }`}
+              >
+                IKKD (Early Warning)
+              </button>
             </div>
           </div>
 
@@ -296,18 +312,41 @@ export const Cartography: React.FC<CartographyProps> = ({ data }) => {
               Klik salah satu titik provinsi untuk menginspeksi metrik ketenagakerjaan secara lengkap.
             </span>
             <div className="flex items-center space-x-3 text-2xs font-mono">
-              <span className="flex items-center space-x-1">
-                <span className="w-2.5 h-2.5 rounded-full bg-red-500 inline-block"></span>
-                <span>Klaster 1 (Urban Trap)</span>
-              </span>
-              <span className="flex items-center space-x-1">
-                <span className="w-2.5 h-2.5 rounded-full bg-amber-500 inline-block"></span>
-                <span>Klaster 2 (Agraris)</span>
-              </span>
-              <span className="flex items-center space-x-1">
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block"></span>
-                <span>Klaster 3 (Transisi)</span>
-              </span>
+              {selectedLayer === 'ikkd' ? (
+                <>
+                  <span className="flex items-center space-x-1">
+                    <span className="w-2.5 h-2.5 rounded-full bg-red-500 inline-block"></span>
+                    <span>Sangat Rentan (≥70)</span>
+                  </span>
+                  <span className="flex items-center space-x-1">
+                    <span className="w-2.5 h-2.5 rounded-full bg-amber-500 inline-block"></span>
+                    <span>Rentan (45-70)</span>
+                  </span>
+                  <span className="flex items-center space-x-1">
+                    <span className="w-2.5 h-2.5 rounded-full bg-blue-500 inline-block"></span>
+                    <span>Moderat (25-45)</span>
+                  </span>
+                  <span className="flex items-center space-x-1">
+                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block"></span>
+                    <span>Resilien (&lt;25)</span>
+                  </span>
+                </>
+              ) : (
+                <>
+                  <span className="flex items-center space-x-1">
+                    <span className="w-2.5 h-2.5 rounded-full bg-red-500 inline-block"></span>
+                    <span>Klaster 1 (Urban Trap)</span>
+                  </span>
+                  <span className="flex items-center space-x-1">
+                    <span className="w-2.5 h-2.5 rounded-full bg-amber-500 inline-block"></span>
+                    <span>Klaster 2 (Agraris)</span>
+                  </span>
+                  <span className="flex items-center space-x-1">
+                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block"></span>
+                    <span>Klaster 3 (Transisi)</span>
+                  </span>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -366,8 +405,22 @@ export const Cartography: React.FC<CartographyProps> = ({ data }) => {
                   <span className="text-muted-foreground block">Mismatch Terdidik</span>
                   <strong className="text-cyan-600 dark:text-cyan-400 font-mono text-sm">{selectedProvince.mismatch}x</strong>
                 </div>
+                <div className="p-3 rounded-lg bg-muted/40 border border-border">
+                  <span className="text-muted-foreground block">Indeks IKKD (Kerentanan)</span>
+                  <div className="flex items-baseline space-x-1.5">
+                    <strong className="text-foreground font-mono text-sm">{selectedProvince.ikkd_score}</strong>
+                    <span className={`text-[10px] font-mono font-bold ${
+                      selectedProvince.ikkd_score >= 70 ? 'text-red-500' :
+                      selectedProvince.ikkd_score >= 45 ? 'text-amber-500' :
+                      selectedProvince.ikkd_score >= 25 ? 'text-blue-500' : 'text-emerald-500'
+                    }`}>
+                      ({selectedProvince.ikkd_score >= 70 ? 'Sangat Rentan' :
+                        selectedProvince.ikkd_score >= 45 ? 'Rentan' :
+                        selectedProvince.ikkd_score >= 25 ? 'Moderat' : 'Resilien'})
+                    </span>
+                  </div>
+                </div>
               </div>
-
               {/* Gender Gap Detail */}
               <div className="p-3 rounded-lg bg-muted/40 border border-border text-xs space-y-1.5">
                 <div className="flex justify-between">

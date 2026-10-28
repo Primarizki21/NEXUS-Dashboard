@@ -136,6 +136,124 @@ export interface MethodologyVIF {
   vif: number;
   status: string;
 }
+export interface KabKotaKerentanan {
+  name: string;
+  provinsi: string;
+  cluster_id: number;
+  tpt: number;
+  informalitas: number;
+  underemployment: number;
+  defisit_upah_pct: number;
+  ikkd_score: number;
+  alert_level: 'CRITICAL' | 'WARNING' | 'SAFE' | string;
+  kategori: string;
+  rekomendasi: string;
+}
+
+export interface IKKDEarlyWarning {
+  title: string;
+  subtitle: string;
+  thresholds: {
+    critical: number;
+    warning: number;
+    resilient: number;
+  };
+  dimensions: Array<{
+    name: string;
+    weight: number;
+    desc: string;
+  }>;
+  provinces_summary: {
+    critical_count: number;
+    warning_count: number;
+    safe_count: number;
+    total_provinces: number;
+  };
+  kabkota_summary: {
+    critical_count: number;
+    warning_count: number;
+    safe_count: number;
+    total_kabkota: number;
+  };
+  kabkota_prioritas: KabKotaKerentanan[];
+}
+
+export interface VocationTrack {
+  id: string;
+  name: string;
+  focus_cluster: string;
+  theory_modules: string[];
+  industry_modules: string[];
+  industry_partners: string[];
+}
+
+export interface DualVocationData {
+  title: string;
+  subtitle: string;
+  default_ratio: {
+    theory_pct: number;
+    industry_pct: number;
+  };
+  tax_deduction_pct: number;
+  accreditation_standard: string;
+  benchmark_impact: {
+    status_quo_theory_pct: number;
+    status_quo_practice_pct: number;
+    baseline_job_readiness_pct: number;
+    target_job_readiness_pct: number;
+    baseline_waiting_months: number;
+    target_waiting_months: number;
+  };
+  tracks: VocationTrack[];
+}
+
+export interface JobVacancy {
+  id: string;
+  title: string;
+  company: string;
+  location: string;
+  provinsi: string;
+  cluster_id: number;
+  radius_km: number;
+  quota: number;
+  salary_range: string;
+  required_skill: string;
+  matched_candidates: number;
+}
+
+export interface KURCluster {
+  id: string;
+  name: string;
+  cluster_target: string;
+  avg_loan: string;
+  tenor_months: number;
+  expected_jobs: number;
+  desc: string;
+  mitra_penjamin: string;
+}
+
+export interface JobMatchingKURData {
+  title: string;
+  subtitle: string;
+  radius_options_km: number[];
+  kur_parameters: {
+    subsidy_interest_pct: number;
+    max_limit_idr: number;
+    min_limit_idr: number;
+    default_loan_idr: number;
+    collateral_required: boolean;
+    jobs_created_multiplier_per_100m: number;
+    target_npl_max_pct: number;
+  };
+  vacancies: JobVacancy[];
+  kur_clusters: KURCluster[];
+}
+
+export interface PolicyInnovationsBundle {
+  ikkd_early_warning: IKKDEarlyWarning;
+  dual_vocation: DualVocationData;
+  job_matching_kur: JobMatchingKURData;
+}
 
 export interface LaborDataBundle {
   meta: {
@@ -166,4 +284,5 @@ export interface LaborDataBundle {
     within_province_variance_pct: number;
     spatial_matrix_type: string;
   };
+  policy_innovations: PolicyInnovationsBundle;
 }

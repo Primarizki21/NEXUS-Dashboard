@@ -12,18 +12,22 @@ interface PolicySimulatorProps {
 }
 
 export const PolicySimulator: React.FC<PolicySimulatorProps> = ({ data }) => {
-  const { national_summary } = data;
+  const { national_summary, clusters } = data;
 
   // 3 Policy Slider states (0% to 100%)
   const [vokasiLevel, setVokasiLevel] = useState<number>(50); // Klaster 1: Urban Trap
   const [hilirisasiLevel, setHilirisasiLevel] = useState<number>(45); // Klaster 2: Agrarian Shelter
   const [digitalLevel, setDigitalLevel] = useState<number>(40); // Klaster 3: Transisi
 
-  // Job capacities per cluster (Sum = 5.40 Juta target RPJMN)
-  const cap1 = 1850000; // Klaster 1 max jobs
-  const cap2 = 2100000; // Klaster 2 max jobs
-  const cap3 = 1450000; // Klaster 3 max jobs
-  const targetTotal = national_summary.total_job_target; // 5,400,000
+  // Job capacities dynamically retrieved from cluster definitions
+  const c1 = clusters.find(c => c.id === 1);
+  const c2 = clusters.find(c => c.id === 2);
+  const c3 = clusters.find(c => c.id === 3);
+
+  const cap1 = c1?.target_jobs ?? 1850000;
+  const cap2 = c2?.target_jobs ?? 2100000;
+  const cap3 = c3?.target_jobs ?? 1450000;
+  const targetTotal = national_summary.total_job_target; // e.g. 5,400,000
 
   // Real-time calculations
   const jobs1 = Math.round((vokasiLevel / 100) * cap1);
@@ -32,9 +36,9 @@ export const PolicySimulator: React.FC<PolicySimulatorProps> = ({ data }) => {
   const totalJobsCreated = jobs1 + jobs2 + jobs3;
   const progressPct = Math.min(100, Math.round((totalJobsCreated / targetTotal) * 100));
 
-  // TPT reduction estimate: 5.4M jobs reduces national TPT by ~0.61 poin (from baseline 4.91% to ~4.30%)
-  const baselineTPT = 4.91;
-  const maxTPTReduction = 0.65; // poin
+  // TPT reduction estimate dynamically anchored to baseline & RPJMN target
+  const baselineTPT = national_summary.tpt_2024;
+  const maxTPTReduction = Math.max(0.1, Number((national_summary.tpt_2024 - national_summary.rpjmn_target_tpt_2029).toFixed(2)));
   const currentReduction = (totalJobsCreated / targetTotal) * maxTPTReduction;
   const simulatedTPT = Math.max(3.80, Math.round((baselineTPT - currentReduction) * 100) / 100);
 
@@ -112,7 +116,7 @@ export const PolicySimulator: React.FC<PolicySimulatorProps> = ({ data }) => {
               {simulatedTPT}%
             </span>
             <span className="text-2xs text-muted-foreground">
-              Baseline 2024: 4.91% (-{(baselineTPT - simulatedTPT).toFixed(2)} poin)
+              Baseline 2024: {baselineTPT}% (-{(baselineTPT - simulatedTPT).toFixed(2)} poin)
             </span>
           </div>
 
