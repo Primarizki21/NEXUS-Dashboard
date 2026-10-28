@@ -1,6 +1,6 @@
 """
 Peramalan Deret Waktu (Forecasting) Tingkat Pengangguran Terbuka Indonesia (ACTION 2026).
-Mengadopsi pola analisis peramalan komprehensif dari proyek RASIO 10.0:
+Pola analisis peramalan deret waktu komprehensif:
 1. Uji Pra-Model: Stasioneritas (ADF & KPSS) dan Dekomposisi Tren LOESS.
 2. Evaluasi Multi-Model (Naive, Drift, Holt Linear, Holt Damped, ARIMA, Ridge, GBDT).
 3. Cross-Validation Multi-Horizon (h=1, 2, 3) dengan Skema Rolling & Expanding Window.

@@ -16,9 +16,9 @@ Tujuan akhir adalah menghasilkan:
 6. Aplikasi Web Pendamping Interaktif (`web/`) berbasis Vite + React + Tailwind + Shadcn UI yang memuat simulator kebijakan RPJMN 2029, peta klaster 38 provinsi, dekomposisi efek spasial, proyeksi TPT, serta 3 Fitur Kunci Inovasi Kebijakan (Early Warning IKKD, Dual-Vocation Credit System 50:50, dan Geo-Spatial Job Matching & KUR Klaster).
 ---
 
-## 2. Prinsip Kerja: Mengambil Aspek Terbaik `@rasio/` (Secara Proporsional)
+## 2. Prinsip Kerja & Filosofi Analisis Data
 
-Mengadopsi prinsip keunggulan `@rasio/` tanpa memaksakan metode yang tidak sesuai data:
+Menegakkan standar analisis data ketenagakerjaan yang kredibel, objektif, dan teruji:
 * **Data-First Discovery:** Identifikasi ketersediaan dan granulasi data nyata di BPS/data.go.id terlebih dahulu sebelum menentukan model statistik.
 * **Metodologi Jujur & Teruji:** Setiap metrik diverifikasi dari data mentah resmi (tidak ada angka fiktif/asumsi tak berdasar).
 * **Storytelling Data:** Menyajikan data dengan struktur narasi tajam (*hook paradoks* $\rightarrow$ anatomi ketimpangan $\rightarrow$ faktor struktural $\rightarrow$ proyeksi $\rightarrow$ rekomendasi kebijakan).

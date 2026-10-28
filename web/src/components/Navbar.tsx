@@ -87,7 +87,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   ACTION 2026
                 </span>
                 <Badge variant="secondary" className="text-[10px] font-mono px-1.5 py-0">
-                  GRAIN-Adapted
+                  Web Companion
                 </Badge>
               </div>
               <p className="text-[11px] text-muted-foreground hidden sm:block truncate max-w-[240px] xl:max-w-none">

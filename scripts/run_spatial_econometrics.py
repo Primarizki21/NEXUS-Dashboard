@@ -1,6 +1,6 @@
 """
 Ekonometrika Spasial Pasar Tenaga Kerja Indonesia (ACTION 2026).
-Mengadopsi pola analisis ekonometrika spasial dari proyek RASIO 10.0:
+Pola analisis ekonometrika spasial regional terintegrasi:
 1. Georeferensi & Haversine Distance 38 Provinsi Indonesia.
 2. Konstruksi Matriks Bobot Spasial W_knn (k=3, 4, 5).
 3. Global Moran's I Lintasan Waktu (2017-2024).

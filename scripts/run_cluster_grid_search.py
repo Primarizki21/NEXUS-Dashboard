@@ -1,6 +1,6 @@
 """
 Pencarian Konfigurasi Klaster Multidimensi & Uji Stabilitas Robustness (ACTION 2026).
-Mengadopsi metodologi grid-search eksplorasi klaster dari proyek RASIO 10.0:
+Metodologi grid-search eksplorasi klaster terstruktur:
 1. Tiga Ruang Fitur: POTRET (2024), LINTASAN (dinamika pemulihan 2017-2024), SERI (deret waktu dibakukan).
 2. Kombinasi Praproses: Standard, Robust, MinMax.
 3. Proyeksi: Aras Asli vs PCA-2.

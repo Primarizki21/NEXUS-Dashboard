@@ -11,7 +11,7 @@ export const Footer: React.FC = () => {
             <span>ACTION 2026 : ANALISIS KETENAGAKERJAAN</span>
           </div>
           <p className="text-muted-foreground leading-relaxed">
-            Platform kompanion analisis statistik dan ekonometrika panel-spasial pengangguran terbuka di Indonesia, mengadaptasi filosofi data storytelling GRAIN (RASIO 10.0).
+            Platform kompanion interaktif analisis statistik dan ekonometrika spasial pasar tenaga kerja Indonesia untuk pemerataan kesempatan kerja menuju target RPJMN 2029.
           </p>
         </div>
 
