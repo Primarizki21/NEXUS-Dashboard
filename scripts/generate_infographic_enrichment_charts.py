@@ -216,6 +216,148 @@ def create_chart_15():
     plt.close()
     print("Generated Chart 15: 15_dikotomi_kota_desa_pengangguran.png & .svg")
 
+# ==============================================================================
+# CHART 16: SINERGI EKOSISTEM STAKEHOLDER (NEXUS MULTI-ACTOR GOVERNANCE)
+# ==============================================================================
+def create_chart_16():
+    import matplotlib.patches as patches
+    fig, ax = plt.subplots(figsize=(14, 10), facecolor="#F8FAFC")
+    ax.set_facecolor("#F8FAFC")
+    ax.set_xlim(0, 100)
+    ax.set_ylim(0, 100)
+    ax.axis("off")
+
+    NAVY = "#1E3A8A"
+    TEAL = "#0D9488"
+    CORAL = "#E11D48"
+    AMBER = "#D97706"
+    SLATE = "#475569"
+    TEXT_MAIN = "#0F172A"
+
+    # 1. Header
+    ax.text(50, 96.8, "SINERGI EKOSISTEM STAKEHOLDER : ARSITEKTUR TATA KELOLA NEXUS",
+            ha="center", va="center", fontsize=15, weight="bold", color=TEXT_MAIN)
+    ax.text(50, 93.8, "Kerangka Integrasi Multi-Aktor untuk Mengakselerasi Target 5,4 Juta Peluang Kerja & RPJMN 2029",
+            ha="center", va="center", fontsize=10.5, color=SLATE)
+
+    # 2. Central Hub
+    center_circle = patches.Circle((50, 50), 12.5, facecolor="#FFFFFF", edgecolor=NAVY, linewidth=2.5, zorder=3)
+    ax.add_patch(center_circle)
+    center_glow = patches.Circle((50, 50), 13.8, facecolor="none", edgecolor="#93C5FD", linewidth=1.5, linestyle="--", zorder=2)
+    ax.add_patch(center_glow)
+
+    ax.text(50, 55.5, "NEXUS CORE", ha="center", va="center", fontsize=11, weight="bold", color=NAVY, zorder=4)
+    ax.text(50, 52.0, "SASARAN RPJMN 2029", ha="center", va="center", fontsize=8.5, weight="bold", color="#B91C1C", zorder=4)
+    ax.text(50, 48.0, "5,40 Juta Lapangan Kerja\\nPenurunan TPT ke 4,30%\\nPencegahan Scarring Effect", 
+            ha="center", va="center", fontsize=8.5, color=TEXT_MAIN, zorder=4, linespacing=1.3)
+    ax.text(50, 42.5, "Intervensi 3 Klaster Wilayah", ha="center", va="center", fontsize=8, weight="bold", color=TEAL, zorder=4)
+
+    def draw_card(cx, cy, w, h, title, actors, roles, accent_color, tag_badge):
+        box = patches.FancyBboxPatch((cx - w/2, cy - h/2), w, h,
+                                     boxstyle="round,pad=0.8,rounding_size=2.0",
+                                     facecolor="#FFFFFF", edgecolor=accent_color, linewidth=2.0, zorder=3)
+        ax.add_patch(box)
+        
+        badge = patches.FancyBboxPatch((cx - w/2 + 1.2, cy + h/2 - 4.2), w - 2.4, 3.2,
+                                       boxstyle="round,pad=0.2,rounding_size=1.0",
+                                       facecolor=accent_color, edgecolor="none", zorder=4)
+        ax.add_patch(badge)
+        ax.text(cx, cy + h/2 - 2.6, f"{tag_badge} : {title.upper()}",
+                ha="center", va="center", fontsize=9.2, weight="bold", color="#FFFFFF", zorder=5)
+        
+        ax.text(cx, cy + h/2 - 6.2, f"Entitas Aktor: {actors}",
+                ha="center", va="center", fontsize=8.2, weight="bold", color=accent_color, zorder=4)
+        
+        start_y = cy + h/2 - 9.2
+        for i, role in enumerate(roles):
+            ax.text(cx - w/2 + 2.5, start_y - (i * 3.3), f"• {role}",
+                    ha="left", va="center", fontsize=8.2, color=TEXT_MAIN, zorder=4)
+
+    # 4 Cards
+    draw_card(50, 78.5, 45, 20.5,
+              "Pemerintah Pusat & Kementerian Terkait",
+              "Kementerian PPN/Bappenas, Kemnaker, Kemenperin, Kemenkeu",
+              ["Penyusunan target ketenagakerjaan makro RPJMN 2025–2029",
+               "Fasilitasi insentif Super-Tax Deduction 200% penyerapan pemuda",
+               "Alokasi APBN untuk subsidi jaring pengaman Jamsostek pekerja rentan"],
+              NAVY, "PILAR REGULASI")
+
+    draw_card(81, 50, 34, 22.5,
+              "Dunia Usaha & Asosiasi Industri",
+              "KADIN, APINDO, BUMN, Korporasi Mitra",
+              ["Penyediaan kuota magang industri berupah layak",
+               "Kemitraan kurikulum dual-vocation 50:50",
+               "Validasi kebutuhan spesifikasi keahlian riil",
+               "Penciptaan 1,85 juta lowongan formal urban"],
+              CORAL, "PILAR INDUSTRI")
+
+    draw_card(50, 19.5, 45, 20.5,
+              "Lembaga Pembiayaan & Jaminan Sosial",
+              "BPJS Ketenagakerjaan, Bank Himbara Penyalur KUR, Kemenkop-UKM",
+              ["Subsidi iuran JKK dan JKM bagi 3,5 juta pekerja informal perdesaan",
+               "Penyaluran KUR Klaster wirausaha muda tanpa agunan tambahan",
+               "Pembiayaan modernisasi alsintan & hilirisasi komoditas agraris"],
+              AMBER, "PILAR PROTEKSI & MODAL")
+
+    draw_card(19, 50, 34, 22.5,
+              "Pemda & Balai Vokasi Terpadu",
+              "Disnaker Provinsi/Kab-Kota, SMK, Politeknik, BLKI",
+              ["Operasionalisasi Early Warning IKKD di 45 kab/kota",
+               "Harmonisasi regulasi upah minimum lintas batas",
+               "Penerapan kurikulum modular SKKNI terapan",
+               "Fasilitasi bursa kerja pemuda berbasis geospasial"],
+              TEAL, "PILAR TERITORIAL")
+
+    # Curved Connecting Arrows
+    def draw_curved_arrow(x1, y1, x2, y2, rad, color):
+        arrow = patches.FancyArrowPatch((x1, y1), (x2, y2),
+                                        connectionstyle=f"arc3,rad={rad}",
+                                        arrowstyle="Simple,tail_width=2.5,head_width=9,head_length=9",
+                                        color=color, alpha=0.85, zorder=2)
+        ax.add_patch(arrow)
+
+    draw_curved_arrow(64, 70, 72, 60, -0.22, NAVY)
+    draw_curved_arrow(72, 40, 64, 28, -0.22, CORAL)
+    draw_curved_arrow(36, 28, 28, 40, -0.22, AMBER)
+    draw_curved_arrow(28, 60, 36, 70, -0.22, TEAL)
+
+    # Synergy Flow Badges
+    def draw_flow_badge(x, y, text, color):
+        ax.text(x, y, text, ha="center", va="center", fontsize=7.8, weight="bold", color="#FFFFFF",
+                bbox=dict(boxstyle="round,pad=0.35,rounding_size=0.6", facecolor=color, edgecolor="none", alpha=0.95),
+                zorder=6)
+
+    draw_flow_badge(72, 68, "Insentif Pajak & Regulasi Magang", NAVY)
+    draw_flow_badge(72, 32, "Formalisasi Kerja & Upah Layak", CORAL)
+    draw_flow_badge(28, 32, "Jaring Pengaman & Modal Usaha", AMBER)
+    draw_flow_badge(28, 68, "Deteksi IKKD & Talenta Terampil", TEAL)
+
+    # Bidirectional Radial Links
+    def draw_radial_link(x1, y1, x2, y2, color):
+        line = patches.FancyArrowPatch((x1, y1), (x2, y2),
+                                       arrowstyle="<|-|>,head_width=4,head_length=5",
+                                       color=color, linewidth=1.2, linestyle=":", alpha=0.7, zorder=1)
+        ax.add_patch(line)
+
+    draw_radial_link(50, 68.2, 50, 62.5, NAVY)
+    draw_radial_link(64, 50, 62.5, 50, CORAL)
+    draw_radial_link(50, 29.8, 50, 37.5, AMBER)
+    draw_radial_link(36, 50, 37.5, 50, TEAL)
+
+    # Bottom Caption
+    ax.text(50, 4.5, "Framework A.K.S.I. : Adaptasi Kompetensi • Kolaborasi Triple-Helix • Skalabilitas Insentif • Inklusi Jamsostek",
+            ha="center", va="center", fontsize=9.2, weight="bold", color=SLATE)
+    ax.text(50, 2.2, "Sumber: Blueprint Solusi NEXUS & Rekomendasi Kebijakan ACTION 2026 | Dokumen Resmi Template Masalah",
+            ha="center", va="center", fontsize=8.0, color="#94A3B8")
+
+    out_png = os.path.join(ASSETS_CHARTS, "16_sinergi_ekosistem_stakeholder.png")
+    out_svg = os.path.join(ASSETS_CHARTS, "16_sinergi_ekosistem_stakeholder.svg")
+    plt.savefig(out_png, dpi=300, bbox_inches="tight")
+    plt.savefig(out_svg, bbox_inches="tight")
+    plt.close()
+    print("Generated Chart 16: 16_sinergi_ekosistem_stakeholder.png & .svg")
+
 if __name__ == "__main__":
     create_chart_14()
     create_chart_15()
+    create_chart_16()
