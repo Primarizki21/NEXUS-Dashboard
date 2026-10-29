@@ -54,7 +54,7 @@ export const App: React.FC = () => {
         />
 
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-16">
-          {currentTab === 'home' && <Home data={data} onNavigate={handleTabChange} />}
+          {currentTab === 'home' && <Home data={data} onNavigate={handleTabChange} isDark={isDark} />}
           {currentTab === 'cartography' && <Cartography data={data} />}
           {currentTab === 'spatial' && <SpatialModel data={data} />}
           {currentTab === 'simulator' && <PolicySimulator data={data} />}
