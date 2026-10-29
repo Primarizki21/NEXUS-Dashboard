@@ -8,7 +8,7 @@ export const Footer: React.FC = () => {
         <div>
           <div className="flex items-center space-x-2 text-foreground font-bold text-sm mb-2">
             <span className="w-2 h-2 rounded-full bg-cyan-500"></span>
-            <span>ACTION 2026 : ANALISIS KETENAGAKERJAAN</span>
+            <span>NEXUS : ANALISIS KETENAGAKERJAAN</span>
           </div>
           <p className="text-muted-foreground leading-relaxed">
             Platform kompanion interaktif analisis statistik dan ekonometrika spasial pasar tenaga kerja Indonesia untuk pemerataan kesempatan kerja menuju target RPJMN 2029.
@@ -44,7 +44,7 @@ export const Footer: React.FC = () => {
       </div>
 
       <div className="max-w-7xl mx-auto border-t border-border mt-8 pt-6 flex flex-col sm:flex-row justify-between items-center text-muted-foreground">
-        <p>&copy; 2026 Tim Peneliti Analisis Data ACTION. Hak cipta dilindungi.</p>
+        <p>&copy; 2026 Tim Peneliti Analisis Data NEXUS. Hak cipta dilindungi.</p>
         <p className="mt-2 sm:mt-0 font-mono text-2xs text-muted-foreground">
           Subtema: Turning Insight into Opportunity
         </p>

@@ -22,7 +22,7 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
         <div className="max-w-4xl">
           <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-600 dark:text-cyan-400 text-xs font-mono mb-6">
             <span className="w-1.5 h-1.5 rounded-full bg-cyan-500 dark:bg-cyan-400"></span>
-            <span>ACTION 2026 : ANALISIS EKONOMETRIKA & PASAR KERJA BPS</span>
+            <span>NEXUS : ANALISIS EKONOMETRIKA & PASAR KERJA BPS</span>
           </div>
 
           <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-foreground leading-tight mb-6">

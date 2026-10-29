@@ -113,41 +113,71 @@ export const PolicyInnovations: React.FC<PolicyInnovationsProps> = ({ data }) =>
           <h1 className="text-2xl sm:text-4xl font-extrabold text-foreground tracking-tight">
             Tiga Solusi Operasional Terintegrasi
           </h1>
-          <p className="text-sm text-muted-foreground mt-1 max-w-3xl">
-            Pengejawantahan actionable roadmap ACTION 2026: Sistem peringatan dini kerentanan kerja lokal, transformasi kurikulum vokasi berbasis industri 50:50, dan bursa kerja geospasial terintegrasi modal tanpa agunan.
+          <p className="text-sm text-muted-foreground mt-1 max-w-3xl leading-relaxed">
+            Pengejawantahan actionable roadmap NEXUS: Sistem peringatan dini kerentanan kerja lokal, transformasi kurikulum vokasi berbasis industri 50:50, dan bursa kerja geospasial terintegrasi modal tanpa agunan.
           </p>
         </div>
 
-        {/* Action Pills Navigator */}
-        <div className="flex flex-wrap gap-2 p-1.5 rounded-xl bg-muted/60 border border-border">
-          <Button
-            size="sm"
-            variant={activeTab === 'early_warning' ? 'default' : 'ghost'}
-            onClick={() => setActiveTab('early_warning')}
-            className="text-xs gap-1.5 h-8 font-medium cursor-pointer"
-          >
-            <AlertTriangle className="size-3.5" />
-            <span>1. Early Warning IKKD</span>
-          </Button>
-          <Button
-            size="sm"
-            variant={activeTab === 'dual_vocation' ? 'default' : 'ghost'}
-            onClick={() => setActiveTab('dual_vocation')}
-            className="text-xs gap-1.5 h-8 font-medium cursor-pointer"
-          >
-            <GraduationCap className="size-3.5" />
-            <span>2. Dual-Vocation (50:50)</span>
-          </Button>
-          <Button
-            size="sm"
-            variant={activeTab === 'job_matching' ? 'default' : 'ghost'}
-            onClick={() => setActiveTab('job_matching')}
-            className="text-xs gap-1.5 h-8 font-medium cursor-pointer"
-          >
-            <Compass className="size-3.5" />
-            <span>3. Geo-Matching & KUR</span>
-          </Button>
+        {/* Micro Benchmarks Info */}
+        <div className="flex flex-wrap gap-2 text-xs font-mono shrink-0">
+          <div className="px-3 py-1.5 rounded-lg bg-card border border-border text-foreground">
+            <span className="text-muted-foreground">Framework:</span> <strong className="text-cyan-600 dark:text-cyan-400">Triple Intervention</strong>
+          </div>
+          <div className="px-3 py-1.5 rounded-lg bg-card border border-border text-foreground">
+            <span className="text-muted-foreground">Basis Data:</span> <strong className="text-emerald-600 dark:text-emerald-400">38 Prov & 45 Kab/Kota</strong>
+          </div>
         </div>
+      </div>
+
+      {/* Symmetrical 3-Pillar Tab Navigator */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 p-1.5 rounded-2xl bg-muted/50 border border-border">
+        <button
+          type="button"
+          onClick={() => setActiveTab('early_warning')}
+          className={`flex items-center justify-center gap-3 px-5 py-3 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+            activeTab === 'early_warning'
+              ? 'bg-card text-foreground shadow-sm border border-border/80 ring-1 ring-cyan-500/40 text-cyan-600 dark:text-cyan-400 font-bold'
+              : 'text-muted-foreground hover:text-foreground hover:bg-card/40 border border-transparent'
+          }`}
+        >
+          <AlertTriangle className={`size-4 shrink-0 ${activeTab === 'early_warning' ? 'text-amber-500' : 'text-muted-foreground'}`} />
+          <div className="text-left">
+            <span className="block font-mono text-[10px] text-muted-foreground uppercase tracking-wider">Inovasi 1</span>
+            <span className="text-xs font-bold text-foreground">1. Early Warning IKKD</span>
+          </div>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setActiveTab('dual_vocation')}
+          className={`flex items-center justify-center gap-3 px-5 py-3 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+            activeTab === 'dual_vocation'
+              ? 'bg-card text-foreground shadow-sm border border-border/80 ring-1 ring-cyan-500/40 text-cyan-600 dark:text-cyan-400 font-bold'
+              : 'text-muted-foreground hover:text-foreground hover:bg-card/40 border border-transparent'
+          }`}
+        >
+          <GraduationCap className={`size-4 shrink-0 ${activeTab === 'dual_vocation' ? 'text-cyan-500' : 'text-muted-foreground'}`} />
+          <div className="text-left">
+            <span className="block font-mono text-[10px] text-muted-foreground uppercase tracking-wider">Inovasi 2</span>
+            <span className="text-xs font-bold text-foreground">2. Dual-Vocation (50:50)</span>
+          </div>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setActiveTab('job_matching')}
+          className={`flex items-center justify-center gap-3 px-5 py-3 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+            activeTab === 'job_matching'
+              ? 'bg-card text-foreground shadow-sm border border-border/80 ring-1 ring-cyan-500/40 text-cyan-600 dark:text-cyan-400 font-bold'
+              : 'text-muted-foreground hover:text-foreground hover:bg-card/40 border border-transparent'
+          }`}
+        >
+          <Compass className={`size-4 shrink-0 ${activeTab === 'job_matching' ? 'text-emerald-500' : 'text-muted-foreground'}`} />
+          <div className="text-left">
+            <span className="block font-mono text-[10px] text-muted-foreground uppercase tracking-wider">Inovasi 3</span>
+            <span className="text-xs font-bold text-foreground">3. Geo-Matching & KUR</span>
+          </div>
+        </button>
       </div>
 
       {/* ========================================================================= */}
