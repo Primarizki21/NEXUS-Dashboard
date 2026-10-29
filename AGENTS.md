@@ -54,8 +54,12 @@ Setiap agen/kontributor wajib mengikuti protokol bertahap dengan mekanisme perse
    - **Langkah 3 (Surgical Execution):** Tulis kode seminimal mungkin pada berkas sasaran.
    - **Langkah 4 (Verification & Browser QA):** Verifikasi mandiri (eksekusi script data, `bun run build`, dan pengujian nyata peramban otomatis dengan tangkapan layar observasi).
    - **Langkah 5 (Atomic Commit di Feature Branch):** Commit terpisah pada branch fitur (`feat/*`), dilarang commit langsung ke `main`.
-4. **Environment-Agnostic Execution:** Dilarang mengasumsikan satu *working directory* tunggal atau menggunakan *hardcoded relative path* yang rapuh terhadap konteks eksekusi (IDE vs terminal vs runner otomatis).
-5. **Self-Verifying Outputs:** Setiap tahap persiapan atau pemuatan data wajib menghasilkan diagnostik atau validasi konkret (inspeksi dimensi, kelengkapan, atau uji asumsi awal), bukan hanya mencetak teks status tanpa bukti eksekusi.
+4. **Larangan Keras Git Push oleh Agen (Push Exclusive to User):**
+   * Agen **DILARANG KERAS** mengeksekusi perintah `git push` ke remote repository (baik ke `main`, branch fitur, maupun remote lainnya) dalam kondisi atau instruksi implisit apa pun.
+   * Lingkup tugas agen dibatasi secara tegas hingga pembuatan *atomic commit* pada branch fitur lokal (`feat/*`) dan pelaporan hasil verifikasi.
+   * Tindakan `git push` dan pembuatan Pull Request ke remote repository sepenuhnya merupakan hak prerogatif dan tanggung jawab langsung pengguna (*Human User*).
+5. **Environment-Agnostic Execution:** Dilarang mengasumsikan satu *working directory* tunggal atau menggunakan *hardcoded relative path* yang rapuh terhadap konteks eksekusi (IDE vs terminal vs runner otomatis).
+6. **Self-Verifying Outputs:** Setiap tahap persiapan atau pemuatan data wajib menghasilkan diagnostik atau validasi konkret (inspeksi dimensi, kelengkapan, atau uji asumsi awal), bukan hanya mencetak teks status tanpa bukti eksekusi.
 ---
 
 ## 4. Struktur Tim Agen (Analisis Data & Web Companion)
