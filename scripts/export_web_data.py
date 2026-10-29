@@ -596,7 +596,7 @@ def build_web_data():
     # Construct the entire unified data bundle
     bundle = {
         "meta": {
-            "title": "ACTION 2026: Turning Insight into Opportunity",
+            "title": "NEXUS: Turning Insight into Opportunity",
             "subtitle": "Analisis Pengangguran Terbuka untuk Pemerataan Kesempatan Kerja",
             "dataset_source": "BPS Sakernas (2017-2024)",
             "benchmark_period": "Agustus 2024",

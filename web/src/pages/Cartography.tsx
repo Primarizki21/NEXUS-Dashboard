@@ -5,6 +5,8 @@ import {
 } from 'lucide-react';
 import { LaborDataBundle, Province } from '../types';
 
+import indonesiaMapFeatures from '../data/indonesia_map_paths.json';
+
 interface CartographyProps {
   data: LaborDataBundle;
 }
@@ -16,6 +18,14 @@ export const Cartography: React.FC<CartographyProps> = ({ data }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [islandFilter, setIslandFilter] = useState('Semua');
   const [clusterFilter, setClusterFilter] = useState<number | 'Semua'>('Semua');
+  const [tooltip, setTooltip] = useState<{ x: number; y: number; province: Province } | null>(null);
+  const [hoveredProvinceName, setHoveredProvinceName] = useState<string | null>(null);
+
+  const provinceByName = useMemo(() => {
+    const map = new Map<string, Province>();
+    provinces.forEach((p) => map.set(p.name, p));
+    return map;
+  }, [provinces]);
 
   // Island options
   const islands = ['Semua', 'Sumatera', 'Jawa', 'Bali & Nusa Tenggara', 'Kalimantan', 'Sulawesi', 'Maluku', 'Papua'];
@@ -31,16 +41,6 @@ export const Cartography: React.FC<CartographyProps> = ({ data }) => {
   }, [provinces, searchQuery, islandFilter, clusterFilter]);
 
   // Coordinate projection helper: lon (95 to 141), lat (-11 to 6) -> SVG viewBox 0 0 950 400
-  const projectCoords = (lon: number, lat: number) => {
-    const minLon = 94.5;
-    const maxLon = 141.5;
-    const minLat = -11.5;
-    const maxLat = 6.5;
-
-    const x = ((lon - minLon) / (maxLon - minLon)) * 900 + 25;
-    const y = ((maxLat - lat) / (maxLat - minLat)) * 340 + 30;
-    return { x, y };
-  };
 
   const getMarkerColor = (p: Province) => {
     if (selectedLayer === 'cluster') {
@@ -71,6 +71,46 @@ export const Cartography: React.FC<CartographyProps> = ({ data }) => {
       return '#10b981'; // Green: Resilien
     }
     return '#06b6d4';
+  };
+
+
+  const getLayerBadge = (p: Province) => {
+    if (selectedLayer === 'cluster') {
+      return {
+        label: `Klaster ${p.cluster_id}`,
+        sub: p.cluster_id === 1 ? 'Urban-Industrial Trap' : p.cluster_id === 2 ? 'Agraris-Informal Shelter' : 'Transisi Berimbang',
+        color: getMarkerColor(p),
+      };
+    }
+    if (selectedLayer === 'lisa') {
+      return {
+        label: p.lisa_quad,
+        sub: p.lisa_sig ? 'Signifikan Spasial' : 'Non-Signifikan',
+        color: getMarkerColor(p),
+      };
+    }
+    if (selectedLayer === 'tpt') {
+      return {
+        label: `TPT ${p.tpt}%`,
+        sub: p.tpt >= 6.0 ? 'Kategori Tinggi' : p.tpt >= 4.5 ? 'Kategori Sedang' : 'Terkendali',
+        color: getMarkerColor(p),
+      };
+    }
+    if (selectedLayer === 'informal') {
+      return {
+        label: `Informal ${p.informal}%`,
+        sub: p.informal >= 70.0 ? 'Informalitas Ekstrem' : p.informal >= 50.0 ? 'Informal Menengah' : 'Formal Dominan',
+        color: getMarkerColor(p),
+      };
+    }
+    if (selectedLayer === 'ikkd') {
+      return {
+        label: `IKKD ${p.ikkd_score}`,
+        sub: p.ikkd_score >= 70.0 ? 'Sangat Rentan (Red Alert)' : p.ikkd_score >= 45.0 ? 'Waspada (Amber)' : p.ikkd_score >= 25.0 ? 'Moderat' : 'Resilien (Aman)',
+        color: getMarkerColor(p),
+      };
+    }
+    return { label: `Klaster ${p.cluster_id}`, sub: '', color: getMarkerColor(p) };
   };
 
   return (
@@ -160,7 +200,7 @@ export const Cartography: React.FC<CartographyProps> = ({ data }) => {
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center space-x-2">
               <Layers className="w-4 h-4 text-cyan-400" />
-              <span className="text-xs font-mono text-foreground uppercase">Pilih Lapisan Tematik:</span>
+              <span className="text-xs font-mono text-foreground uppercase">Pilih Layer Tematik:</span>
             </div>
             <div className="flex flex-wrap gap-1.5">
               <button
@@ -216,134 +256,238 @@ export const Cartography: React.FC<CartographyProps> = ({ data }) => {
             </div>
           </div>
 
-          {/* SVG Canvas Map */}
-          <div className="relative w-full bg-slate-950 rounded-xl border border-slate-800 p-4 overflow-hidden">
+          {/* SVG Administrative Choropleth Map */}
+          <div 
+            className="relative w-full bg-slate-100/70 dark:bg-slate-950/90 rounded-2xl border border-border p-4 md:p-6 overflow-hidden shadow-xs"
+            onMouseLeave={() => setTooltip(null)}
+          >
+            {/* Map Metadata Chips */}
+            <div className="absolute top-4 left-4 z-10 flex flex-wrap items-center gap-2 pointer-events-none">
+              <span className="px-2.5 py-1 rounded-md bg-background/85 backdrop-blur-xs border border-border text-[11px] font-mono text-muted-foreground shadow-xs">
+                Basis Spasial: <strong className="text-foreground">38 Provinsi Administratif</strong>
+              </span>
+              <span className="hidden sm:inline-block px-2.5 py-1 rounded-md bg-background/85 backdrop-blur-xs border border-border text-[11px] font-mono text-muted-foreground shadow-xs">
+                Layer Aktif: <strong className="text-cyan-600 dark:text-cyan-400 uppercase">{selectedLayer}</strong>
+              </span>
+            </div>
+
             <svg
-              viewBox="0 0 950 400"
-              className="w-full h-auto max-h-[420px] select-none"
+              viewBox="0 0 1600 620"
+              className="w-full h-auto max-h-[500px] select-none filter drop-shadow-xs"
             >
-              {/* Grid / Equator Reference Lines */}
-              <line x1="20" y1="200" x2="930" y2="200" stroke="#1e293b" strokeDasharray="4 4" strokeWidth="1" />
-              <text x="30" y="195" fill="#475569" fontSize="10" fontFamily="monospace">Khatulistiwa (0°)</text>
-
-              {/* Meridian ticks */}
-              <text x="120" y="380" fill="#475569" fontSize="9" fontFamily="monospace">100° BT</text>
-              <text x="350" y="380" fill="#475569" fontSize="9" fontFamily="monospace">110° BT</text>
-              <text x="580" y="380" fill="#475569" fontSize="9" fontFamily="monospace">120° BT</text>
-              <text x="810" y="380" fill="#475569" fontSize="9" fontFamily="monospace">130° BT</text>
-
-              {/* Arcs / Spatial Connections across High-High and Clusters */}
-              <path
-                d="M 230 250 Q 280 200 310 270"
-                fill="none"
-                stroke="rgba(6, 182, 212, 0.4)"
-                strokeWidth="1.5"
-                strokeDasharray="3 3"
+              {/* Reference Khatulistiwa / Equator Line */}
+              <line 
+                x1="40" 
+                y1="230" 
+                x2="1560" 
+                y2="230" 
+                stroke="currentColor" 
+                className="text-slate-300 dark:text-slate-800" 
+                strokeDasharray="4 4" 
+                strokeWidth="1" 
+                opacity="0.6" 
               />
-              <path
-                d="M 310 270 Q 500 180 840 220"
-                fill="none"
-                stroke="rgba(6, 182, 212, 0.25)"
-                strokeWidth="1.2"
-                strokeDasharray="4 4"
-              />
+              <text 
+                x="50" 
+                y="222" 
+                fill="currentColor" 
+                className="text-slate-400 dark:text-slate-600 text-[11px] font-mono select-none"
+              >
+                Khatulistiwa (0°)
+              </text>
 
-              {/* Province Nodes */}
-              {provinces.map((p) => {
-                const { x, y } = projectCoords(p.lon, p.lat);
-                const isCurrent = selectedProvince.name === p.name;
-                const markerColor = getMarkerColor(p);
-                const radius = isCurrent ? 8 : (p.tpt >= 6.0 ? 6.5 : 5);
+              {/* 38 Province Choropleth Polygons */}
+              <g className="transition-all duration-200">
+                {indonesiaMapFeatures.map((feat) => {
+                  const province = provinceByName.get(feat.name);
+                  if (!province) return null;
+                  const isCurrent = selectedProvince.name === province.name;
+                  const isHovered = tooltip?.province.name === province.name || hoveredProvinceName === province.name;
+                  const baseColor = getMarkerColor(province);
 
-                return (
-                  <g
-                    key={p.name}
-                    className="cursor-pointer transition-transform duration-200"
-                    onClick={() => setSelectedProvince(p)}
-                  >
-                    {/* Pulsing halo for active selection */}
-                    {isCurrent && (
-                      <circle
-                        cx={x}
-                        cy={y}
-                        r={radius + 6}
-                        fill="none"
-                        stroke={markerColor}
-                        strokeWidth="1.5"
-                        opacity="0.6"
-                        className="animate-ping"
-                      />
-                    )}
-
-                    {/* Point Circle */}
-                    <circle
-                      cx={x}
-                      cy={y}
-                      r={radius}
-                      fill={markerColor}
-                      stroke={isCurrent ? '#ffffff' : '#0f172a'}
-                      strokeWidth={isCurrent ? 2 : 1.2}
-                      opacity={isCurrent ? 1 : 0.85}
+                  return (
+                    <path
+                      key={feat.id}
+                      d={feat.d}
+                      fill={baseColor}
+                      fillOpacity={isCurrent ? 0.95 : isHovered ? 0.92 : 0.78}
+                      stroke={
+                        isCurrent 
+                          ? '#38bdf8' 
+                          : isHovered 
+                            ? '#ffffff' 
+                            : 'currentColor'
+                      }
+                      strokeWidth={isCurrent ? 3.0 : isHovered ? 2.0 : 0.8}
+                      className={`cursor-pointer transition-all duration-150 ${
+                        !isCurrent && !isHovered 
+                          ? 'text-slate-900/60 dark:text-slate-950/80 hover:brightness-110' 
+                          : ''
+                      }`}
+                      onClick={() => setSelectedProvince(province)}
+                      onMouseEnter={(e) => {
+                        const rect = e.currentTarget.ownerSVGElement?.getBoundingClientRect();
+                        if (rect) {
+                          setTooltip({
+                            x: e.clientX - rect.left,
+                            y: e.clientY - rect.top,
+                            province,
+                          });
+                        }
+                        setHoveredProvinceName(province.name);
+                      }}
+                      onMouseMove={(e) => {
+                        const rect = e.currentTarget.ownerSVGElement?.getBoundingClientRect();
+                        if (rect) {
+                          setTooltip({
+                            x: e.clientX - rect.left,
+                            y: e.clientY - rect.top,
+                            province,
+                          });
+                        }
+                      }}
+                      onMouseLeave={() => {
+                        setHoveredProvinceName(null);
+                      }}
                     />
-
-                    {/* Label on top / prominent provinces */}
-                    {(isCurrent || p.tpt >= 6.5 || ['DKI Jakarta', 'Jawa Barat', 'Bali', 'Papua Pegunungan'].includes(p.name)) && (
-                      <text
-                        x={x}
-                        y={y - 9}
-                        textAnchor="middle"
-                        fill={isCurrent ? '#38bdf8' : '#cbd5e1'}
-                        fontSize="9"
-                        fontWeight={isCurrent ? 'bold' : 'normal'}
-                        fontFamily="sans-serif"
-                        className="pointer-events-none drop-shadow"
-                      >
-                        {p.name.replace('Kepulauan', 'Kep.').replace('Nusa Tenggara', 'NT')} ({p.tpt}%)
-                      </text>
-                    )}
-                  </g>
-                );
-              })}
+                  );
+                })}
+              </g>
             </svg>
-          </div>
 
-          <div className="flex flex-wrap items-center justify-between text-xs text-muted-foreground pt-1">
+            {/* Interactive Floating Tooltip */}
+            {tooltip && (
+              <div
+                className="absolute z-30 pointer-events-none transform -translate-x-1/2 -translate-y-full mb-3 px-3.5 py-2.5 rounded-xl bg-background/95 backdrop-blur-md border border-border shadow-xl text-xs space-y-1 transition-opacity duration-150 animate-fade-in"
+                style={{
+                  left: `${tooltip.x}px`,
+                  top: `${tooltip.y - 10}px`,
+                }}
+              >
+                <div className="flex items-center justify-between gap-3 border-b border-border/60 pb-1">
+                  <strong className="text-foreground text-sm font-extrabold">{tooltip.province.name}</strong>
+                  <span className="text-2xs font-mono px-2 py-0.5 rounded bg-muted text-muted-foreground">
+                    {tooltip.province.pulau}
+                  </span>
+                </div>
+                <div className="text-2xs font-mono space-y-0.5 text-muted-foreground pt-0.5">
+                  <div className="flex justify-between gap-4">
+                    <span>Klaster:</span>
+                    <strong className="text-foreground">Klaster {tooltip.province.cluster_id}</strong>
+                  </div>
+                  <div className="flex justify-between gap-4">
+                    <span>TPT:</span>
+                    <strong className="text-cyan-600 dark:text-cyan-400">{tooltip.province.tpt.toFixed(2)}%</strong>
+                  </div>
+                  <div className="flex justify-between gap-4">
+                    <span>Informal:</span>
+                    <strong className="text-amber-600 dark:text-amber-400">{tooltip.province.informal.toFixed(1)}%</strong>
+                  </div>
+                  <div className="flex justify-between gap-4">
+                    <span>IKKD:</span>
+                    <strong className="text-emerald-600 dark:text-emerald-400">{tooltip.province.ikkd_score.toFixed(1)}</strong>
+                  </div>
+                  <div className="flex justify-between gap-4">
+                    <span>Status LISA:</span>
+                    <strong className="text-foreground">{tooltip.province.lisa_quad}</strong>
+                  </div>
+                </div>
+                <span className="text-[10px] text-cyan-600 dark:text-cyan-400 font-mono block pt-1 border-t border-border/40">
+                  Klik untuk inspeksi profil wilayah lengkap
+                </span>
+              </div>
+            )}
+          </div>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-muted-foreground pt-1 border-t border-border/60">
             <span className="font-mono text-2xs">
-              Klik salah satu titik provinsi untuk menginspeksi metrik ketenagakerjaan secara lengkap.
+              Arahkan kursor atau klik wilayah provinsi untuk inspeksi metrik. Layer aktif: <strong className="text-foreground uppercase">{selectedLayer}</strong>
             </span>
-            <div className="flex items-center space-x-3 text-2xs font-mono">
-              {selectedLayer === 'ikkd' ? (
+            <div className="flex flex-wrap items-center gap-3 text-2xs font-mono">
+              {selectedLayer === 'cluster' && (
                 <>
-                  <span className="flex items-center space-x-1">
-                    <span className="w-2.5 h-2.5 rounded-full bg-red-500 inline-block"></span>
-                    <span>Sangat Rentan (≥70)</span>
-                  </span>
-                  <span className="flex items-center space-x-1">
-                    <span className="w-2.5 h-2.5 rounded-full bg-amber-500 inline-block"></span>
-                    <span>Rentan (45-70)</span>
-                  </span>
-                  <span className="flex items-center space-x-1">
-                    <span className="w-2.5 h-2.5 rounded-full bg-blue-500 inline-block"></span>
-                    <span>Moderat (25-45)</span>
-                  </span>
-                  <span className="flex items-center space-x-1">
-                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block"></span>
-                    <span>Resilien (&lt;25)</span>
-                  </span>
-                </>
-              ) : (
-                <>
-                  <span className="flex items-center space-x-1">
+                  <span className="flex items-center gap-1.5">
                     <span className="w-2.5 h-2.5 rounded-full bg-red-500 inline-block"></span>
                     <span>Klaster 1 (Urban Trap)</span>
                   </span>
-                  <span className="flex items-center space-x-1">
+                  <span className="flex items-center gap-1.5">
                     <span className="w-2.5 h-2.5 rounded-full bg-amber-500 inline-block"></span>
-                    <span>Klaster 2 (Agraris)</span>
+                    <span>Klaster 2 (Agraris Shelter)</span>
                   </span>
-                  <span className="flex items-center space-x-1">
+                  <span className="flex items-center gap-1.5">
                     <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block"></span>
-                    <span>Klaster 3 (Transisi)</span>
+                    <span>Klaster 3 (Transisi Berimbang)</span>
+                  </span>
+                </>
+              )}
+              {selectedLayer === 'lisa' && (
+                <>
+                  <span className="flex items-center gap-1.5">
+                    <span className="w-2.5 h-2.5 rounded-full bg-red-500 inline-block"></span>
+                    <span>High-High (Hotspot)</span>
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <span className="w-2.5 h-2.5 rounded-full bg-blue-500 inline-block"></span>
+                    <span>Low-Low (Coldspot)</span>
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block"></span>
+                    <span>Low-High (Outlier)</span>
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <span className="w-2.5 h-2.5 rounded-full bg-slate-500 inline-block"></span>
+                    <span>Non-Signifikan</span>
+                  </span>
+                </>
+              )}
+              {selectedLayer === 'tpt' && (
+                <>
+                  <span className="flex items-center gap-1.5">
+                    <span className="w-2.5 h-2.5 rounded-full bg-red-500 inline-block"></span>
+                    <span>Tinggi (≥ 6.0%)</span>
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <span className="w-2.5 h-2.5 rounded-full bg-amber-500 inline-block"></span>
+                    <span>Sedang (4.5% - 6.0%)</span>
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block"></span>
+                    <span>Terkendali (&lt; 4.5%)</span>
+                  </span>
+                </>
+              )}
+              {selectedLayer === 'informal' && (
+                <>
+                  <span className="flex items-center gap-1.5">
+                    <span className="w-2.5 h-2.5 rounded-full bg-amber-500 inline-block"></span>
+                    <span>Dominan Informal (≥ 70%)</span>
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <span className="w-2.5 h-2.5 rounded-full bg-blue-500 inline-block"></span>
+                    <span>Menengah (50% - 70%)</span>
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block"></span>
+                    <span>Formal Maju (&lt; 50%)</span>
+                  </span>
+                </>
+              )}
+              {selectedLayer === 'ikkd' && (
+                <>
+                  <span className="flex items-center gap-1.5">
+                    <span className="w-2.5 h-2.5 rounded-full bg-red-500 inline-block"></span>
+                    <span>Sangat Rentan (≥ 70)</span>
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <span className="w-2.5 h-2.5 rounded-full bg-amber-500 inline-block"></span>
+                    <span>Rentan (45 - 70)</span>
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <span className="w-2.5 h-2.5 rounded-full bg-blue-500 inline-block"></span>
+                    <span>Moderat (25 - 45)</span>
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block"></span>
+                    <span>Resilien (&lt; 25)</span>
                   </span>
                 </>
               )}
@@ -360,19 +504,41 @@ export const Cartography: React.FC<CartographyProps> = ({ data }) => {
                 <h3 className="text-xl font-extrabold text-foreground">{selectedProvince.name}</h3>
                 <span className="text-xs text-muted-foreground">Pulau {selectedProvince.pulau}</span>
               </div>
-              <span
-                className="px-2.5 py-1 rounded-full text-xs font-mono font-bold"
-                style={{
-                  backgroundColor: `${getMarkerColor(selectedProvince)}20`,
-                  color: getMarkerColor(selectedProvince),
-                  border: `1px solid ${getMarkerColor(selectedProvince)}50`
-                }}
-              >
-                Klaster {selectedProvince.cluster_id}
-              </span>
+              <div className="text-right">
+                <span
+                  className="px-2.5 py-1 rounded-full text-xs font-mono font-bold inline-block"
+                  style={{
+                    backgroundColor: `${getMarkerColor(selectedProvince)}20`,
+                    color: getMarkerColor(selectedProvince),
+                    border: `1px solid ${getMarkerColor(selectedProvince)}50`
+                  }}
+                >
+                  {getLayerBadge(selectedProvince).label}
+                </span>
+                {getLayerBadge(selectedProvince).sub && (
+                  <span className="text-[10px] text-muted-foreground block font-mono mt-0.5">
+                    {getLayerBadge(selectedProvince).sub}
+                  </span>
+                )}
+              </div>
             </div>
 
             <div className="space-y-4">
+              {/* Active Layer Dynamic Interpretation Callout */}
+              <div className="p-3 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-between">
+                <div>
+                  <span className="text-2xs font-mono uppercase text-cyan-600 dark:text-cyan-400 block font-bold">
+                    Metrik Kunci Layer {selectedLayer.toUpperCase()}
+                  </span>
+                  <span className="text-xs font-semibold text-foreground mt-0.5 block">
+                    {selectedLayer === 'cluster' && `Klaster ${selectedProvince.cluster_id}: ${clusters.find(c => c.id === selectedProvince.cluster_id)?.name}`}
+                    {selectedLayer === 'lisa' && `Status Spasial: ${selectedProvince.lisa_quad} (${selectedProvince.lisa_sig ? 'Signifikan p < 0.05' : 'Non-Signifikan'})`}
+                    {selectedLayer === 'tpt' && `Tingkat Pengangguran: ${selectedProvince.tpt.toFixed(2)}% (Peringkat Provinsi)`}
+                    {selectedLayer === 'informal' && `Proporsi Sektor Informal: ${selectedProvince.informal.toFixed(2)}%`}
+                    {selectedLayer === 'ikkd' && `Skor Kerentanan IKKD: ${selectedProvince.ikkd_score.toFixed(1)} / 100`}
+                  </span>
+                </div>
+              </div>
               {/* TPT Big Callout */}
               <div className="p-4 rounded-xl bg-muted/40 border border-border flex items-center justify-between">
                 <div>
@@ -493,12 +659,13 @@ export const Cartography: React.FC<CartographyProps> = ({ data }) => {
               <tr>
                 <th className="py-3 px-4">Provinsi</th>
                 <th className="py-3 px-3">Pulau</th>
-                <th className="py-3 px-3 text-right">TPT (%)</th>
-                <th className="py-3 px-3 text-right">Informal (%)</th>
+                <th className={`py-3 px-3 text-right ${selectedLayer === 'tpt' ? 'text-primary font-bold bg-primary/10' : ''}`}>TPT (%)</th>
+                <th className={`py-3 px-3 text-right ${selectedLayer === 'informal' ? 'text-primary font-bold bg-primary/10' : ''}`}>Informal (%)</th>
                 <th className="py-3 px-3 text-right">Upah (Rp)</th>
                 <th className="py-3 px-3 text-right">Mismatch</th>
-                <th className="py-3 px-3">Klaster</th>
-                <th className="py-3 px-3">Status LISA</th>
+                <th className={`py-3 px-3 text-right ${selectedLayer === 'ikkd' ? 'text-primary font-bold bg-primary/10' : ''}`}>IKKD</th>
+                <th className={`py-3 px-3 ${selectedLayer === 'cluster' ? 'text-primary font-bold bg-primary/10' : ''}`}>Klaster</th>
+                <th className={`py-3 px-3 ${selectedLayer === 'lisa' ? 'text-primary font-bold bg-primary/10' : ''}`}>Status LISA</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border/60 font-mono">
@@ -522,16 +689,17 @@ export const Cartography: React.FC<CartographyProps> = ({ data }) => {
                       <span>{p.name}</span>
                     </td>
                     <td className="py-2.5 px-3 font-sans text-muted-foreground">{p.pulau}</td>
-                    <td className="py-2.5 px-3 text-right font-bold text-cyan-600 dark:text-cyan-400">{p.tpt.toFixed(2)}%</td>
-                    <td className="py-2.5 px-3 text-right text-amber-600 dark:text-amber-400">{p.informal.toFixed(2)}%</td>
+                    <td className={`py-2.5 px-3 text-right font-bold ${selectedLayer === 'tpt' ? 'bg-primary/10 text-primary' : 'text-cyan-600 dark:text-cyan-400'}`}>{p.tpt.toFixed(2)}%</td>
+                    <td className={`py-2.5 px-3 text-right ${selectedLayer === 'informal' ? 'bg-primary/10 font-bold text-primary' : 'text-amber-600 dark:text-amber-400'}`}>{p.informal.toFixed(2)}%</td>
                     <td className="py-2.5 px-3 text-right text-foreground">Rp{p.upah.toLocaleString('id-ID')}</td>
                     <td className="py-2.5 px-3 text-right text-muted-foreground">{p.mismatch.toFixed(2)}x</td>
-                    <td className="py-2.5 px-3 font-sans">
+                    <td className={`py-2.5 px-3 text-right font-mono ${selectedLayer === 'ikkd' ? 'bg-primary/10 font-bold text-primary' : 'text-foreground'}`}>{p.ikkd_score.toFixed(1)}</td>
+                    <td className={`py-2.5 px-3 font-sans ${selectedLayer === 'cluster' ? 'bg-primary/10' : ''}`}>
                       <span className="px-2 py-0.5 rounded text-2xs bg-muted border border-border text-foreground">
                         Klaster {p.cluster_id}
                       </span>
                     </td>
-                    <td className="py-2.5 px-3 font-sans text-muted-foreground text-2xs">{p.lisa_quad}</td>
+                    <td className={`py-2.5 px-3 font-sans text-2xs ${selectedLayer === 'lisa' ? 'bg-primary/10 font-bold text-foreground' : 'text-muted-foreground'}`}>{p.lisa_quad}</td>
                   </tr>
                 );
               })}

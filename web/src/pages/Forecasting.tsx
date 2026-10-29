@@ -152,35 +152,91 @@ export const Forecasting: React.FC<ForecastingProps> = ({ data }) => {
           </div>
         </div>
         {/* SVG Fanchart Canvas */}
-        <div className="relative w-full bg-slate-950 rounded-xl border border-slate-800 p-4 overflow-hidden">
+        <div className="relative w-full bg-slate-100/70 dark:bg-slate-950/90 rounded-xl border border-border p-4 overflow-hidden shadow-xs">
           <svg viewBox="0 0 900 320" className="w-full h-auto select-none">
             {/* Horizontal Gridlines */}
             {[2.0, 4.0, 6.0, 8.0].map((val) => (
               <g key={val}>
-                <line x1="50" y1={mapY(val)} x2="860" y2={mapY(val)} stroke="#1e293b" strokeDasharray="3 3" />
-                <text x="35" y={mapY(val) + 4} fill="#64748b" fontSize="10" fontFamily="monospace" textAnchor="end">{val}%</text>
+                <line 
+                  x1="50" 
+                  y1={mapY(val)} 
+                  x2="860" 
+                  y2={mapY(val)} 
+                  stroke="currentColor" 
+                  className="text-slate-300 dark:text-slate-800" 
+                  strokeDasharray="3 3" 
+                />
+                <text 
+                  x="35" 
+                  y={mapY(val) + 4} 
+                  fill="currentColor" 
+                  className="text-slate-500 dark:text-slate-400 text-[10px] font-mono" 
+                  textAnchor="end"
+                >
+                  {val}%
+                </text>
               </g>
             ))}
 
             {/* Vertical Separator for 2024 */}
-            <line x1={mapX(2024)} y1="30" x2={mapX(2024)} y2="290" stroke="#475569" strokeDasharray="4 4" strokeWidth="1.2" />
-            <text x={mapX(2024)} y="24" fill="#94a3b8" fontSize="10" fontFamily="monospace" textAnchor="middle">2024 (Aktual)</text>
+            <line 
+              x1={mapX(2024)} 
+              y1="30" 
+              x2={mapX(2024)} 
+              y2="290" 
+              stroke="currentColor" 
+              className="text-slate-400 dark:text-slate-600" 
+              strokeDasharray="4 4" 
+              strokeWidth="1.2" 
+            />
+            <text 
+              x={mapX(2024)} 
+              y="24" 
+              fill="currentColor" 
+              className="text-slate-600 dark:text-slate-300 font-semibold text-[10px] font-mono" 
+              textAnchor="middle"
+            >
+              2024 (Aktual)
+            </text>
 
             {/* 95% Confidence Band */}
             {show95CI && (
-              <path d={area95Path} fill="rgba(99, 102, 241, 0.12)" stroke="rgba(99, 102, 241, 0.3)" strokeDasharray="2 2" />
+              <path 
+                d={area95Path} 
+                fill="rgba(99, 102, 241, 0.16)" 
+                stroke="rgba(99, 102, 241, 0.45)" 
+                strokeDasharray="2 2" 
+              />
             )}
 
             {/* 80% Confidence Band */}
             {show80CI && (
-              <path d={area80Path} fill="rgba(6, 182, 212, 0.2)" stroke="rgba(6, 182, 212, 0.5)" strokeDasharray="3 3" />
+              <path 
+                d={area80Path} 
+                fill="rgba(6, 182, 212, 0.22)" 
+                stroke="rgba(6, 182, 212, 0.6)" 
+                strokeDasharray="3 3" 
+              />
             )}
 
             {/* Historical Line */}
-            <path d={histPath} fill="none" stroke="#38bdf8" strokeWidth="2.5" />
+            <path 
+              d={histPath} 
+              fill="none" 
+              stroke="currentColor" 
+              className="text-cyan-600 dark:text-cyan-400" 
+              strokeWidth="2.8" 
+            />
 
             {/* Forecast Line */}
-            <path d={fcPath} fill="none" stroke="#10b981" strokeWidth="2.5" strokeDasharray="4 2" />
+            <path 
+              d={fcPath} 
+              fill="none" 
+              stroke="currentColor" 
+              className="text-emerald-600 dark:text-emerald-400" 
+              strokeWidth="2.8" 
+              strokeDasharray="4 2" 
+            />
 
             {/* Year Points */}
             {allPoints.map((p) => {
@@ -192,24 +248,36 @@ export const Forecasting: React.FC<ForecastingProps> = ({ data }) => {
               return (
                 <g key={p.year} className="cursor-pointer" onClick={() => setSelectedYear(p.year)}>
                   {isSelected && (
-                    <circle cx={cx} cy={cy} r="9" fill="none" stroke={isForecast ? '#10b981' : '#38bdf8'} strokeWidth="2" opacity="0.6" className="animate-ping" />
+                    <circle 
+                      cx={cx} 
+                      cy={cy} 
+                      r="9" 
+                      fill="none" 
+                      stroke={isForecast ? '#10b981' : '#0284c7'} 
+                      strokeWidth="2" 
+                      opacity="0.6" 
+                      className="animate-ping" 
+                    />
                   )}
                   <circle
                     cx={cx}
                     cy={cy}
                     r={isSelected ? 6 : 4.5}
-                    fill={isForecast ? '#10b981' : '#38bdf8'}
-                    stroke="#0f172a"
-                    strokeWidth="1.5"
+                    fill={isForecast ? '#10b981' : '#0284c7'}
+                    stroke="currentColor"
+                    className="text-white dark:text-slate-950"
+                    strokeWidth="1.8"
                   />
                   <text
                     x={cx}
                     y={cy - 10}
                     textAnchor="middle"
-                    fill={isSelected ? '#ffffff' : '#94a3b8'}
-                    fontSize={isSelected ? '11' : '9'}
-                    fontWeight={isSelected ? 'bold' : 'normal'}
-                    fontFamily="monospace"
+                    fill="currentColor"
+                    className={`font-mono ${
+                      isSelected 
+                        ? 'text-cyan-600 dark:text-cyan-300 font-bold text-[11px]' 
+                        : 'text-slate-700 dark:text-slate-300 text-[9px]'
+                    }`}
                   >
                     {p.tpt.toFixed(2)}%
                   </text>
@@ -217,9 +285,8 @@ export const Forecasting: React.FC<ForecastingProps> = ({ data }) => {
                     x={cx}
                     y="308"
                     textAnchor="middle"
-                    fill="#64748b"
-                    fontSize="10"
-                    fontFamily="monospace"
+                    fill="currentColor"
+                    className="text-slate-500 dark:text-slate-400 text-[10px] font-mono"
                   >
                     {p.year}
                   </text>

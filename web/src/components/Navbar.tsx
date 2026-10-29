@@ -55,7 +55,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-2 font-mono text-[11px]">
             <span className="size-2 rounded-full bg-emerald-500 ring-2 ring-emerald-500/20" />
-            <span className="font-semibold text-foreground">ACTION 2026 Data Engine</span>
+            <span className="font-semibold text-foreground">NEXUS Data Engine</span>
             <span className="text-border">|</span>
             <span>Sakernas BPS 2024 • 38 Provinsi</span>
           </div>
@@ -84,7 +84,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             <div className="flex flex-col">
               <div className="flex items-center gap-2">
                 <span className="font-bold text-base tracking-tight text-foreground sm:text-lg">
-                  ACTION 2026
+                  NEXUS
                 </span>
                 <Badge variant="secondary" className="text-[10px] font-mono px-1.5 py-0">
                   Web Companion
@@ -157,7 +157,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                           <Compass className="size-4" />
                         </div>
                         <div>
-                          <SheetTitle className="text-base font-bold">ACTION 2026</SheetTitle>
+                          <SheetTitle className="text-base font-bold">NEXUS</SheetTitle>
                           <p className="text-xs text-muted-foreground">Turning Insight into Opportunity</p>
                         </div>
                       </div>
