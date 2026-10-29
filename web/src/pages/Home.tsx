@@ -7,50 +7,59 @@ import {
 } from 'lucide-react';
 import { LaborDataBundle } from '../types';
 import { MetricBadge } from '../components/MetricBadge';
+import { IndonesiaMapWrapper } from '../components/map-3d';
 
 interface HomeProps {
   data: LaborDataBundle;
   onNavigate: (tab: string) => void;
+  isDark?: boolean;
 }
 
-export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
+export const Home: React.FC<HomeProps> = ({ onNavigate, isDark = true }) => {
 
   return (
     <div className="space-y-16 animate-fade-in">
-      {/* Hero Section */}
-      <section className="relative pt-8 pb-12 overflow-hidden border-b border-border">
-        <div className="max-w-4xl">
-          <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-600 dark:text-cyan-400 text-xs font-mono mb-6">
-            <span className="w-1.5 h-1.5 rounded-full bg-cyan-500 dark:bg-cyan-400"></span>
-            <span>NEXUS : ANALISIS EKONOMETRIKA & PASAR KERJA BPS</span>
+      {/* Hero Section with 3D Holographic Radar Map */}
+      <section className="relative pt-6 pb-12 overflow-hidden border-b border-border">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+          <div className="lg:col-span-5 space-y-6">
+            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-600 dark:text-cyan-400 text-xs font-mono">
+              <span className="w-1.5 h-1.5 rounded-full bg-cyan-500 dark:bg-cyan-400 animate-ping"></span>
+              <span>NEXUS : ANALISIS EKONOMETRIKA & PASAR KERJA BPS</span>
+            </div>
+
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-foreground leading-tight">
+              Anatomi Pengangguran Terbuka Indonesia. <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-600 to-blue-600 dark:from-cyan-400 dark:to-blue-500">
+                Menembus Batas Teritorial.
+              </span>
+            </h1>
+
+            <p className="text-base sm:text-lg text-muted-foreground leading-relaxed">
+              Tingkat Pengangguran Terbuka (TPT) nasional resmi turun ke <strong className="text-foreground font-semibold">4,91%</strong> pada Agustus 2024, telah melampaui level pra-pandemi 2019 (5,23%). Namun di balik penurunan tersebut, angka setengah pengangguran melonjak drastis <strong className="text-amber-500 dark:text-amber-400 font-semibold">+23,8%</strong> mencapai <strong className="text-foreground font-semibold">11,56 juta orang</strong>. Kebijakan ketenagakerjaan tidak dapat lagi bertumpu pada satu angka agregat tunggal.
+            </p>
+
+            <div className="flex flex-wrap gap-4 pt-1">
+              <button
+                onClick={() => onNavigate('cartography')}
+                className="inline-flex items-center space-x-2 px-6 py-3 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-semibold text-sm transition-all shadow-lg shadow-cyan-500/25 cursor-pointer"
+              >
+                <span>Eksplorasi Kartografi 3 Klaster</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+              <button
+                onClick={() => onNavigate('simulator')}
+                className="inline-flex items-center space-x-2 px-6 py-3 rounded-xl bg-card hover:bg-muted text-foreground border border-border font-semibold text-sm transition-all cursor-pointer"
+              >
+                <span>Buka Simulator Kebijakan RPJMN</span>
+                <ChevronRight className="w-4 h-4 text-muted-foreground" />
+              </button>
+            </div>
           </div>
 
-          <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-foreground leading-tight mb-6">
-            Anatomi Pengangguran Terbuka Indonesia. <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-600 to-blue-600 dark:from-cyan-400 dark:to-blue-500">
-              Menembus Batas Teritorial.
-            </span>
-          </h1>
-
-          <p className="text-base sm:text-lg text-muted-foreground leading-relaxed mb-8 max-w-3xl">
-            Tingkat Pengangguran Terbuka (TPT) nasional resmi turun ke <strong className="text-foreground font-semibold">4,91%</strong> pada Agustus 2024, telah melampaui level pra-pandemi 2019 (5,23%). Namun di balik penurunan tersebut, angka setengah pengangguran melonjak drastis <strong className="text-amber-500 dark:text-amber-400 font-semibold">+23,8%</strong> mencapai <strong className="text-foreground font-semibold">11,56 juta orang</strong>. Kebijakan ketenagakerjaan tidak dapat lagi bertumpu pada satu angka agregat tunggal.
-          </p>
-
-          <div className="flex flex-wrap gap-4">
-            <button
-              onClick={() => onNavigate('cartography')}
-              className="inline-flex items-center space-x-2 px-6 py-3 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-semibold text-sm transition-all shadow-lg shadow-cyan-500/25 cursor-pointer"
-            >
-              <span>Eksplorasi Kartografi 3 Klaster</span>
-              <ArrowRight className="w-4 h-4" />
-            </button>
-            <button
-              onClick={() => onNavigate('simulator')}
-              className="inline-flex items-center space-x-2 px-6 py-3 rounded-xl bg-card hover:bg-muted text-foreground border border-border font-semibold text-sm transition-all cursor-pointer"
-            >
-              <span>Buka Simulator Kebijakan RPJMN</span>
-              <ChevronRight className="w-4 h-4 text-muted-foreground" />
-            </button>
+          {/* 3D Holographic Radar Map Visual */}
+          <div className="lg:col-span-7 w-full">
+            <IndonesiaMapWrapper isDark={isDark} />
           </div>
         </div>
       </section>
