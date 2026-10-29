@@ -28,38 +28,34 @@ Menegakkan standar analisis data ketenagakerjaan yang kredibel, objektif, dan te
 
 ## 3. Aturan Wajib Alur Kerja Agen (Mandatory Workflow Protocol)
 
-Setiap agen/kontributor wajib mengikuti protokol 5 langkah:
+Setiap agen/kontributor wajib mengikuti protokol bertahap dengan mekanisme persetujuan pengguna (Human-in-the-Loop Gatekeeper):
 
 ```
-[1. Load Skills] ──> [2. To-Do List] ──> [3. Surgical Work] ──> [4. Verification] ──> [5. Atomic Commit]
-  • antislop           • Breakdown        • Minimum code       • Run scripts       • 1 logical change
-  • j-space              terukur          • Simplicity first   • Inspect data      • Descriptive msg
-  • karpathy           • Success criteria • No speculative     • Zero hallucination
+[Tahap 1: Analisis & Rencana] ────────> [GATE: Persetujuan Pengguna] ────────> [Tahap 2: Eksekusi & Rilis]
+• Low-Level Troubleshooting             • Tunggu konfirmasi ("Lanjut",           • [1] Load Skills & Constraints
+• Low-Level Implementation Plan           "Jalankan", atau "Approve")            • [2] To-Do List Terukur
+• Rincian file, baris, & kode           • DILARANG mutasi file sebelum disetujui • [3] Surgical Execution
+                                                                                 • [4] Verification (Browser QA)
+                                                                                 • [5] Atomic Commit (Branch Fitur)
 ```
 
-1. **Load Skills & Constraints:**
-   * `/skill:antislop`: Teks bebas *buzzwords*, bebas klaim palsu, data 100% berbasis sumber resmi, tanpa em dash (`—`).
-   * `/skill:j-space`: Jaga invariant logika, evaluasi asumsi data, dan fokus terarah.
-   * `karpathy-guidelines`: *Simplicity first*, kode seringkas mungkin, tanpa abstraksi berlebihan.
-2. **To-Do List:** Tetapkan daftar tugas dengan kriteria keberhasilan yang dapat diverifikasi.
-3. **Surgical Execution:** Tulis script seminimal mungkin yang menyelesaikan tugas pengolahan/analisis data.
-4. **Verification (Multi-Environment & Browser-Driven Web Testing):**
-   * **Analisis Data & Script:** Eksekusi script secara langsung, cek konsistensi angka dan ketiadaan nilai hilang tak terduga. Untuk file notebook (.ipynb) atau modul interaktif, verifikasi wajib dijalankan sukses dari dua working directory: root repositori (`.`) dan folder `notebooks/`.
-   * **Pipeline Data Web:** Eksekusi `python scripts/export_web_data.py` wajib memastikan seluruh *self-verifying assertions* lolos (`PASSED`) tanpa nilai `NaN` atau data terpotong.
-   * **Kompilasi & Tipe Data Web:** Jalankan `cd web && bun run build` (atau `npm run build`), memastikan 0 error TypeScript (`tsc`) dan 0 error bundling Vite.
-   * **Pengujian Nyata dengan Browser Tools (Wajib Sebelum Commit):**
-     - Jalankan preview/dev server web lokal.
-     - Gunakan modul browser otomatis (`eval` dengan global `browser` object) untuk:
-       1. Membuka tab peramban headless (`await browser.open({ url: ... })`).
-       2. Menjalankan *smoke test* navigasi ke seluruh tab (Beranda, Kartografi, Ekonometrika, Simulator, Proyeksi, Metodologi, dan Inovasi Kebijakan).
-       3. Menguji interaktivitas dinamis (slider kurikulum 50:50, filter radius Job Matching, kalkulator KUR Klaster, dan layer IKKD).
-       4. Menginspeksi error console peramban (`tab.errors()`) dan memastikan tidak ada uncaught exception (`TypeError`, `undefined`, crash rendering React).
-       5. Mengambil tangkapan layar observasi visual untuk memvalidasi tata letak responsif dan tema Dark/Light.
-5. **Atomic Commit:** Lakukan commit git terpisah untuk setiap capaian logis yang telah diverifikasi.
-6. **Feature Branch Only:** Dilarang commit atau push langsung ke `main`. Setiap perubahan wajib dibuat di branch terpisah (`feat/*`, `fix/*`) dan melalui Pull Request.
-7. **Environment-Agnostic Execution:** Dilarang mengasumsikan satu *working directory* tunggal atau menggunakan *hardcoded relative path* yang rapuh terhadap konteks eksekusi (IDE vs terminal vs runner otomatis).
-8. **Self-Verifying Outputs:** Setiap tahap persiapan atau pemuatan data wajib menghasilkan diagnostik atau validasi konkret (inspeksi dimensi, kelengkapan, atau uji asumsi awal), bukan hanya mencetak teks status tanpa bukti eksekusi.
-
+### Aturan Utama: Gatekeeper Persetujuan Pengguna (Approval-First Gatekeeper)
+1. **Low-Level Troubleshooting & Implementation Plan Wajib:**
+   * Sebelum melakukan mutasi kode atau menulis berkas apa pun, agen **wajib** menyajikan:
+     a. **Low-Level Troubleshooting:** Analisis akar masalah secara konkret (menyebutkan path berkas, nomor baris, komponen yang terdampak, dan mekanisme kegagalan sistem).
+     b. **Low-Level Implementation Plan:** Rincian rencana teknis yang presisi (arsitektur perubahan, struktur komponen/fungsi yang akan diubah, serta implikasi visual/data).
+2. **Dilarang Mutasi Tanpa Izin Eksplisit:**
+   * Agen **DILARANG KERAS** melakukan eksekusi mutasi kode (`write`, `edit`, `git checkout -b`, dsb.) sebelum pengguna memberikan instruksi atau persetujuan eksplisit (seperti *"Lanjut"*, *"Jalankan"*, *"Eksekusi"*, atau *"Approve"*).
+   * Menanyakan konfirmasi rencana tidak boleh langsung dibarengi dengan tindakan mutasi berkas di putaran yang sama.
+3. **Eksekusi Alur Kerja Setelah Disetujui:**
+   Setelah pengguna menyetujui rencana, barulah agen mengeksekusi 5 langkah teknis:
+   - **Langkah 1 (Skills & Constraints):** Mematuhi `/skill:antislop`, `/skill:j-space`, dan `karpathy-guidelines`.
+   - **Langkah 2 (To-Do List):** Memecah tugas menjadi daftar periksa terukur.
+   - **Langkah 3 (Surgical Execution):** Tulis kode seminimal mungkin pada berkas sasaran.
+   - **Langkah 4 (Verification & Browser QA):** Verifikasi mandiri (eksekusi script data, `bun run build`, dan pengujian nyata peramban otomatis dengan tangkapan layar observasi).
+   - **Langkah 5 (Atomic Commit di Feature Branch):** Commit terpisah pada branch fitur (`feat/*`), dilarang commit langsung ke `main`.
+4. **Environment-Agnostic Execution:** Dilarang mengasumsikan satu *working directory* tunggal atau menggunakan *hardcoded relative path* yang rapuh terhadap konteks eksekusi (IDE vs terminal vs runner otomatis).
+5. **Self-Verifying Outputs:** Setiap tahap persiapan atau pemuatan data wajib menghasilkan diagnostik atau validasi konkret (inspeksi dimensi, kelengkapan, atau uji asumsi awal), bukan hanya mencetak teks status tanpa bukti eksekusi.
 ---
 
 ## 4. Struktur Tim Agen (Analisis Data & Web Companion)
